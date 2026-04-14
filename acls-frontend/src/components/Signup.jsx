@@ -7,7 +7,7 @@ import { UserPlus, User, Lock, Mail } from 'lucide-react';
 import Footer from './Footer';
 import iaclsLogo from '../assets/iacls-logo.png';
 
-const Signup = () => {
+const Signup = ({ theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -71,10 +71,13 @@ const Signup = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', paddingBottom: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 32px', zIndex: 10 }}>
-        <img src={iaclsLogo} alt="iACLS Logo" style={{ height: '90px', objectFit: 'contain', mixBlendMode: 'multiply' }} />
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={() => toggleLanguage('en')} style={{ background: i18n.language === 'en' ? '#ea580c' : 'rgba(255,255,255,0.6)', color: i18n.language === 'en' ? '#fff' : '#9a3412', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>EN</button>
-          <button onClick={() => toggleLanguage('te')} style={{ background: i18n.language === 'te' ? '#ea580c' : 'rgba(255,255,255,0.6)', color: i18n.language === 'te' ? '#fff' : '#9a3412', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>తెలుగు</button>
+        <img src={iaclsLogo} alt="iACLS Logo" style={{ height: '90px', objectFit: 'contain', filter: 'var(--logo-filter)' }} />
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button onClick={() => toggleLanguage('en')} style={{ background: i18n.language === 'en' ? 'var(--orange)' : 'var(--card)', color: i18n.language === 'en' ? '#fff' : 'var(--red)', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>EN</button>
+          <button onClick={() => toggleLanguage('te')} style={{ background: i18n.language === 'te' ? 'var(--orange)' : 'var(--card)', color: i18n.language === 'te' ? '#fff' : 'var(--red)', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>తెలుగు</button>
+          <button onClick={toggleTheme} className="theme-toggle-btn" title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} aria-label="Toggle theme">
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
         </div>
       </div>
 
@@ -82,13 +85,13 @@ const Signup = () => {
         <div style={{ position: 'relative', width: '100%', maxWidth: '500px', marginTop: '0px' }}>
           <div
             style={{
-              background: 'rgba(255, 255, 255, 0.4)',
+              background: 'var(--card)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.6)',
+              border: '1px solid var(--card-border)',
               borderRadius: '24px',
               padding: '48px 40px 16px 40px',
-              boxShadow: '0 24px 48px rgba(154, 52, 18, 0.08)',
+              boxShadow: 'var(--shadow-lg)',
               position: 'relative',
             }}
           >
@@ -101,12 +104,12 @@ const Signup = () => {
                 width: '84px',
                 height: '84px',
                 borderRadius: '50%',
-                background: '#9a3412',
+                background: 'var(--red)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 boxShadow: '0 16px 32px rgba(154, 52, 18, 0.4)',
-                border: '4px solid #ffffff',
+                border: '4px solid var(--card-border)',
               }}
             >
               <UserPlus size={36} color="#ffffff" style={{ marginLeft: '4px' }} />
@@ -114,8 +117,8 @@ const Signup = () => {
 
             <form onSubmit={handleSignup} id="signup-form" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
-                <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-                  <div style={{ width: '46px', background: '#9a3412', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
+                  <div style={{ width: '46px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <User size={16} color="#ffffff" />
                   </div>
                   <input
@@ -123,13 +126,13 @@ const Signup = () => {
                     value={formData.first_name}
                     onChange={handleChange}
                     placeholder={t('first_name')}
-                    style={{ flex: 1, border: 'none', background: 'rgba(255, 255, 255, 0.9)', padding: '0 12px', fontSize: '14px', color: '#111827', outline: 'none', width: '100%' }}
+                    style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 12px', fontSize: '14px', color: 'var(--text)', outline: 'none', width: '100%' }}
                     required
                   />
                 </div>
 
-                <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-                  <div style={{ width: '46px', background: '#9a3412', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
+                  <div style={{ width: '46px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <User size={16} color="#ffffff" />
                   </div>
                   <input
@@ -137,14 +140,14 @@ const Signup = () => {
                     value={formData.last_name}
                     onChange={handleChange}
                     placeholder={t('last_name')}
-                    style={{ flex: 1, border: 'none', background: 'rgba(255, 255, 255, 0.9)', padding: '0 12px', fontSize: '14px', color: '#111827', outline: 'none', width: '100%' }}
+                    style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 12px', fontSize: '14px', color: 'var(--text)', outline: 'none', width: '100%' }}
                     required
                   />
                 </div>
               </div>
 
-              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-                <div style={{ width: '46px', background: '#9a3412', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
+                <div style={{ width: '46px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Mail size={16} color="#ffffff" />
                 </div>
                 <input
@@ -153,13 +156,13 @@ const Signup = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={t('email')}
-                  style={{ flex: 1, border: 'none', background: 'rgba(255, 255, 255, 0.9)', padding: '0 16px', fontSize: '14px', color: '#111827', outline: 'none' }}
+                  style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 16px', fontSize: '14px', color: 'var(--text)', outline: 'none' }}
                   required
                 />
               </div>
 
-              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-                <div style={{ width: '46px', background: '#9a3412', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
+                <div style={{ width: '46px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Lock size={16} color="#ffffff" />
                 </div>
                 <input
@@ -168,13 +171,13 @@ const Signup = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder={t('password')}
-                  style={{ flex: 1, border: 'none', background: 'rgba(255, 255, 255, 0.9)', padding: '0 16px', fontSize: '14px', color: '#111827', outline: 'none' }}
+                  style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 16px', fontSize: '14px', color: 'var(--text)', outline: 'none' }}
                   required
                 />
               </div>
 
-              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
-                <div style={{ width: '46px', background: '#9a3412', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ display: 'flex', height: '46px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
+                <div style={{ width: '46px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Lock size={16} color="#ffffff" />
                 </div>
                 <input
@@ -183,7 +186,7 @@ const Signup = () => {
                   value={formData.confirm_password}
                   onChange={handleChange}
                   placeholder={t('confirm_password')}
-                  style={{ flex: 1, border: 'none', background: 'rgba(255, 255, 255, 0.9)', padding: '0 16px', fontSize: '14px', color: '#111827', outline: 'none' }}
+                  style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 16px', fontSize: '14px', color: 'var(--text)', outline: 'none' }}
                   required
                 />
               </div>
@@ -196,8 +199,8 @@ const Signup = () => {
             </form>
 
             <div style={{ textAlign: 'center', marginTop: '16px', paddingBottom: '16px' }}>
-              <span style={{ fontSize: '14px', color: '#9a3412', fontWeight: 500 }}>
-                {t('already_have_account')} <Link to="/login" style={{ color: '#ea580c', fontWeight: 800, textDecoration: 'none' }}>{t('login')}</Link>
+              <span style={{ fontSize: '14px', color: 'var(--red)', fontWeight: 500 }}>
+                {t('already_have_account')} <Link to="/login" style={{ color: 'var(--orange)', fontWeight: 800, textDecoration: 'none' }}>{t('login')}</Link>
               </span>
             </div>
           </div>

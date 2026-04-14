@@ -9,6 +9,7 @@ import 'core/services/cache_service.dart';
 import 'core/api/api_client.dart';
 import 'core/storage/local_storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_provider.dart';
 import 'features/auth/auth_provider.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/signup_screen.dart';
@@ -21,7 +22,7 @@ import 'core/services/connectivity_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.init();
-  await CacheService.init(); 
+  await CacheService.init();
   await ApiClient.setup();
   runApp(const ProviderScope(child: AclsApp()));
 }
@@ -30,7 +31,7 @@ final _router = GoRouter(
   initialLocation: '/',
   redirect: (context, state) {
     if (state.matchedLocation == '/') return null; // Allow splash screen
-    
+
     final loggedIn = LocalStorage.isLoggedIn;
     final isAuth = state.matchedLocation.startsWith('/login') ||
         state.matchedLocation.startsWith('/signup');
@@ -70,6 +71,7 @@ class AclsApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final curLang = ref.watch(languageProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     // Rebuild router when auth state changes
     ref.listen(authProvider, (_, next) {
@@ -80,7 +82,9 @@ class AclsApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'ACLS Trainer',
-      theme: AppTheme.theme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
       locale: Locale(curLang),
@@ -95,7 +99,8 @@ class AclsApp extends ConsumerWidget {
         Locale('te'),
       ],
       builder: (context, child) {
-        return _ConnectivityBannerWrapper(child: SessionTimeoutTracker(child: child!));
+        return _ConnectivityBannerWrapper(
+            child: SessionTimeoutTracker(child: child!));
       },
     );
   }
@@ -109,7 +114,7 @@ class _ConnectivityBannerWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(connectivityProvider);
     final isTe = ref.watch(languageProvider) == 'te';
-    
+
     if (status == ConnectivityStatus.isDisconnected) {
       return Column(
         children: [
@@ -146,10 +151,12 @@ class SessionTimeoutTracker extends ConsumerStatefulWidget {
   const SessionTimeoutTracker({super.key, required this.child});
 
   @override
-  ConsumerState<SessionTimeoutTracker> createState() => _SessionTimeoutTrackerState();
+  ConsumerState<SessionTimeoutTracker> createState() =>
+      _SessionTimeoutTrackerState();
 }
 
-class _SessionTimeoutTrackerState extends ConsumerState<SessionTimeoutTracker> with WidgetsBindingObserver {
+class _SessionTimeoutTrackerState extends ConsumerState<SessionTimeoutTracker>
+    with WidgetsBindingObserver {
   Timer? _timer;
   DateTime _lastActivity = DateTime.now();
 
@@ -185,7 +192,8 @@ class _SessionTimeoutTrackerState extends ConsumerState<SessionTimeoutTracker> w
     if (state == AppLifecycleState.resumed) {
       final diff = DateTime.now().difference(_lastActivity);
       if (diff.inMinutes >= 30) {
-        debugPrint('Session expired while in background (${diff.inMinutes} mins).');
+        debugPrint(
+            'Session expired while in background (${diff.inMinutes} mins).');
         _handleTimeout();
       } else {
         // App resumed before timeout, restart timer with remaining time

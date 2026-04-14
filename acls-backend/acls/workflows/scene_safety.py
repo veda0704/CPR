@@ -72,7 +72,7 @@ SCENE_SAFETY_WORKFLOW = {
     "scene_safety_ppe_risk": {
         "title": _("Risk Assessment"),
         "question": _("Are there any risks of body fluid splash or infection?"),
-        "video": "/static/images/safetychecks.mp4",
+        "video": "/static/videos/safetychecks.mp4",
         "choices": [
             {"label": _("YES, high risk"), "next": "scene_safety_ppe_advanced", "color": "danger"},
             {"label": _("NO, low risk"), "next": "scene_safety_ready", "color": "primary"},
@@ -81,7 +81,7 @@ SCENE_SAFETY_WORKFLOW = {
     "scene_safety_ppe_advanced": {
         "title": _("Advanced PPE"),
         "question": _("Wear a gown, N95 mask, and eye protection. Ready?"),
-        "video": "/static/images/safetychecks.mp4",
+        "video": "/static/videos/safetychecks.mp4",
         "choices": [
             {"label": _("YES, fully protected"), "next": "scene_safety_ready", "color": "primary"},
         ]

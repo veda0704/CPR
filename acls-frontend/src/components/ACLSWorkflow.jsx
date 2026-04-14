@@ -130,7 +130,7 @@ const ChoiceCards = ({ options, onSelect, lang, footerNote }) => {
 };
 
 // --- Main Component ---
-const ACLSWorkflow = () => {
+const ACLSWorkflow = ({ theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { '*': stepId } = useParams();
@@ -160,15 +160,15 @@ const ACLSWorkflow = () => {
         if (isMounted.current) setLoading(false);
       }
     };
-    
+
     // Add timeout to prevent infinite loading
     const timeout = setTimeout(() => {
       if (isMounted.current) setLoading(false);
     }, 15000); // 15 second timeout for steps
-    
+
     if (stepId) fetchStep();
-    return () => { 
-      isMounted.current = false; 
+    return () => {
+      isMounted.current = false;
       clearTimeout(timeout);
     };
   }, [stepId, navigate, i18n.language]);
@@ -307,9 +307,9 @@ const ACLSWorkflow = () => {
   // --- Completion Overlay ---
   if (showCompletion && completionInfo) {
     return (
-      <div className="completion-overlay" ref={completionRef}>
+      <div className="completion-overlay" ref={completionRef} style={{ background: 'var(--bg)' }}>
         <Confetti />
-        <div className="completion-card">
+        <div className="completion-card" style={{ background: 'var(--card)', border: '1px solid var(--card-border)', boxShadow: 'var(--shadow-lg)', color: 'var(--text)' }}>
           <div className="completion-emoji-ring">
             <span className="completion-emoji">{completionInfo.emoji}</span>
           </div>
@@ -325,8 +325,8 @@ const ACLSWorkflow = () => {
               />
             ))}
           </div>
-          <h1 className="completion-headline">{completionInfo.headline}</h1>
-          <p className="completion-sub">{completionInfo.sub}</p>
+          <h1 className="completion-headline" style={{ color: 'var(--text)' }}>{completionInfo.headline}</h1>
+          <p className="completion-sub" style={{ color: 'var(--muted)' }}>{completionInfo.sub}</p>
           <div className="completion-module-badge">
             <CheckCircle size={16} style={{ color: '#16a34a' }} />
             <span>{t(stepData.title)}</span>
@@ -354,42 +354,45 @@ const ACLSWorkflow = () => {
         <div className="header-center" style={{ fontWeight: 700 }}>
           {t(stepData.title)}
         </div>
-        <div className="header-right">
-          <div className="language-selector" style={{ background: 'rgba(255,255,255,0.4)', padding: '4px', borderRadius: '12px', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', gap: '4px' }}>
-              <button 
-                onClick={() => { i18n.changeLanguage('en'); localStorage.setItem('i18nextLng', 'en'); }} 
-                className={i18n.language === 'en' ? 'active' : ''}
-                style={{ 
-                  background: i18n.language === 'en' ? 'var(--orange)' : 'transparent',
-                  color: i18n.language === 'en' ? 'white' : 'var(--muted)',
-                  border: 'none',
-                  padding: '4px 10px',
-                  borderRadius: '8px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                EN
-              </button>
-              <button 
-                onClick={() => { i18n.changeLanguage('te'); localStorage.setItem('i18nextLng', 'te'); }} 
-                className={i18n.language === 'te' ? 'active' : ''}
-                style={{ 
-                  background: i18n.language === 'te' ? 'var(--orange)' : 'transparent',
-                  color: i18n.language === 'te' ? 'white' : 'var(--muted)',
-                  border: 'none',
-                  padding: '4px 10px',
-                  borderRadius: '8px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                TE
-              </button>
+        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button onClick={toggleTheme} className="theme-toggle-btn" title={theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'} aria-label="Toggle theme" style={{ fontSize: '16px', width: '34px', height: '34px' }}>
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+          <div className="language-selector" style={{ background: 'var(--card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--card-border)', display: 'flex', gap: '4px' }}>
+            <button
+              onClick={() => { i18n.changeLanguage('en'); localStorage.setItem('i18nextLng', 'en'); }}
+              className={i18n.language === 'en' ? 'active' : ''}
+              style={{
+                background: i18n.language === 'en' ? 'var(--orange)' : 'transparent',
+                color: i18n.language === 'en' ? 'white' : 'var(--muted)',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => { i18n.changeLanguage('te'); localStorage.setItem('i18nextLng', 'te'); }}
+              className={i18n.language === 'te' ? 'active' : ''}
+              style={{
+                background: i18n.language === 'te' ? 'var(--orange)' : 'transparent',
+                color: i18n.language === 'te' ? 'white' : 'var(--muted)',
+                border: 'none',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                fontSize: '11px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              TE
+            </button>
           </div>
         </div>
       </header>
@@ -397,7 +400,7 @@ const ACLSWorkflow = () => {
       <main key={stepData.id} className="guided-step animate-step" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
         <div className={`acls-workflow-layout ${stepData.video || stepData.interactive_component ? 'has-media' : 'no-media'} ${stepData.interactive_component === 'choice_cards' || stepData.interactive_component === 'patient_type_selector' ? 'is-selector-layout' : ''}`}>
           {(stepData.video || stepData.interactive_component) && (
-            <div className={`acls-media-container ${stepData.interactive_component === 'choice_cards' || stepData.interactive_component === 'patient_type_selector' ? 'is-selector-media' : ''}`} style={{ background: stepData.interactive_component ? 'transparent' : '#000', border: stepData.interactive_component ? 'none' : '2px solid white', boxShadow: stepData.interactive_component ? 'none' : 'var(--shadow-sm)' }}>
+            <div className={`acls-media-container ${stepData.interactive_component === 'choice_cards' || stepData.interactive_component === 'patient_type_selector' ? 'is-selector-media' : ''}`} style={{ background: stepData.interactive_component ? 'transparent' : '#000', border: stepData.interactive_component ? 'none' : '2px solid var(--card-border)', boxShadow: stepData.interactive_component ? 'none' : 'var(--shadow-sm)' }}>
               {stepData.interactive_component === 'ecg_monitor' ? (
                 <AnimatedECG rhythms={stepData.interactive_props?.rhythms || ['nsr']} />
               ) : stepData.interactive_component === 'patient_type_selector' || stepData.interactive_component === 'choice_cards' ? (
@@ -408,7 +411,7 @@ const ACLSWorkflow = () => {
                   footerNote={stepData.interactive_props?.footer_note}
                 />
               ) : stepData.video && stepData.video.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) ? (
-                <img src={stepData.video} alt={t(stepData.title)} style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'white' }} />
+                <img src={stepData.video} alt={t(stepData.title)} style={{ width: '100%', height: '100%', objectFit: 'contain', background: 'var(--card)', borderRadius: '12px' }} />
               ) : stepData.video ? (
                 <div className="video-container-wrapper">
                   <video

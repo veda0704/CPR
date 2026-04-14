@@ -1,6 +1,0 @@
-com.bavya.acls.acls_mobile:style/NormalTheme = 0x7f040001
-com.bavya.acls.acls_mobile:style/LaunchTheme = 0x7f040000
-com.bavya.acls.acls_mobile:mipmap/ic_launcher = 0x7f030000
-com.bavya.acls.acls_mobile:drawable/launch_background = 0x7f020001
-com.bavya.acls.acls_mobile:drawable/ic_launcher_foreground = 0x7f020000
-com.bavya.acls.acls_mobile:color/ic_launcher_background = 0x7f010000

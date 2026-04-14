@@ -3,5 +3,6 @@
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.analysis.extraPaths": [
         "./acls-backend"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

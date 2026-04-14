@@ -48,66 +48,118 @@ class AppColors {
 
   static Color fromLabel(String label) {
     switch (label) {
-      case 'primary':   return orange;
-      case 'success':   return success;
-      case 'danger':    return danger;
-      case 'warning':   return warning;
-      case 'white':     return white;
-      default:          return orange;
+      case 'primary':
+        return orange;
+      case 'success':
+        return success;
+      case 'danger':
+        return danger;
+      case 'warning':
+        return warning;
+      case 'white':
+        return white;
+      default:
+        return orange;
     }
   }
 }
 
 class AppTheme {
-  static ThemeData get theme {
+  static ThemeData get lightTheme {
     final base = ThemeData(
       colorSchemeSeed: AppColors.orange,
       scaffoldBackgroundColor: AppColors.bg,
       useMaterial3: true,
+      brightness: Brightness.light,
     );
 
+    return _buildTheme(base, AppColors.text, Colors.white.withValues(alpha: 0.9));
+  }
+
+  static ThemeData get darkTheme {
+    final base = ThemeData(
+      colorSchemeSeed: AppColors.orange,
+      scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
+      useMaterial3: true,
+      brightness: Brightness.dark,
+    );
+
+    return _buildTheme(base, const Color(0xFFF8FAFC), const Color(0xFF1E293B)); // Slate 50 text, Slate 800 surface
+  }
+
+  static ThemeData _buildTheme(ThemeData base, Color textColor, Color surfaceColor) {
     return base.copyWith(
       textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
-        bodyColor: AppColors.text,
-        displayColor: AppColors.text,
+        bodyColor: textColor,
+        displayColor: textColor,
       ),
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.orange,
-          foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 56),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          textStyle: GoogleFonts.inter(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.2,
-          ),
+        iconTheme: IconThemeData(color: textColor),
+        titleTextStyle: GoogleFonts.inter(
+          color: textColor,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
         ),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.9),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+      elevatedButtonTheme: _elevatedButtonTheme(AppColors.orange),
+      inputDecorationTheme: _inputDecorationTheme(surfaceColor),
+      cardTheme: CardThemeData(
+        color: surfaceColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: base.brightness == Brightness.dark
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.black.withValues(alpha: 0.05),
+            width: 1,
+          ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.orange, width: 2),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
     );
   }
+
+  static ElevatedButtonThemeData _elevatedButtonTheme(Color color) {
+    return ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        minimumSize: const Size(double.infinity, 56),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        textStyle: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
+  }
+
+  static InputDecorationTheme _inputDecorationTheme(Color fillColor) {
+    return InputDecorationTheme(
+      filled: true,
+      fillColor: fillColor.withValues(alpha: 0.9),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.orange, width: 2),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
+  }
+
+  // Backward compatibility
+  static ThemeData get theme => lightTheme;
 }

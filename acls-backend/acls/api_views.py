@@ -103,7 +103,6 @@ def api_dashboard_data(request):
             "id": "level1",
             "name": str(_("Level 1: Basic Life Saving")),
             "tag": str(_("START HERE")),
-            "description": str(_("Learn the first steps to save a life. Perfect for beginners.")),
             "modules": [
                 {"name": _("Scene Safety & PPE"), "id": "scene_safety", "start_step": "scene_safety_start"},
                 {"name": _("Systematic ABCDE"), "id": "abcde", "start_step": "abcde_start"},
@@ -115,7 +114,6 @@ def api_dashboard_data(request):
             "id": "level2",
             "name": str(_("Level 2: Emergency Management")),
             "tag": str(_("INTERMEDIATE")),
-            "description": str(_("Handle complex emergencies with clear, step-by-step guidance.")),
             "modules": [
                 {"name": _("Airway Anatomy"), "id": "airway", "start_step": "airway_start"},
                 {"name": _("Advanced Airway"), "id": "adv_airway", "start_step": "adv_airway_start"},
@@ -131,7 +129,6 @@ def api_dashboard_data(request):
             "id": "level3",
             "name": str(_("Level 3: Advanced Cardiac (ACLS)")),
             "tag": str(_("ADVANCED")),
-            "description": str(_("Professional cardiac response simplified for quick decisions.")),
             "modules": [
                 {"name": _("ECG Waves & Basics"), "id": "ecg", "start_step": "ecg_start"},
                 {"name": _("Rhythms & Blocks"), "id": "rhythms", "start_step": "rhythms_start"},

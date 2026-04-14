@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:acls_mobile/generated/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/theme_provider.dart';
 import '../../core/widgets/animated_ecg.dart';
 import '../auth/auth_provider.dart';
 import '../settings/language_provider.dart';
@@ -190,7 +191,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           if (mounted) {
             setState(() => _syncProgress = totalSyncs / (totalSteps * 2));
           }
-          
+
           // Throttling to prevent 'Software caused connection abort'
           await Future.delayed(const Duration(milliseconds: 100));
         }
@@ -199,8 +200,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                isTe ? 'ద్విభాషా ఆఫ్‌లైన్ సమకాలీకరణ పూర్తయింది! ఇంగ్లీష్ మరియు తెలుగు సిద్ధంగా ఉన్నాయి.' : 'Bilingual Offline Sync Complete! English and Telugu are ready.'),
+            content: Text(isTe
+                ? 'ద్విభాషా ఆఫ్‌లైన్ సమకాలీకరణ పూర్తయింది! ఇంగ్లీష్ మరియు తెలుగు సిద్ధంగా ఉన్నాయి.'
+                : 'Bilingual Offline Sync Complete! English and Telugu are ready.'),
             backgroundColor: Colors.green,
           ),
         );
@@ -209,7 +211,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(isTe ? 'సమకాలీకరణ విఫలమైంది: $e' : 'Bilingual Sync failed: $e'),
+              content: Text(isTe
+                  ? 'సమకాలీకరణ విఫలమైంది: $e'
+                  : 'Bilingual Sync failed: $e'),
               backgroundColor: Colors.red),
         );
       }
@@ -228,7 +232,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     super.initState();
     // Silent auto-sync on startup ONLY if authenticated
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && ref.read(authProvider).status == AuthStatus.authenticated) {
+      if (mounted &&
+          ref.read(authProvider).status == AuthStatus.authenticated) {
         _silentRefresh();
       }
     });
@@ -250,10 +255,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final isTe = curLang == 'te';
 
     return Scaffold(
-      backgroundColor: AppColors.bg,
       body: AnimatedECGBackground(
         child: Container(
-          decoration: const BoxDecoration(gradient: AppColors.bgGradient),
+          decoration: BoxDecoration(
+            gradient: Theme.of(context).brightness == Brightness.dark
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF0F172A),
+                      const Color(0xFF1E293B).withValues(alpha: 0.8),
+                    ],
+                  )
+                : AppColors.bgGradient,
+          ),
           child: SafeArea(
             bottom: false,
             child: dashAsync.when(
@@ -267,8 +282,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
               data: (data) {
                 final levelsList = (data['levels'] as List<dynamic>?) ?? [];
-                final userName =
-                    data['user']?['first_name'] as String? ?? 'Practitioner';
+                final userName = (data['user']?['first_name'] as String?)?.isNotEmpty == true
+                    ? data['user']!['first_name'] as String
+                    : (data['user']?['username'] as String? ?? '');
                 final l10n = AppLocalizations.of(context)!;
 
                 return CustomScrollView(
@@ -285,14 +301,19 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.4),
+                                color: Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withValues(alpha: 0.06)
+                                    : Colors.white.withValues(alpha: 0.4),
                                 borderRadius: BorderRadius.circular(24),
                                 border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.6)),
+                                    color: Theme.of(context).brightness == Brightness.dark
+                                        ? Colors.white12
+                                        : Colors.white.withValues(alpha: 0.6)),
                                 boxShadow: [
                                   BoxShadow(
-                                      color: AppColors.darkOrange
-                                          .withValues(alpha: 0.08),
+                                      color: Theme.of(context).brightness == Brightness.dark
+                                          ? Colors.black26
+                                          : AppColors.darkOrange.withValues(alpha: 0.08),
                                       blurRadius: 24,
                                       offset: const Offset(0, 12))
                                 ],
@@ -300,18 +321,29 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    flex: 3,
-                                    child: Image.asset(
-                                        'assets/images/iacls-logo.png',
-                                        height: 60,
-                                        alignment: Alignment.centerLeft,
-                                        fit: BoxFit.contain),
+                                    child: ColorFiltered(
+                                      colorFilter: Theme.of(context).brightness == Brightness.dark
+                                          ? const ColorFilter.matrix([
+                                              -1, 0, 0, 0, 255,
+                                              0, -1, 0, 0, 255,
+                                              0, 0, -1, 0, 255,
+                                              0, 0, 0, 1, 0,
+                                            ])
+                                          : const ColorFilter.mode(Colors.transparent, BlendMode.dst),
+                                      child: Image.asset(
+                                          'assets/images/iacls-logo.png',
+                                          height: 50,
+                                          alignment: Alignment.centerLeft,
+                                          fit: BoxFit.contain),
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 4),
                                   _buildLanguageSwitcher(ref, curLang),
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: 4),
+                                  _buildThemeToggle(ref),
+                                  const SizedBox(width: 4),
                                   _buildSyncBtn(ref),
-                                  const SizedBox(width: 12),
+                                  const SizedBox(width: 4),
                                   _buildUserArea(userName, isTe, ref),
                                 ],
                               ),
@@ -361,7 +393,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                             style: GoogleFonts.inter(
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.w900,
-                                                color: AppColors.text)),
+                                                color: Theme.of(context).textTheme.bodyLarge?.color)),
                                       ),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -443,7 +475,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  Widget _buildThemeToggle(WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    final isDark = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            WidgetsBinding
+                    .instance.platformDispatcher.platformBrightness ==
+                Brightness.dark);
+    return GestureDetector(
+      onTap: () => ref.read(themeModeProvider.notifier).toggle(),
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.white.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+              color: isDark
+                  ? Colors.white12
+                  : Colors.black.withValues(alpha: 0.1)),
+        ),
+        child: Center(
+          child: Text(
+            isDark ? '☀️' : '🌙',
+            style: const TextStyle(fontSize: 18),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildLanguageSwitcher(WidgetRef ref, String curLang) {
+
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -486,25 +551,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(name,
-                style: GoogleFonts.inter(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.darkOrange,
-                    height: 1.1)),
-            Text(isTe ? 'ప్రాక్టీషనర్' : 'PRACTITIONER',
-                style: GoogleFonts.inter(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.orange,
-                    letterSpacing: 0.5,
-                    height: 1.1)),
-          ],
-        ),
+        Text(name,
+            style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w900,
+                color: AppColors.darkOrange,
+                height: 1.1)),
         const SizedBox(width: 8),
         GestureDetector(
           onTap: () {
@@ -559,13 +611,13 @@ class _ModuleCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.9),
+          color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.dark ? Colors.white.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.5)),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 16,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.black26 : const Color(0x1A9A3412),
+                blurRadius: 20,
                 offset: const Offset(0, 8))
           ],
         ),
@@ -596,7 +648,7 @@ class _ModuleCard extends StatelessWidget {
                 style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.text)),
+                    color: Theme.of(context).textTheme.bodyLarge?.color)),
             const SizedBox(height: 8),
             Expanded(
                 child: Text(description,
@@ -648,7 +700,7 @@ class _FooterWidget extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Image.asset('assets/images/bavya-logo.png',
-                height: 24, fit: BoxFit.contain),
+                height: 24, fit: BoxFit.fitHeight),
           ],
         ),
       ],

@@ -189,7 +189,6 @@ HR < 60
 HR > 100 (BUT CYANOSIS)
 HR IS NORMAL
 HR STILL < 100
-Handle complex emergencies with clear, step-by-step guidance.
 Heart Blocks
 How many victims are present at the location?
 I am holding the head still
@@ -233,7 +232,6 @@ LMA - Insertion Steps
 LMA - Post-Insertion
 LMA - Preparation
 Labour & Normal Delivery
-Learn the first steps to save a life. Perfect for beginners.
 Level 1: Basic Life Saving
 Level 2: Emergency Management
 Level 3: Advanced Cardiac (ACLS)
@@ -310,7 +308,6 @@ Poisoning Management
 Position the airway. Is the victim breathing now?
 Primary Survey (ABCDE)
 Professional ACLS Simulator
-Professional cardiac response simplified for quick decisions.
 Protection: Face Shield
 Protection: Gloves
 Provide PPV and monitor SpO2. Re-check HR after 30 seconds:
