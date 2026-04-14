@@ -1,0 +1,531 @@
+1 Large Box = 0.2 Seconds\n5 Large Boxes = 1.0 Second\n1 Small Box = 0.04 Seconds\nVoltage: 10mm = 1mV\n\nReady to check rhythms?
+1. 1st Degree: Long PR (>0.20s)\n2. 2nd Deg Type I: PR lengthening -> Drop\n3. 2nd Deg Type II: Fixed PR -> Drop\n4. 3rd Degree: P and QRS independent
+1. Assess patient first (ABC)\n2. Shockable (VT/VF): Start CPR + ACLS immediately\n3. Stable: Monitor & Take help\n4. ACS/STEMI: Aspirin 300mg, O2 (if <94%), Transmit ECG & Rapid Transport\n\nGolden Rules:\n- Treat the patient, not the ECG\n- Don't get lost in interpretation\n- Correlate with symptoms
+1. Hold LMA firmly\n2. Open mouth\n3. Insert deflated mask pointing to feet\n4. Guide along palate past tongue\n5. Advance to resistance\n\nDone?
+1. Inflate cuff\n2. Connect Bag-Valve\n3. Confirm placement (chest rise/breath sounds)\n4. Secure LMA with tape\n\nComplete?
+1. P wave: Atria contract\n2. PR interval (0.12-0.20 sec): Signal travel\n3. QRS complex (<0.12 sec): Ventricles contract\n4. ST segment & T wave: Ventricles relax\n\nDone?
+1. Position: Sniffing position\n2. Size: Based on weight\n3. Cuff: Check & Deflate\n4. Lubricate posterior surface\n5. Preoxygenate\n\nReady?
+1. Preparation\n2. Preoxygenation\n3. Pretreatment\n4. Paralysis with Induction\n5. Protection/Positioning\n6. Placement of Tube (ETT)\n7. Postintubation Management\n\nComplete?
+1. Rate: Count QRS (60-100 normal)\n2. Rhythm: Regular or irregular?\n3. P Waves: Present before Every QRS?\n4. PR Interval: Normal or prolonged?\n5. QRS Width: Narrow or wide?\n6. ST Segment: Elevated or depressed?\n\nProceed?
+12 years or older
+1st Shock Delivered
+2nd Shock Delivered
+3rd Shock Delivered
+A blocked airway stops air from going into the lungs.
+ACLS Cardiac Algorithms
+ACS refers to a range of conditions associated with sudden, reduced blood flow to the heart. Identify the suspected type base on ECG/Vitals:\n- STEMI: Total vessel occlusion.\n- NSTEMI / UA: Partial vessel occlusion.\n\nContinue to clinical assessment?
+ADULT
+ADVANCED
+AIRWAY (A)
+AIRWAY ADJUNCTS
+AIRWAY BLOCKED
+AIRWAY OPEN
+ANATOMY & MANEUVERS
+ANTICHOLINERGIC (Dry skin, Confusion)
+ARREST RHYTHMS
+AWAKE (FOLLOWS COMMANDS)
+Action Points & Golden Rules
+Administer Atropine (2mg IV). Repeat until secretions clear. Done?
+Administer Atropine 1mg IV. Repeat every 3-5min if needed (Max 3mg). Was it effective?
+Administer IV Adrenaline (1:10,000) and consider volume expansion (Normal Saline). Continue resuscitation. Mission complete?
+Administer Naloxone (0.4mg IV/IM). Monitor for respiratory improvement. Effective?
+Advanced Airway
+Advanced PPE
+After ABCDE is complete, continue with S-A-M-P-L-E history and focused head-to-toe examination.
+After tagging, give only rapid life-saving interventions that fit the disaster setting: open airway, support breathing, control major bleeding, and move RED patients toward evacuation.
+After the mission, attend debrief, report safety issues, restock equipment, and check crew wellbeing before returning to service.
+Airway Adjuncts
+Airway Anatomy
+Airway Assessment
+Airway Intervention
+Airway Management
+Airway Maneuvers
+An Electrocardiogram (ECG) shows the electrical activity of the heart. It helps identify rhythms, rates, and life-threatening arrhythmias.\n\nRemember: ALWAYS treat the patient, not just the ECG. Proceed?
+An open airway lets breathing happen normally.
+Anticholinergic Toxicity
+Are there any risks of body fluid splash or infection?
+Are you wearing gloves?
+Ask the family: When did this start? Was the person okay an hour ago? Record the time.
+Ask the person to smile. Does one side of the face drop? Ask them to lift both arms. Does one arm fall down?
+Assess Airway, Breathing, and Circulation for immediate life threats. Proceed?
+Assess Airway, Breathing, and Circulation. Are they stable?
+Assess Mental Status: Is the victim unable to follow simple commands?
+Assess Perfusion: Is the radial pulse absent OR Capillary refill > 2 seconds?
+Assess Respiratory Rate. Is it over 30/min or under 10/min?
+Assess for the 5 cardinal signs of ACS:\n1. PAIN: Discomfort or pressure in the chest.\n2. RADIATION: Pain in jaw, neck, back, arm, or shoulder.\n3. RESPIRATORY: Shortness of breath.\n4. SYSTEMIC: Lightheadedness, nausea, or vomiting.\n5. SKIN: Sweating (Diaphoresis).\n\nSigns present?
+Assess rate, depth, and oxygen saturation. Is breathing adequate?
+Assess the patient. Identify the stage of Labour:\n- STAGE 1: Dilation (Cervix opening)\n- STAGE 2: Expulsion (Baby delivery)\n- STAGE 3: Placental (Placenta delivery)
+Assess the rhythm and signs. Decide if the tachycardia is stable or unstable.
+Asystole Identified
+At hospital handover, give a short structured report with triage tag, major injuries, vitals, treatment given, and transport timeline. Keep written records for every patient moved.
+Awake Management
+BABY
+BACK
+BACK TO TRIAGE
+BEGIN CHECK
+BLACK TAG APPLIED
+BLS & CPR
+BRADYCARDIA (With Pulse)
+Begin START triage. Sort every victim before committing your team to prolonged treatment on one patient. Ready to start the first pass?
+Birth Mechanics 1: Head Floating
+Birth Mechanics 2: Descent
+Birth Mechanics 3: Shoulder Delivery
+Blood Flow (C)
+Blood Flow Support
+Blood Pressure Support
+Bradycardia: Advanced
+Bradycardia: Atropine
+Bradycardia: Monitor
+Bradycardia: Symptomatic?
+Brain Check (D)
+Brain Support
+Breathing (B)
+Breathing Check
+Breathing Support
+CARDIAC ARREST (No Pulse)
+CARDIOVERTED (SUCCESS)
+CHECKED (NEXT)
+COMATOSE
+COMMAND UPDATED
+COMPLETE
+COMPLETE ALGORITHM
+CONTINUE
+CONTINUE ALGORITHM
+CPR & Epinephrine
+CPR for 2 minutes.\nAdminister Epinephrine 1mg ASAP (repeat every 3-5m).\nObtain IV/IO.\nConsider Advanced Airway.\n\nDone?
+CPR in progress
+Call out for all walking wounded to move to a safe holding area. Are any victims able to walk?
+Cardiac Algorithms
+Cardiac Arrest Rhythms
+Certification
+Check Common Treatable Causes
+Check for signs of Anaphylaxis (severe allergy) or Systemic Toxicity (venom spread). Done?
+Check if the patient is breathing. If their neck is hurt, do NOT move their head. Hold their head still. Ready?
+Check if they are breathing and check for a pulse in the neck. Do they have a pulse?
+Check pulse, BP, and skin temperature. Is circulation stable?
+Check the throat and breathing. Start with simple maneuvers first?
+Chest Pain / Heart Blood Flow Problem
+Chest Problem Signs
+Chest Problem Treatment
+Chest Problem: Final Notes
+Chest Problem: History and Exam
+Choking
+Choking Management
+Choose adult or baby.
+Choose the treatment path based on the person's condition:
+Clinical Pearls for EMTs:\n- Do NOT delay transport for prolonged on-scene treatment.\n- Early pain relief and rapid reperfusion are critical.\n- Always recheck contraindications before giving medications.\n\nComplete mission?
+Comatose Management
+Common Rhythms
+Communicate the latest scene picture to the 108 control room and receiving hospitals: total victims, triage categories, hazards, airway concerns, and transport priority.
+Confirm that every sorted casualty has a visible triage tag or mark and has been moved or directed according to category before treatment priorities continue. Tagging complete?
+Consider Adenosine only if regular and monomorphic.\nConsider antiarrhythmic infusion (Amiodarone 150mg over 10m OR Procainamide 20-50mg/min).\nSeek Expert Consultation.
+Control major bleeding, support perfusion, and prepare for rapid transport if unstable. Is the patient stable enough to continue?
+Could a blood clot be blocking the heart? Look for signs on ECG. Treatment: urgent hospital intervention.
+Could potassium be too high or too low? Check the heart monitor and treat per protocol with calcium or fluids.
+Could the patient's blood be too acidic? Check for kidney or diabetes problems. Treatment: Improve breathing and ventilation.
+Could there be a blood clot in the lungs? Look for fast heart rate and breathing trouble. Treatment: follow protocol for clot dissolving or surgery.
+Could this be poison or overdose? Look for small pupils, slow breathing, or other signs. Treatment: give antidotes if indicated.
+DONE
+DONE (CHECK STABILITY)
+DONE (NEXT: ADJUNCTS)
+DONE (POST-INSERTION)
+DONE, patients sorted
+Detailed Check
+Did anyone see the person collapse?
+Disaster Management
+Disaster Management: Apply Triage Tags
+Disaster Management: Casualties & Hazards
+Disaster Management: Control Room Update
+Disaster Management: Debrief
+Disaster Management: Handover & Records
+Disaster Management: Hold for Clearance
+Disaster Management: Immediate Stabilization
+Disaster Management: Incident Command
+Disaster Management: PPE & Scene Safety
+Disaster Management: Resource Request
+Disaster Management: START Triage
+Disaster Management: Transport Priority
+Do NOT enter. Wait for specialized help (Fire, Police, or Hazmat).
+Do NOT give them any water or food. Take them to a big hospital very fast!
+Do not enter the hazard zone. Stay in a safe area, update the 108 control room, and wait until fire, police, rescue, or site command confirms safe access. Has clearance been given?
+Does the patient follow commands (Awake) or are they Comatose?
+ECG Basics - Introduction
+ECG Paper Basics
+ECG Waves & Basics
+EMTs must immediately identify:\n- VT: Wide QRS, regular\n- VF: Chaotic waveform\n- Asystole: Flat line
+EMTs must recognize:\n- NSR: Normal (60-100 bpm)\n- Bradycardia (<50 bpm)\n- Tachycardia (>100 bpm)\n- AF: Irregular, no P waves\n- VT/VF: Life-threatening\n- STEMI: ST elevation\n\nReady for action points?
+ET TUBE (RSI)
+Elevate the bitten limb at or ABOVE the level of the heart. Proceed?
+Ensure open airway, reduce leaks, increase pressure and oxygen. Consider Intubation or LMA. Check HR:
+Ensure safety (Gloves, Mask). Perform Stabilization:\n- AIRWAY: Ensure patency, provide suction if needed.\n- BREATHING: SpO2 monitoring. Give O2 if < 94% or patient is in distress.\n- CIRCULATION: Attach Cardiac Monitor, Pulse/BP/Capillary Refill check, Establish IV/IO access.\n- DISABILITY: Check consciousness (AVPU / GCS).\n- EXPOSURE: Expose chest for assessment, apply leads, maintain privacy.\n\nProceed to detailed history?
+Enter the poisoning workflow. Is the scene safe and are you wearing PPE?
+Establish IV access in an UNAFFECTED limb. (Do not use the bitten arm/leg). Proceed?
+Expose the patient enough to find hidden injuries while preventing hypothermia. Exposure complete?
+FAIL -> ADVANCED EXPERT
+FINISH
+FINISH CHECK
+FINISH DISASTER MODULE
+FINISH MISSION
+FINISH SYSTEMATIC APPROACH
+Fast Heart Rate: Stable?
+Fast Heart Rate: Unstable
+First Check for ACS
+Flatline rhythm. Not shockable. Initiate protocol.
+GO TO STAGE 2
+GREEN TAG APPLIED
+Give 5 abdominal thrusts (Heimlich Maneuver). Push in and up above the navel.
+Give up to 5 back slaps. Support the infant face-down on your forearm with the head lower than the chest.
+Give up to 5 chest thrusts. Support the infant face-up on your forearm with the head lower than the chest.
+Going to hospital now
+H1: Low Blood Volume
+H2: Low Oxygen
+H3: Acid in Blood
+H4: Potassium Problem
+H5: Cold Body
+HANDOVER COMPLETE
+HEART BLOCKS
+HR < 100 (GASPING)
+HR < 60
+HR > 100 (BUT CYANOSIS)
+HR IS NORMAL
+HR STILL < 100
+Handle complex emergencies with clear, step-by-step guidance.
+Heart Blocks
+How many victims are present at the location?
+I am holding the head still
+I am waiting
+INTERMEDIATE
+Identify casualty numbers, hazard zones, access and exit routes, and immediate threats such as fire, gas, electricity, traffic, or structural collapse. Size-up complete?
+Identify the rhythm group you want to study:
+If the heart is slow, keep the airway open, give oxygen, check blood pressure, and get IV access. Obtain ECG if available.
+Immediate high-quality CPR for 2 minutes.\nEstablish IV/IO access.\n\nDone?
+Initial stabilization done. Consider CPAP for laboured breathing or persistent cyanosis. SpO2 monitoring is required. Clinical improvement?
+Initiate Professional Treatment immediately:\n- (M) MORPHINE: IV morphine + antiemetic for pain relief.\n- (O) OXYGEN: Administer to maintain target SATS > 94%.\n- (N) GTN: Glyceryl Trinitrate per protocol.\n- (A) ASPIRIN: Administer 300 MG (if no contraindications).\n\nProceed to transport notes?
+Initiate Targeted Temperature Management (TTM).\nObtain Brain CT.\nMonitor EEG.\nAvoid barotrauma/hyperventilation.\nTransfer to ICU.
+Initiate Transcutaneous Pacing OR\nDopamine IV infusion (5-20 mcg/kg/min) OR\nEpinephrine IV infusion (2-10 mcg/min).\nConsider Transvenous pacing / Expert Consult.
+Initiate rapid transport. Provide detailed handover at the destination hospital. Mission complete?
+Is a defibrillator / cardiac monitor available?
+Is a face shield or protective barrier available?
+Is a pulse present (within 10 seconds)?
+Is air trapped in the chest and squeezing the lung? Look for shifting and no breath sounds. Treatment: release the trapped air.
+Is fluid pressing on the heart? Look for fast pulse and weak blood pressure. Treatment: remove the fluid around the heart.
+Is the QRS Wide (>= 0.12 seconds) or Narrow?
+Is the immediate area safe for you and your team to enter?
+Is the infant becoming unresponsive or limp?
+Is the infant crying, speaking, or breathing?
+Is the obstructing object removed from the airway?
+Is the obstructing object removed from the infant's airway?
+Is the patient bleeding a lot? Press hard on the wound with a clean cloth. Use a bandage if you have one. Done?
+Is the patient breathing normally?
+Is the patient getting enough oxygen? Look for slow heart rate and bluish skin. Treatment: Open airway and give oxygen.
+Is the patient responsive? (Tap and shout)
+Is the patient's body too cold? Check skin and temperature. Treatment: Warm them gently.
+Is the person able to speak or breathe?
+Is the person becoming unresponsive or fainting?
+Is the scene safe for you and your team?
+Is the victim breathing spontaneously?
+Is there heavy bleeding or fluid loss? Check pulse and signs of poor blood flow. Treatment: Give fluids as needed.
+KEEP WATCHING
+Keep the patient warm and take them to the hospital fast in the ambulance!
+LIFE THREATS ADDRESSED
+LMA (Supraglottic)
+LMA - Insertion Steps
+LMA - Post-Insertion
+LMA - Preparation
+Labour & Normal Delivery
+Learn the first steps to save a life. Perfect for beginners.
+Level 1: Basic Life Saving
+Level 2: Emergency Management
+Level 3: Advanced Cardiac (ACLS)
+Look at the monitor. Is the rhythm shockable (VF/VT)?
+Look for Injuries (E)
+Look for common, treatable causes of cardiac arrest. Start the 10-point check?
+Look for signs of severe airway obstruction:\n- No sound or weak cry\n- Inability to breathe\n- Lips turning blue
+Look for signs of severe airway obstruction:\n- Silent cough\n- Inability to speak or breathe\n- Lips turning blue (Cyanosis)
+MULTIPLE victims
+Maintain Systolic BP > 90 mmHg (MAP > 65).\nIf hypotensive: 1-2L Normal Saline bolus OR Vasopressor infusion.\n\nObtain 12-lead ECG (evaluate for STEMI).\n\nDone?
+Monitor clinical condition and observe. No medication needed at this time.
+Monitor core temperature.\nMaintain blood oxygen, glucose, and hemodynamics.\nAvoid barotrauma.\nTransfer to ICU.
+Monitor/Defibrillator
+Multiple Victims
+NARROW QRS
+NEED ADVANCED AIRWAY
+NEONATAL LIFE SUPPORT (NLS)
+NEXT: PAPER BASICS
+NLS & Delivery
+NLS: Airway/Leak Check
+NLS: Chest Compressions
+NLS: Drugs & Volume
+NLS: Laboured Breathing
+NLS: Positive Pressure Ventilation
+NO
+NO (ASYMPTOMATIC)
+NO (ASYSTOLE/PEA)
+NO (CHECK PULSE)
+NO (DECEASED/BLACK)
+NO (IMMEDIATE/RED)
+NO (INEFFECTIVE)
+NO (NON-SHOCKABLE)
+NO (ROSC)
+NO (START ASSESSMENT)
+NO (START STABILIZATION)
+NO (STILL ASYSTOLE/PEA)
+NO (UNDER 30/MIN)
+NO pulse found
+NO, CONTINUE TO EXPOSURE
+NO, Hazards present
+NO, KEEP STAGING
+NO, Repeat dose
+NO, Resuscitate
+NO, START BLS
+NO, TREAT SHOCK/BLEEDING
+NO, WAIT FOR CLEARANCE
+NO, low risk
+NO, not available
+NO, they are not awake
+NO, they look okay
+Not sure? When in doubt, treat as obstructed and act immediately.
+Notify Control Room
+ONE victim
+OPIOID (Small pupils, Slow breathing)
+ORGANOPHOSPHATE (Sweating, Secretions)
+OTHER / UNKNOWN
+Observe the patient for specific signs. What is the suspected toxidrome?
+Open the airway using head tilt-chin lift or jaw thrust (if trauma suspected). Suction if needed and insert adjuncts as available. Airway secured?
+Opioid Overdose
+Organized rhythm on monitor but NO pulse. Not shockable. Initiate protocol.
+Organophosphate Poisoning
+PEA Identified
+POST-ARREST CARE (ROSC)
+Perform Clinical Assessment:\n- HISTORY: SAMPLEX (Signs, Allergies, Meds, Past Hx, Last meal, Events).\n- PAIN QUALITY: OPQRST (Onset, Provoke, Quality, Radiation, Severity, Time).\n- URGENT: Obtain 12-lead ECG and Troponin bloods (if possible).\n\nReady for MONA Treatment Protocol?
+Perform Head Tilt - Chin Lift or Jaw Thrust (if spinal injury suspected). Opening the airway is critical. Done?
+Perform Initial Newborn Assessment: Term gestation? Breathing or crying? Good muscle tone?
+Perform a quick neurologic check (AVPU/GCS, pupils, glucose). Any abnormal finding?
+Perform rapid transport to a hospital that stocks Antivenom immediately. Proceed?
+Persistent bradycardia causing:\n- Hypotension?\n- Signs of Shock?\n- Acute Mental Status Change?\n- Chest Discomfort?\n- Acute Heart Failure?
+Persistent tachyarrhythmia causing:\n- Hypotension?\n- Altered Mental Status?\n- Signs of Shock?\n- Chest Pain?\n- Acute Heart Failure?
+Pick the advanced device to open the airway:
+Pick the right age group for the steps.
+Poisoning Management
+Position the airway. Is the victim breathing now?
+Primary Survey (ABCDE)
+Professional ACLS Simulator
+Professional cardiac response simplified for quick decisions.
+Protection: Face Shield
+Protection: Gloves
+Provide PPV and monitor SpO2. Re-check HR after 30 seconds:
+Provide oxygen, assist ventilation with bag-mask if needed, and treat life-threatening breathing problems. Ready to continue the survey?
+Provide professional pain control (like IV opioids) per protocol. Done?
+Provide supportive care. Monitor temperature and manage agitation. Ready for transport?
+Pulse Check
+Pulseless Ventricular Tachycardia (pVT) confirmed. Initiate protocol.
+Push hard and fast on the center of the chest (30 times). Then give 2 breaths. Keep going!
+Put on disaster PPE before entry: helmet, gloves, mask, reflective jacket, and eye protection if needed. Is the scene safe enough for you to enter?
+READY
+RED TAG APPLIED
+RESOURCES REQUESTED
+RHYTHM CHECK (2 MIN)
+ROSC ACHIEVED
+ROSC Achieved (Post-Arrest)
+RSI - 7 Steps
+Recognize:\n- NSR: Normal (60-100)\n- Sinus Brady: <50 bpm\n- Sinus Tachy: >100 bpm
+Recognize:\n- SVT: Fast, narrow QRS\n- AFib: Irregular, no P waves\n- V-Tach: Wide complex tachycardia
+Remove jewelry, watches, or rings from the bitten limb to prevent swelling issues. Done?
+Report the situation and victim count to dispatch. Request additional backup if needed. Ready?
+Report to the incident command point or control room. Confirm casualty count, hazard zones, access routes, and whether fire, police, or rescue support is needed.
+Request the right resources early: extra ambulances, rescue teams, police, fire, lighting, and transport support. Declare MCI status if indicated.
+Responsiveness
+Resume CPR
+Resume CPR for 2 minutes.\nAdminister Amiodarone (300mg bolus) OR Lidocaine (1-1.5 mg/kg).\nTreat reversible causes (5H & 5T).\n\nDone?
+Resume CPR for 2 minutes.\nAdminister Epinephrine 1mg every 3-5 mins.\nConsider Advanced Airway/Capnography.\n\nDone?
+Resume CPR for 2 minutes.\nIdentify and treat reversible causes (Hypovolemia, Hypoxia, Hydrogen ion, Hypo/Hyperkalemia, Hypothermia, Tension Pneumothorax, Tamponade, Toxins, Thrombosis).\n\nDone?
+Return of Spontaneous Circulation (ROSC) achieved!\n\nOptimize Ventilation/Oxygenation:\n- SpO2 92-98%\n- PaCO2 35-45 mmHg\n- Place Advanced Airway if needed.\n\nDone?
+Reversible Causes (H5T5)
+Rhythm Check
+Rhythms & Blocks
+Risk Assessment
+SELECT BLOCKED
+SELECT OPEN AIRWAY
+SHOCK (DEFIBRILLATE)
+SINUS RHYTHMS
+SIZE-UP COMPLETE
+STABLE (No Signs)
+STAGE 1: DILATION
+STAGE 2: EXPULSION
+STAGE 3: PLACENTAL
+START CPR + MEDS
+START HERE
+START TRIAGE
+START Triage: Airway Maneuver
+START Triage: BLACK Tag
+START Triage: GREEN Tag
+START Triage: Initial Sort
+START Triage: Mental Status
+START Triage: Perfusion
+START Triage: RED Tag
+START Triage: Respirations
+START Triage: Respiratory Rate
+START Triage: YELLOW Tag
+Scene Ready
+Scene Safety
+Scene Safety & PPE
+Scene Safety Assessment
+Scene is safe and you are protected. Proceed to patient contact?
+Select and place OPA or NPA. Give oxygen with a mask or bag if available. Done?
+Sinus Rhythms
+Slow Heart Rate: Assessment
+Snake Bite Management
+Something is blocking the throat. Act now.
+Sort patients based on priority (Red, Yellow, Green, Black). Move all walking wounded to a safe area. Done?
+Stable Narrow QRS
+Stable Wide QRS
+Stage 1: Dilation Stage
+Stage 3: Placental Stage
+Start 3 chest compressions to 1 breath (3:1 ratio). Give 100% oxygen. Establish venous access. Still HR < 60?
+Start CPR
+Start high-quality CPR (30 compressions, 2 breaths)?
+Start with ABCDE: Airway, Breathing, Circulation, Disability, Exposure. Proceed?
+Step 1: Assess ABC's
+Step 1: Check Face & Arms
+Step 1: Head floating before engagement. Monitor for descent. Ready for engagement and flexion?
+Step 1: Response Check
+Step 1: Stop Bleeding
+Step 1: Wake the baby
+Step 1: Wake the person
+Step 2-4: Engagement, Flexion, and Internal Rotation. The baby is descending. Ready for crowning and extension?
+Step 2: Airway & Breathing
+Step 2: Ask about Time
+Step 2: Can they breathe?
+Step 2: Is the baby breathing?
+Step 2: Pulse & Breathing
+Step 2: Toxicity Check
+Step 3: Go to Hospital
+Step 3: Go to Hospital Fast
+Step 3: Let the baby cough
+Step 3: Let them cough
+Step 3: Limb Assessment
+Step 3: Start CPR
+Step 4: Bad choking signs
+Step 4: IV Access
+Step 5-8: Complete Rotation and Extension. Head is out. Restitution (External Rotation). Deliver Anterior then Posterior shoulder. Baby born?
+Step 5: Back slaps
+Step 5: Elevation
+Step 5: Push the belly
+Step 6: Chest pushes
+Step 6: Is the object out?
+Step 6: Pain Control
+Step 7: IV Fluids
+Step 7: Is the object out?
+Step 7: Is the person fainting?
+Step 8: Is the baby fainting?
+Step 8: Transport
+Step 9: Expert Advice
+Stepwise Rhythm Check
+Stop CPR.\nIs the rhythm shockable?
+Stop CPR.\nIs the rhythm still shockable?
+Stroke Assessment
+Systematic ABCDE
+Systematic Approach
+T1: Chest Air Trap
+T2: Fluid Around Heart
+T3: Poison or Overdose
+T4: Lung Blood Clot
+T5: Heart Blood Clot
+TACHYARRHYTHMIAS
+TACHYCARDIA (With Pulse)
+TAGGING COMPLETE
+TRANSPORT ORDER SET
+Tachyarrhythmias
+Tachycardia Assessment
+Tachycardia: Stable
+Tag the walking wounded as GREEN (Minor). Move them to a safe area, recheck them periodically, and continue sorting the remaining victims.
+Tag this victim as BLACK (Deceased/Expectant) according to protocol. Do not spend scene time here while other salvageable victims still need triage.
+Tag this victim as RED (Immediate). Prioritize rapid airway, breathing, and circulation support with the fastest possible evacuation.
+Tag this victim as YELLOW (Delayed). They are stable enough to wait briefly, but they still need transport and repeated reassessment.
+Tap the infant's foot and shout. Is the baby responsive?
+Tap the patient and shout. Are they awake?
+Tap the shoulders and shout. Is the person awake?
+Targeted Temperature Management
+Testing
+The Golden Minute
+The Golden Minute (0-60s): Maintain normal temperature, position airway, stimulate. Reassess Heart Rate:
+The baby is born. The placenta is detaching from the uterus. Deliver the placenta and perform fundal massage to prevent bleeding. Done?
+The cervix is partially dilated. Placenta is attached. Goal: Monitor contractions and fetal heart rate. Proceed to next stage when fully dilated?
+The infant is crying or coughing. Encourage them to continue and monitor closely.
+The person is coughing forcefully. Encourage them to keep coughing. Do not interfere with their efforts.
+The throat is clear and air can move in and out.
+This is a Mass Casualty Incident (MCI). Ready to start triage?
+Time recorded
+Toxidrome Assessment
+Training
+Transport & Handover
+Transport RED patients first, then YELLOW. Keep GREEN patients together in a safe holding area and handle BLACK category according to local disaster protocol.
+Trauma & Bleeding
+Treat low blood pressure with volume resuscitation (IV Fluids). Ready?
+Treat reversible causes (e.g., hypoglycemia, seizures) and protect airway as needed. Ready to proceed to exposure?
+Triage Process
+UNSTABLE (Signs Exist)
+UPDATE SENT
+Under 12 months
+Understanding ECG Waves
+Unsafe Scene
+Use synchronized shock (cardioversion) if the person is unstable. Follow energy settings for each rhythm type.
+VF Identified
+Vagal maneuvers.\nAdenosine 6mg rapid IV push (if regular).\nBeta-blocker or Calcium channel blocker.\nSeek Expert Consultation.
+Ventricular Fibrillation (VF) confirmed. Patient is pulseless. Initiate protocol.
+Victim Count
+WIDE QRS
+Wear a gown, N95 mask, and eye protection. Ready?
+When in doubt, contact a doctor or specialist. Mission complete?
+Witnessed Collapse
+YELLOW TAG APPLIED
+YES
+YES (ACTION POINTS)
+YES (ASSESS MENTAL STATUS)
+YES (CHECK BP)
+YES (CHECK SYMPTOMS)
+YES (COMMON RHYTHMS)
+YES (DELAYED/YELLOW)
+YES (DRUGS)
+YES (EFFECTIVE)
+YES (ENGAGEMENT)
+YES (EXTENSION)
+YES (FINAL NOTES)
+YES (IMMEDIATE/RED)
+YES (INSERTION STEPS)
+YES (LEARN WAVES)
+YES (MINOR/GREEN)
+YES (PASS)
+YES (RHYTHM CHECK)
+YES (SECONDARY SURVEY)
+YES (SHOCK AGAIN)
+YES (SHOCKABLE)
+YES (START STABILIZATION)
+YES (START TREATMENT)
+YES (STAY WITH MOTHER)
+YES (STILL VF/VT)
+YES (SYMPTOMATIC)
+YES (VF/VT SPONTANEOUS)
+YES! BABY BORN
+YES! TRANSPORT
+YES, AIRWAY SECURED
+YES, Area is safe
+YES, CLEARANCE RECEIVED
+YES, CONTINUE TO CIRCULATION
+YES, CONTINUE TO DISABILITY
+YES, CONTINUE TO EXPOSURE
+YES, ENTER SAFELY
+YES, Proceed
+YES, SECONDARY SURVEY
+YES, STABILIZE AND CONTINUE
+YES, Stable
+YES, begin survey
+YES, bleeding stopped
+YES, dispatch notified
+YES, fully protected
+YES, high risk
+YES, pulse found
+YES, they are awake
+YES, they look like a stroke
+YES, wearing
+pVT Identified

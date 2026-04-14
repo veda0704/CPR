@@ -1,0 +1,38 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.bavya.acls.acls_mobile.app-mergeDebugResources-2:/values/values.xml",
+            "map": [
+                {
+                    "source": "D:\\projects\\CPR\\acls_mobile\\android\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    }
+                },
+                {
+                    "source": "D:\\projects\\CPR\\acls_mobile\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "176,832",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "483,998"
+                    },
+                    "to": {
+                        "startLines": "3,7",
+                        "startColumns": "4,4",
+                        "startOffsets": "112,293",
+                        "endLines": "6,9",
+                        "endColumns": "12,12",
+                        "endOffsets": "288,457"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+com.bavya.acls.acls_mobile.app-pngs-0 D:\projects\CPR\acls_mobile\android\app\build\generated\res\pngs\debug
+com.bavya.acls.acls_mobile.app-resValues-1 D:\projects\CPR\acls_mobile\android\app\build\generated\res\resValues\debug
+com.bavya.acls.acls_mobile.app-packageDebugResources-2 D:\projects\CPR\acls_mobile\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.bavya.acls.acls_mobile.app-packageDebugResources-3 D:\projects\CPR\acls_mobile\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.bavya.acls.acls_mobile.app-merged_res-4 D:\projects\CPR\acls_mobile\android\app\build\intermediates\merged_res\debug
+com.bavya.acls.acls_mobile.app-debug-5 D:\projects\CPR\acls_mobile\android\app\src\debug\res
+com.bavya.acls.acls_mobile.app-main-6 D:\projects\CPR\acls_mobile\android\app\src\main\res

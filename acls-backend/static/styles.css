@@ -1,0 +1,868 @@
+:root {
+    --bg: #fffaf6;
+    --card: #ffffff;
+    --muted: #6b6b6b;
+    --text: #1f2933;
+    --yellow: #f59e0b;
+    --orange: #ea580c;
+    --red: #dc2626;
+    --accent-gradient: linear-gradient(90deg, var(--yellow) 0%, var(--orange) 55%, var(--red) 100%);
+    --radius: 12px;
+    --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.08);
+    --gap: 16px;
+    --max-width: 500px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* background: linear-gradient(180deg, rgba(250, 246, 241, 1) 0%, rgba(255, 255, 255, 1) 100%); */
+    background: #fde7d5;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    font-size: 16px;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 28px
+}
+
+/* Make existing `.container` elements render as cards so templates don't need changes */
+.container {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    max-width: var(--max-width);
+    margin: 32px auto;
+}
+
+/* keep main container at its natural size (don't expand) so the card stays centered */
+main.container {
+    flex: 0 0 auto;
+}
+
+/* Ensure content wraps and prevents overflow */
+*,
+*::before,
+*::after {
+    word-break: break-word;
+    overflow-wrap: anywhere
+}
+
+/* Header */
+.site-header {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm)
+}
+
+.site-header .app-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap)
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+.brand .logo {
+    font-weight: 700;
+    color: var(--red);
+    font-size: 20px
+}
+
+.nav {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.nav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600
+}
+
+.nav a:hover {
+    color: var(--red);
+    background: rgba(220, 38, 38, 0.04)
+}
+
+/* Main content card */
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    padding: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.04)
+}
+
+.card--narrow {
+    max-width: 840px;
+    margin: 32px auto
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0 0 12px;
+    font-weight: 700;
+    color: var(--text);
+    word-break: break-word
+}
+
+h2 {
+    font-size: 1.375rem;
+    margin: 0 0 10px;
+    font-weight: 600;
+    color: var(--text)
+}
+
+p {
+    color: var(--muted);
+    margin: 0 0 16px;
+    font-size: 15px
+}
+
+/* Buttons: unify native and utility classes for a professional look */
+button,
+input[type="button"],
+input[type="submit"],
+.btn {
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    min-height: 40px;
+    min-width: 96px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent-gradient);
+    box-shadow: var(--shadow-sm);
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease, background-color .12s ease;
+    line-height: 1;
+}
+
+button svg,
+.btn svg {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: middle
+}
+
+button:hover,
+.btn:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+button:active,
+.btn:active,
+input[type="button"]:active,
+input[type="submit"]:active {
+    transform: translateY(-1px);
+}
+
+/* Variants */
+.btn--ghost,
+button.btn--ghost {
+    background: transparent;
+    color: var(--red);
+    border: 2px solid rgba(220, 38, 38, 0.12);
+    box-shadow: none;
+}
+
+.btn--subtle,
+button.btn--subtle {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.06), rgba(234, 88, 12, 0.04));
+    color: var(--red);
+}
+
+/* Small circular icon-only buttons (header icons) */
+.icon-btn,
+button.icon-btn {
+    padding: 8px;
+    min-width: 0;
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: var(--red);
+    border: 2px solid rgba(220, 38, 38, 0.06);
+}
+
+.icon-btn:hover {
+    background: rgba(220, 38, 38, 0.06);
+    transform: translateY(-2px)
+}
+
+/* Back button: keep subtle but consistent */
+.back-btn {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(15, 23, 42, 0.04);
+    background: transparent
+}
+
+/* Language selector buttons (unclassed element in template) */
+.language-selector {
+    display: flex;
+}
+
+.language-selector button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-left: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.04);
+    background: white;
+    font-weight: 700;
+    color: var(--muted);
+}
+
+.language-selector button:hover {
+    background: rgba(245, 158, 11, 0.06);
+    color: white
+}
+
+/* Focus and disabled */
+button:focus,
+.btn:focus,
+input[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.12);
+}
+
+button[disabled],
+input[disabled],
+.btn[disabled] {
+    opacity: 0.6;
+    pointer-events: none;
+    transform: none
+}
+
+/* Forms */
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 10px;
+    background: transparent;
+    font-size: 15px;
+    color: var(--text)
+}
+
+.links {
+    color: var(--red);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.links:hover {
+    text-decoration: underline
+}
+
+textarea {
+    min-height: 100px
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: rgba(234, 88, 12, 0.9);
+    box-shadow: 0 6px 18px rgba(234, 88, 12, 0.06)
+}
+
+/* Utilities */
+.muted {
+    color: var(--muted)
+}
+
+.accent {
+    color: var(--red)
+}
+
+.kicker {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), rgba(234, 88, 12, 0.08));
+    color: var(--red);
+    font-weight: 700
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start
+}
+
+.col {
+    flex: 1
+}
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px
+}
+
+/* Cards and notes */
+.note {
+    padding: 14px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.04), rgba(234, 88, 12, 0.03));
+    border-left: 4px solid var(--yellow);
+    color: var(--muted)
+}
+
+/* Timers, badges */
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--yellow);
+    color: var(--text);
+    font-weight: 700
+}
+
+/* ACLS header style */
+.acls-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--accent-gradient);
+    color: #fff;
+    flex-wrap: nowrap;
+}
+
+/* Ensure header child sections stay in a single row and don't wrap */
+.acls-header>.header-left,
+.acls-header>.header-right,
+.acls-header>.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.acls-header>.header-center {
+    flex: 1 1 auto;
+    text-align: center;
+    min-width: 0;
+    /* allow center to shrink without forcing wrap */
+}
+
+.language-selector form {
+    display: inline-flex;
+    margin: 0 4px;
+}
+
+/* Guided checklist video and layout helpers */
+.content.guided-step {
+    position: relative;
+}
+
+/* Place the video inside the card content (absolute relative to .content) */
+.acls-video {
+    margin-bottom: 20px !important;
+    width: 100%;
+    max-width: 220px;
+    border-radius: 12px;
+    /* box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12); */
+}
+
+/* On small screens hide the inline video to avoid crowding the card */
+@media (max-width: 640px) {
+    .acls-video {
+        max-width: 100%;
+        margin-top: 16px;
+    }
+
+    .guided-step {
+        padding-bottom: 24px;
+    }
+}
+
+.guided-step .lead {
+    margin-bottom: 18px;
+    font-size: 1.05rem;
+}
+
+.guided-step form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.guided-step .primary {
+    min-width: 120px
+}
+
+.guided-step .secondary {
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--red);
+    box-shadow: none
+}
+
+/* Remove large bottom padding (video is now inside the card) */
+.guided-step {
+    padding-bottom: 28px
+}
+
+
+.language-selector button {
+    white-space: nowrap;
+}
+
+.icon-btn {
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:hover {
+    transform: translateY(-2px)
+}
+
+/* Timer style to prevent wrapping */
+#acls-timer {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Responsive images and media */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent
+}
+
+th,
+td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+    text-align: left
+}
+
+th {
+    font-weight: 700
+}
+
+/* Footer */
+.site-footer {
+    padding-top: 12px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: auto;
+}
+
+.site-footer p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.site-footer img {
+    height: 16px;
+}
+
+/* Small screens */
+@media (max-width:900px) {
+    .row {
+        flex-direction: column
+    }
+
+    .site-header .app-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px
+    }
+}
+
+@media (max-width:480px) {
+    h1 {
+        font-size: 1.375rem
+    }
+
+    .app-container {
+        padding: 16px
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px
+    }
+}
+
+/* page-specific themes */
+body.dashboard {
+    --accent-gradient: linear-gradient(90deg, var(--yellow), var(--orange), var(--red))
+}
+
+body.login {
+    --accent-gradient: linear-gradient(90deg, #efefef, #ddd)
+}
+
+/* Rhythm page specific styles */
+.rhythm-page .rhythm-card {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px;
+    border-radius: 12px;
+}
+
+.rhythm-page .lead {
+    color: var(--muted);
+    margin-bottom: 18px
+}
+
+.rhythm-options {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 16px
+}
+
+/* Each option is a horizontal tile: radio left, content right */
+.rhythm-options .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fff, #fff);
+    border: 1px solid rgba(15, 23, 42, 0.04);
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+    flex-wrap: nowrap !important;
+    /* keep radio and label on same line */
+    width: 100%;
+}
+
+.rhythm-options .option span {
+    display: inline-block;
+    flex: 1 1 auto;
+    font-weight: 700;
+    color: var(--text);
+    text-align: left
+}
+
+.rhythm-options .option input[type="radio"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--red);
+    align-self: center
+}
+
+.rhythm-options .option:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06)
+}
+
+/* Selected state: style the entire tile */
+.rhythm-options .option input:checked+span {
+    color: #fff
+}
+
+.rhythm-options .option input:checked {
+    /* also color the radio */
+    accent-color: var(--red);
+}
+
+.rhythm-options .option input:checked+span {
+    background: linear-gradient(90deg, var(--orange), var(--red));
+    padding: 10px 12px;
+    border-radius: 8px
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: center
+}
+
+.form-actions .btn {
+    min-width: 220px;
+    padding: 12px 22px
+}
+
+@media (max-width:900px) {
+    .rhythm-options {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+@media (max-width:480px) {
+    .rhythm-options {
+        grid-template-columns: 1fr
+    }
+
+
+    /* Improve radio/checkbox alignment in ACLS forms: keep input and label text on the same row */
+    .container form label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        vertical-align: middle;
+    }
+
+    .container form label input[type="radio"],
+    .container form label input[type="checkbox"] {
+        margin: 0;
+        flex: 0 0 auto;
+        /* override generic input width so radios don't expand to full width */
+        width: auto !important;
+        padding: 0 !important;
+        height: 18px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Ensure long label text wraps but stays aligned with the control */
+    .container form label span,
+    .container form label .label-text {
+        display: inline-block;
+        max-width: 100%;
+        word-break: break-word;
+    }
+
+    .rhythm-page .rhythm-card {
+        padding: 18px
+    }
+}
+
+/* ---------------- MOBILE HEADER FIX ---------------- */
+@media (max-width: 480px) {
+
+    .acls-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .acls-header>.header-left,
+    .acls-header>.header-center,
+    .acls-header>.header-right {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Top row: back + home */
+    .header-left {
+        justify-content: flex-start;
+    }
+
+    /* Center title */
+    .header-center {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        white-space: nowrap;
+        /* ❗ stops i A C L S breaking */
+    }
+
+    /* Bottom row: timer, speaker, language */
+    .header-right {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    #acls-timer {
+        font-size: 14px;
+    }
+
+    .language-selector {
+        width: 100%;
+        justify-content: center;
+        margin-top: 6px;
+    }
+
+    .language-selector button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+
+/* Dashboard specific layout fixes */
+.dashboard h2 {
+    margin-top: 32px;
+}
+
+.module-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+
+.module-links a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.dashboard a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.dashboard a button {
+    margin-bottom: 12px;
+}
+
+form[action*="set_mode"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+form[action*="set_mode"] select {
+    margin-bottom: 0px !important; /* Override global select margin */
+    width: auto;
+    min-width: 200px;
+}
+
+form[action*="set_mode"] label {
+    font-weight: 700;
+}
+
+/* Inline Validation Errors */
+.error-text {
+    display: block;
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: -15px;
+    margin-bottom: 12px;
+}
+
+.row .col .error-text {
+    margin-top: -15px;
+}
+
+/* Toaster system */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    min-width: 280px;
+    max-width: 400px;
+    background: #ffffff;
+    border-left: 5px solid var(--orange);
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    animation: toast-in 0.3s ease forwards;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast.success {
+    border-left-color: #10b981;
+}
+
+.toast.error {
+    border-left-color: var(--red);
+}
+
+.toast .message {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.toast button {
+    background: transparent;
+    padding: 4px;
+    min-width: 0;
+    color: var(--muted);
+    box-shadow: none;
+}
+
+.toast button:hover {
+    background: rgba(0,0,0,0.05);
+    transform: none;
+}
+
+@keyframes toast-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toast-out {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}

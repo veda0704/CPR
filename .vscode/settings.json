@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "acls-backend/.venv/Scripts/python.exe",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.analysis.extraPaths": [
+        "./acls-backend"
+    ]
+}

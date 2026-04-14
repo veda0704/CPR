@@ -1,0 +1,911 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-23 17:24+0530\n"
+"PO-Revision-Date: 2025-01-01 12:00+0530\n"
+"Last-Translator: Telugu Translator <te@li.org>\n"
+"Language-Team: Telugu <te@li.org>\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\acls\views.py:181
+msgid "Is the scene safe?"
+msgstr "సీన్ సురక్షితమా?"
+
+#: .\acls\views.py:182
+msgid "Is the patient responsive?"
+msgstr "రోగి ప్రతిస్పందిస్తున్నారా?"
+
+#: .\acls\views.py:183
+msgid "Did you see the person collapse?"
+msgstr "వ్యక్తి పడిపోవడం మీరు చూశారా?"
+
+#: .\acls\views.py:184 .\templates\acls\breathing_after_pulse.html:4
+msgid "Is the patient breathing normally?"
+msgstr "రోగి సాధారణంగా శ్వాస తీసుకుంటున్నారా?"
+
+#: .\acls\views.py:185
+msgid "Is a pulse present (within 10 seconds)?"
+msgstr "పల్స్ ఉందా (10 సెకండ్లలోపు)?"
+
+#: .\acls\views.py:186
+msgid "Is the rhythm Ventricular Fibrillation (VF)?"
+msgstr "రిద్దమ్ వెంట్రిక్యులర్ ఫిబ్రిలేషన్ (VF) అనేదా?"
+
+#: .\acls\views.py:187
+msgid "Is the rhythm Pulseless Ventricular Tachycardia (VT)?"
+msgstr "రిద్దమ్ పల్స్ లేని వెంట్రిక్యులర్ టాకికార్డియా (VT) అనేదా?"
+
+#: .\acls\views.py:188
+msgid "Is the rhythm Asystole?"
+msgstr "రిద్దమ్ అసిస్టోల్ అనేదా?"
+
+#: .\acls\views.py:189
+#, fuzzy
+#| msgid "Pulseless Electrical Activity (PEA)"
+msgid "Is the rhythm Pulseless Electrical Activity (PEA)?"
+msgstr "పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (PEA)"
+
+#: .\templates\acls\adenosine_admin.html:5
+msgid "Adenosine Administration"
+msgstr "అడెనోసిన్ అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\adenosine_admin.html:6
+msgid "Administer adenosine for SVT."
+msgstr "SVT కోసం అడెనోసిన్ అడ్మినిస్టర్ చేయండి."
+
+#: .\templates\acls\adenosine_admin.html:9
+#: .\templates\acls\cardioversion.html:9
+#: .\templates\acls\observe_bradycardia.html:9
+#: .\templates\acls\pacing_started.html:9
+#: .\templates\acls\sinus_rhythm_workflow.html:9
+msgid "End Session"
+msgstr "సెషన్ ముగించు"
+
+#: .\templates\acls\airway.html:4
+msgid "Open Airway"
+msgstr "వాయుమార్గాన్ని తెరవండి"
+
+#: .\templates\acls\airway.html:7 .\templates\acls\breaths.html:7
+#: .\templates\acls\call108.html:8 .\templates\acls\recovery.html:7
+msgid "OK"
+msgstr "సరే"
+
+#: .\templates\acls\analyze_rhythm.html:4
+msgid "Analyze Heart Rhythm"
+msgstr "హృదయ రిద్దమ్ విశ్లేషించండి"
+
+#: .\templates\acls\analyze_rhythm.html:5
+msgid ""
+"The monitor shows the heart rhythm. Further ACLS steps are performed based "
+"on that rhythm."
+msgstr "మానిటర్ హృదయ రిద్దమ్ చూపిస్తుంది. ఆ రిద్దమ్ ఆధారంగా మరిన్ని ACLS దశలు నిర్వహించబడతాయి."
+
+#: .\templates\acls\analyze_rhythm.html:8
+#: .\templates\acls\attach_monitor.html:8 .\templates\acls\cpr.html:8
+msgid "Continue"
+msgstr "కొనసాగించు"
+
+#: .\templates\acls\arrest_witnessed.html:4
+msgid "Was the arrest witnessed?"
+msgstr "అరెస్ట్ చూసారా?"
+
+#: .\templates\acls\arrest_witnessed.html:7 .\templates\acls\breathing.html:7
+#: .\templates\acls\breathing_after_pulse.html:7
+#: .\templates\acls\defibrillator.html:7
+#: .\templates\acls\guided_checklist.html:14 .\templates\acls\protection.html:7
+#: .\templates\acls\pulse.html:7 .\templates\acls\response.html:7
+#: .\templates\acls\responsive.html:7 .\templates\acls\witnessed.html:8
+msgid "YES"
+msgstr "అవును"
+
+#: .\templates\acls\arrest_witnessed.html:8 .\templates\acls\breathing.html:8
+#: .\templates\acls\breathing_after_pulse.html:8
+#: .\templates\acls\defibrillator.html:8
+#: .\templates\acls\guided_checklist.html:15 .\templates\acls\protection.html:8
+#: .\templates\acls\pulse.html:8 .\templates\acls\response.html:8
+#: .\templates\acls\responsive.html:8 .\templates\acls\witnessed.html:9
+msgid "NO"
+msgstr "కాదు"
+
+#: .\templates\acls\asystole_epinephrine.html:5
+msgid "Asystole Epinephrine Administration"
+msgstr "అసిస్టోల్ ఎపినెఫ్రిన్ అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\asystole_epinephrine.html:6
+msgid ""
+"Administer epinephrine for asystole as per protocol. Proceed when ready."
+msgstr "అసిస్టోల్ కోసం ప్రోటోకాల్ ప్రకారం ఎపినెఫ్రిన్ అడ్మినిస్టర్ చేయండి. సిద్ధంగా ఉన్నప్పుడు కొనసాగించండి."
+
+#: .\templates\acls\asystole_epinephrine.html:9
+#: .\templates\acls\bradycardia_treatment.html:11
+#: .\templates\acls\bradycardia_workflow.html:11
+#: .\templates\acls\check_bp.html:11 .\templates\acls\ecg_evaluation.html:9
+#: .\templates\acls\pacing_effectiveness.html:11
+#: .\templates\acls\pea_epinephrine.html:9
+#: .\templates\acls\perfusion_check.html:11
+#: .\templates\acls\prepare_pacing.html:9 .\templates\acls\rhythm.html:24
+#: .\templates\acls\rhythm_classification.html:12
+#: .\templates\acls\tachycardia_pulse_workflow.html:11
+#: .\templates\acls\tachycardia_stable.html:11 .\templates\acls\vf_drugs.html:9
+#: .\templates\acls\vt_no_pulse_drugs.html:9
+#: .\templates\acls\vt_pulse_irregular_treatment.html:15
+#: .\templates\acls\vt_pulse_regularity.html:11
+#: .\templates\acls\vt_pulse_workflow.html:12
+msgid "Proceed"
+msgstr "కొనసాగించు"
+
+#: .\templates\acls\asystole_workflow.html:5
+msgid "Asystole Workflow"
+msgstr "అసిస్టోల్ వర్క్‌ఫ్లో"
+
+#: .\templates\acls\asystole_workflow.html:6
+msgid "Perform CPR cycles, epinephrine every 3-5 minutes."
+msgstr "CPR సైకిల్స్ నిర్వహించండి, ఎపినెఫ్రిన్ ప్రతి 3-5 నిమిషాలకు."
+
+#: .\templates\acls\asystole_workflow.html:9
+#: .\templates\acls\pea_workflow.html:9 .\templates\acls\vf_workflow.html:10
+#: .\templates\acls\vt_no_pulse_workflow.html:10
+msgid "Continue CPR"
+msgstr "CPR కొనసాగించు"
+
+#: .\templates\acls\atropine_admin.html:5
+msgid "Atropine Administration"
+msgstr "అట్రోపిన్ అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\atropine_admin.html:6
+msgid "Administer atropine at defined intervals."
+msgstr "నిర్వచించిన విరామాల్లో అట్రోపిన్ అడ్మినిస్టర్ చేయండి."
+
+#: .\templates\acls\atropine_admin.html:9
+msgid "Recheck"
+msgstr "మళ్లీ తనిఖీ చేయండి"
+
+#: .\templates\acls\attach_monitor.html:4
+msgid "Attach Monitor and Defibrillator Pads"
+msgstr "మానిటర్ మరియు డిఫిబ్రిలేటర్ ప్యాడ్‌లను అటాచ్ చేయండి"
+
+#: .\templates\acls\attach_monitor.html:5
+msgid ""
+"Attach the monitor and defibrillator pads. Do not touch the patient while "
+"the machine analyzes the heart rhythm."
+msgstr ""
+"మానిటర్ మరియు డిఫిబ్రిలేటర్ ప్యాడ్‌లను అటాచ్ చేయండి. మెషీన్ హృదయ రిద్దమ్ విశ్లేషించేటప్పుడు రోగిని తాకవద్దు."
+
+#: .\templates\acls\bradycardia_treatment.html:5
+msgid "Bradycardia Treatment"
+msgstr "బ్రాడికార్డియా చికిత్స"
+
+#: .\templates\acls\bradycardia_treatment.html:6
+msgid "Check pacing availability."
+msgstr "పేసింగ్ లభ్యతను తనిఖీ చేయండి."
+
+#: .\templates\acls\bradycardia_treatment.html:9
+msgid "Pacing Available"
+msgstr "పేసింగ్ లభ్యం"
+
+#: .\templates\acls\bradycardia_treatment.html:10
+msgid "Pacing Not Available"
+msgstr "పేసింగ్ లభ్యం కాదు"
+
+#: .\templates\acls\bradycardia_workflow.html:5
+msgid "Bradycardia Workflow"
+msgstr "బ్రాడికార్డియా వర్క్‌ఫ్లో"
+
+#: .\templates\acls\bradycardia_workflow.html:6
+msgid "Check Perfusion (Blood flow to organs)."
+msgstr "పర్ఫ్యూషన్ స్థితిని తనిఖీ చేయండి."
+
+#: .\templates\acls\bradycardia_workflow.html:9
+#: .\templates\acls\perfusion_check.html:9
+msgid "Adequate Perfusion"
+msgstr "సరైన పర్ఫ్యూషన్"
+
+#: .\templates\acls\bradycardia_workflow.html:10
+msgid "Poor Perfusion"
+msgstr "తక్కువ పర్ఫ్యూషన్"
+
+#: .\templates\acls\breathing.html:4
+msgid "Check Breathing"
+msgstr "శ్వాసను పరిశీలించండి"
+
+#: .\templates\acls\breaths.html:4
+msgid "Give 2 Rescue Breaths"
+msgstr "2 రెస్క్యూ శ్వాసలు ఇవ్వండి"
+
+#: .\templates\acls\call108.html:4
+msgid "Call 108"
+msgstr "108కు కాల్ చేయండి"
+
+#: .\templates\acls\call108.html:5
+msgid "Please call emergency services 108."
+msgstr "దయచేసి అత్యవసర సేవలు 108కు కాల్ చేయండి."
+
+#: .\templates\acls\cardioversion.html:5
+msgid "Cardioversion"
+msgstr "కార్డియోవర్షన్"
+
+#: .\templates\acls\cardioversion.html:6
+msgid "Prepare for synchronized cardioversion."
+msgstr "సింక్రొనైజ్డ్ కార్డియోవర్షన్ కోసం సిద్ధం చేయండి."
+
+#: .\templates\acls\check_bp.html:5
+msgid "Check Blood Pressure"
+msgstr "రక్తపోటు తనిఖీ చేయండి"
+
+#: .\templates\acls\check_bp.html:6
+msgid "Enter Blood Pressure (Systolic & Diastolic)."
+msgstr "రక్తపోటు (సిస్టాలిక్ మరియు డయాస్టాలిక్) నమోదు చేయండి."
+
+#: .\templates\acls\check_bp.html:9
+msgid "Systolic BP:"
+msgstr "సిస్టాలిక్ బిపి:"
+
+#: .\templates\acls\check_bp.html:10
+msgid "Diastolic BP:"
+msgstr "డయాస్టాలిక్ బిపి:"
+
+#: .\templates\acls\cpr.html:4
+msgid "Start CPR"
+msgstr "CPRను ప్రారంభించండి"
+
+#: .\templates\acls\cpr.html:5
+msgid "Perform CPR immediately."
+msgstr "వెంటనే CPR నిర్వహించండి."
+
+#: .\templates\acls\cpr_cycle.html:5
+msgid "CPR Cycle"
+msgstr "CPR సైకిల్"
+
+#: .\templates\acls\cpr_cycle.html:6
+msgid "Perform CPR for 2 minutes, then reassess rhythm."
+msgstr "2 నిమిషాల పాటు CPR నిర్వహించండి, తర్వాత రిద్దమ్ మళ్లీ విశ్లేషించండి."
+
+#: .\templates\acls\cpr_cycle.html:9
+msgid "Reassess Rhythm"
+msgstr "రిద్దమ్ మళ్లీ విశ్లేషించు"
+
+#: .\templates\acls\dashboard.html:4
+msgid "Dashboard"
+msgstr "డ్యాష్‌బోర్డ్"
+
+#: .\templates\acls\dashboard.html:5
+msgid "Welcome to the ACLS dashboard. Use the links below to begin."
+msgstr "ACLS డ్యాష్‌బోర్డ్‌కు స్వాగతం. ప్రారంభించడానికి దిగువ లింక్‌లను ఉపయోగించండి."
+
+#: .\templates\acls\dashboard.html:8 .\templates\acls\start.html:4
+#: .\templates\acls\start_acls.html:4
+msgid "Start ACLS"
+msgstr "ACLSను ప్రారంభించండి"
+
+#: .\templates\acls\dashboard.html:12
+msgid "Logout"
+msgstr "లాగ్ అవుట్"
+
+#: .\templates\acls\defibrillator.html:4
+msgid "Is a defibrillator available?"
+msgstr "డిఫిబ్రిలేటర్ లభ్యమా?"
+
+#: .\templates\acls\ecg_evaluation.html:5
+msgid "ECG Evaluation"
+msgstr "ECG విశ్లేషణ"
+
+#: .\templates\acls\ecg_evaluation.html:6
+msgid "Obtain 12-lead ECG if possible."
+msgstr "సాధ్యమైతే 12-లీడ్ ECG పొందండి."
+
+#: .\templates\acls\forgot_password.html:4
+msgid "Forgot Password"
+msgstr "పాస్‌వర్డ్ మర్చిపోయారా?"
+
+#: .\templates\acls\forgot_password.html:20
+msgid "Enter your email"
+msgstr "మీ ఇమెయిల్ నమోదు చేయండి"
+
+#: .\templates\acls\forgot_password.html:22
+msgid "Resend OTP"
+msgstr "OTP మళ్లీ పంపండి"
+
+#: .\templates\acls\forgot_password.html:24
+msgid "Enter OTP"
+msgstr "OTP నమోదు చేయండి"
+
+#: .\templates\acls\forgot_password.html:25
+#: .\templates\registration\password_reset_confirm.html:10
+msgid "New password"
+msgstr "కొత్త పాస్‌వర్డ్"
+
+#: .\templates\acls\forgot_password.html:26
+msgid "Retype new password"
+msgstr "కొత్త పాస్‌వర్డ్ మళ్లీ టైప్ చేయండి"
+
+#: .\templates\acls\forgot_password.html:27
+#: .\templates\registration\password_reset_confirm.html:4
+msgid "Reset Password"
+msgstr "పాస్‌వర్డ్ రీసెట్"
+
+#: .\templates\acls\forgot_password.html:29
+msgid "Generate OTP"
+msgstr "OTP ఉత్పత్తి చేయండి"
+
+#: .\templates\acls\forgot_password.html:34
+#: .\templates\registration\password_reset_confirm.html:20
+#: .\templates\registration\password_reset_done.html:11
+msgid "Back to Sign In"
+msgstr "సైన్ ఇన్‌కు తిరిగి వెళ్ళు"
+
+#: .\templates\acls\guided_checklist.html:4
+msgid "Guided ACLS Checklist"
+msgstr "మార్గదర్శక ACLS చెక్‌లిస్ట్"
+
+#: .\templates\acls\guided_checklist.html:8
+msgid "Back to dashboard"
+msgstr "డ్యాష్‌బోర్డ్‌కు తిరిగి వెళ్ళు"
+
+#: .\templates\acls\login.html:4 .\templates\acls\signup.html:18
+#: .\templates\registration\login.html:4
+msgid "Sign In"
+msgstr "సైన్ ఇన్"
+
+#: .\templates\acls\login.html:12 .\templates\acls\signup.html:12
+#: .\templates\registration\login.html:8
+msgid "Email"
+msgstr "ఇమెయిల్"
+
+#: .\templates\acls\login.html:13 .\templates\acls\signup.html:13
+#: .\templates\registration\login.html:9
+msgid "Password"
+msgstr "పాస్‌వర్డ్"
+
+#: .\templates\acls\login.html:14 .\templates\registration\login.html:10
+msgid "Login"
+msgstr "లాగిన్"
+
+#: .\templates\acls\login.html:18 .\templates\acls\signup.html:4
+#: .\templates\registration\login.html:14
+msgid "Sign Up"
+msgstr "సైన్ అప్"
+
+#: .\templates\acls\login.html:19 .\templates\registration\login.html:15
+msgid "Forgot Password?"
+msgstr "పాస్‌వర్డ్ మర్చిపోయారా?"
+
+#: .\templates\acls\observe_bradycardia.html:5
+msgid "Observe Bradycardia"
+msgstr "బ్రాడికార్డియా గమనించండి"
+
+#: .\templates\acls\observe_bradycardia.html:6
+msgid "Monitor and observe the patient."
+msgstr "రోగిని మానిటర్ చేసి గమనించండి."
+
+#: .\templates\acls\pacing_effectiveness.html:5
+msgid "Check Pacing Effectiveness"
+msgstr "పేసింగ్ ప్రభావవంతతను తనిఖీ చేయండి"
+
+#: .\templates\acls\pacing_effectiveness.html:6
+msgid "Is the pacing effective? Check for improved perfusion and vital signs."
+msgstr "పేసింగ్ ప్రభావవంతమా? మెరుగైన పర్ఫ్యూషన్ మరియు కీలక సంకేతాల కోసం తనిఖీ చేయండి."
+
+#: .\templates\acls\pacing_effectiveness.html:9
+msgid "Yes, effective"
+msgstr "అవును, ప్రభావవంతం"
+
+#: .\templates\acls\pacing_effectiveness.html:10
+msgid "No, not effective"
+msgstr "కాదు, ప్రభావవంతం కాదు"
+
+#: .\templates\acls\pacing_started.html:5
+msgid "Pacing Started"
+msgstr "పేసింగ్ ప్రారంభించబడింది"
+
+#: .\templates\acls\pacing_started.html:6
+msgid "Transcutaneous pacing has been initiated."
+msgstr "ట్రాన్స్‌క్యూటేనియస్ పేసింగ్ ప్రారంభించబడింది."
+
+#: .\templates\acls\pea_epinephrine.html:5
+msgid "PEA Epinephrine Administration"
+msgstr "PEA ఎపినెఫ్రిన్ అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\pea_epinephrine.html:6
+msgid "Administer epinephrine for PEA as per protocol. Proceed when ready."
+msgstr "PEA కోసం ప్రోటోకాల్ ప్రకారం ఎపినెఫ్రిన్ అడ్మినిస్టర్ చేయండి. సిద్ధంగా ఉన్నప్పుడు కొనసాగించండి."
+
+#: .\templates\acls\pea_workflow.html:5
+msgid "PEA Workflow"
+msgstr "PEA వర్క్‌ఫ్లో"
+
+#: .\templates\acls\pea_workflow.html:6
+msgid "Perform CPR cycles. Administer epinephrine every 3-5 minutes."
+msgstr "CPR సైకిల్స్ నిర్వహించండి. ఎపినెఫ్రిన్ ప్రతి 3-5 నిమిషాలకు అడ్మినిస్టర్ చేయండి."
+
+#: .\templates\acls\perfusion_check.html:5
+msgid "Perfusion Check"
+msgstr "పర్ఫ్యూషన్ తనిఖీ"
+
+#: .\templates\acls\perfusion_check.html:6
+msgid ""
+"Assess perfusion: Check for signs of adequate perfusion (alert, warm, pink "
+"skin, normal BP)."
+msgstr ""
+"పర్ఫ్యూషన్ విశ్లేషించండి: సరైన పర్ఫ్యూషన్ లక్షణాల కోసం తనిఖీ చేయండి (జాగ్రత్త, వెచ్చని, గులాబీ చర్మం, "
+"సాధారణ బిపి)."
+
+#: .\templates\acls\perfusion_check.html:10
+msgid "Poor Perfusion (hypotension, altered mental status, chest pain, etc.)"
+msgstr "తక్కువ పర్ఫ్యూషన్ (హైపోటెన్షన్, మార్చబడిన మానసిక స్థితి, వక్షోజం నొప్పి, మొదలైనవి)"
+
+#: .\templates\acls\prepare_pacing.html:5
+msgid "Prepare for Pacing"
+msgstr "పేసింగ్ కోసం సిద్ధం చేయండి"
+
+#: .\templates\acls\prepare_pacing.html:6
+msgid "Prepare transcutaneous pacing equipment and pads."
+msgstr "ట్రాన్స్‌క్యూటేనియస్ పేసింగ్ పరికరాలు మరియు ప్యాడ్‌లను సిద్ధం చేయండి."
+
+#: .\templates\acls\protection.html:4
+msgid "Airway Protection?"
+msgstr "వాయుమార్గ రక్షణ?"
+
+#: .\templates\acls\pulse.html:4
+msgid "Check Pulse"
+msgstr "పల్స్ పరిశీలించండి"
+
+#: .\templates\acls\recovery.html:4
+msgid "Place Recovery Position"
+msgstr "రికవరీ స్థానాన్ని ఉంచండి"
+
+#: .\templates\acls\rescue_breaths_after_pulse.html:4
+msgid "Provide Rescue Breaths"
+msgstr "రెస్క్యూ శ్వాసలు అందించండి"
+
+#: .\templates\acls\rescue_breaths_after_pulse.html:5
+msgid ""
+"Give one rescue breath every 5 seconds for 30 seconds, then recheck the "
+"pulse every 2 minutes."
+msgstr ""
+"ప్రతి 5 సెకండ్లకు ఒక రెస్క్యూ శ్వాస ఇవ్వండి 30 సెకండ్ల పాటు, తర్వాత ప్రతి 2 నిమిషాలకు పల్స్ మళ్లీ తనిఖీ "
+"చేయండి."
+
+#: .\templates\acls\rescue_breaths_after_pulse.html:8
+msgid "Recheck Pulse"
+msgstr "పల్స్ మళ్లీ తనిఖీ చేయండి"
+
+#: .\templates\acls\response.html:4
+msgid "Do you see any response?"
+msgstr "మీరు ఎలాంటి ప్రతిస్పందన చూసారా?"
+
+#: .\templates\acls\responsive.html:4
+msgid "Check Responsiveness"
+msgstr "ప్రతిస్పందనను పరిశీలించండి"
+
+#: .\templates\acls\rhythm.html:6
+msgid "Select Rhythm"
+msgstr "రిద్దమ్ ఎంచుకోండి"
+
+#: .\templates\acls\rhythm.html:7
+msgid "Select the identified rhythm from the monitor:"
+msgstr "మానిటర్ నుండి గుర్తించబడిన రిద్దమ్ ఎంచుకోండి:"
+
+#: .\templates\acls\rhythm.html:12
+msgid "Ventricular Fibrillation"
+msgstr "వెంట్రిక్యులర్ ఫిబ్రిలేషన్"
+
+#: .\templates\acls\rhythm.html:13
+msgid "Ventricular Tachycardia (No Pulse)"
+msgstr "వెంట్రిక్యులర్ టాకికార్డియా (పల్స్ లేదు)"
+
+#: .\templates\acls\rhythm.html:14
+msgid "Ventricular Tachycardia (With Pulse)"
+msgstr "వెంట్రిక్యులర్ టాకికార్డియా (పల్స్ తో)"
+
+#: .\templates\acls\rhythm.html:15
+msgid "Pulseless Electrical Activity (PEA)"
+msgstr "పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (PEA)"
+
+#: .\templates\acls\rhythm.html:16
+msgid "Asystole"
+msgstr "అసిస్టోల్"
+
+#: .\templates\acls\rhythm.html:17
+msgid "Bradycardia"
+msgstr "బ్రాడికార్డియా"
+
+#: .\templates\acls\rhythm.html:18
+msgid "Tachycardia (With Pulse)"
+msgstr "టాకికార్డియా (పల్స్ తో)"
+
+#: .\templates\acls\rhythm.html:19
+msgid "Sinus Rhythm"
+msgstr "సైనస్ రిద్దమ్"
+
+#: .\templates\acls\rhythm.html:20
+msgid "Supraventricular Tachycardia (SVT)"
+msgstr "సూప్రావెంట్రిక్యులర్ టాకికార్డియా (SVT)"
+
+#: .\templates\acls\rhythm_classification.html:5
+msgid "Rhythm Classification"
+msgstr "రిద్దమ్ వర్గీకరణ"
+
+#: .\templates\acls\rhythm_classification.html:6
+msgid "Classify the bradycardia rhythm."
+msgstr "బ్రాడికార్డియా రిద్దమ్ వర్గీకరించండి."
+
+#: .\templates\acls\rhythm_classification.html:9
+msgid "Sinus Bradycardia"
+msgstr "సైనస్ బ్రాడికార్డియా"
+
+#: .\templates\acls\rhythm_classification.html:10
+msgid "2nd Degree AV Block Type II"
+msgstr "2వ డిగ్రీ AV బ్లాక్ టైప్ II"
+
+#: .\templates\acls\rhythm_classification.html:11
+msgid "3rd Degree AV Block"
+msgstr "3వ డిగ్రీ AV బ్లాక్"
+
+#: .\templates\acls\shock_delivered.html:5
+msgid "Shock Delivered"
+msgstr "షాక్ అందించబడింది"
+
+#: .\templates\acls\shock_delivered.html:6
+msgid "Shock has been delivered. Resume CPR immediately."
+msgstr "షాక్ అందించబడింది. వెంటనే CPR పునఃప్రారంభించండి."
+
+#: .\templates\acls\shock_delivered.html:9
+msgid "Resume CPR"
+msgstr "CPR పునఃప్రారంభించు"
+
+#: .\templates\acls\signup.html:14
+msgid "Create account"
+msgstr "ఖాతా సృష్టించు"
+
+#: .\templates\acls\sinus_rhythm_workflow.html:5
+msgid "Sinus Rhythm Workflow"
+msgstr "సైనస్ రిద్దమ్ వర్క్‌ఫ్లో"
+
+#: .\templates\acls\sinus_rhythm_workflow.html:6
+msgid "Check pulse and observe."
+msgstr "పల్స్ తనిఖీ చేసి గమనించండి."
+
+#: .\templates\acls\start.html:8
+msgid "START"
+msgstr "ప్రారంభం"
+
+#: .\templates\acls\start_acls.html:5
+msgid "ACLS workflow will be handled server-side"
+msgstr "ACLS వర్క్‌ఫ్లో సర్వర్ వైపు నిర్వహించబడుతుంది"
+
+#: .\templates\acls\svt_workflow.html:5
+msgid "SVT Workflow"
+msgstr "SVT వర్క్‌ఫ్లో"
+
+#: .\templates\acls\svt_workflow.html:6
+msgid "Attempt vagal maneuvers first, then adenosine."
+msgstr "మొదట వాగల్ మేన్యూవర్స్ ప్రయత్నించండి, తర్వాత అడెనోసిన్."
+
+#: .\templates\acls\svt_workflow.html:9
+msgid "Administer Adenosine"
+msgstr "అడెనోసిన్ అడ్మినిస్టర్ చేయండి"
+
+#: .\templates\acls\tachycardia_pulse_workflow.html:5
+msgid "Tachycardia with Pulse Workflow"
+msgstr "పల్స్ తో టాకికార్డియా వర్క్‌ఫ్లో"
+
+#: .\templates\acls\tachycardia_pulse_workflow.html:6
+msgid "Assess stability."
+msgstr "స్థిరత్వాన్ని విశ్లేషించండి."
+
+#: .\templates\acls\tachycardia_pulse_workflow.html:9
+#: .\templates\acls\vt_pulse_workflow.html:10
+msgid "Unstable"
+msgstr "అస్థిరం"
+
+#: .\templates\acls\tachycardia_pulse_workflow.html:10
+#: .\templates\acls\vt_pulse_workflow.html:11
+msgid "Stable"
+msgstr "స్థిరం"
+
+#: .\templates\acls\tachycardia_stable.html:5
+msgid "Stable Tachycardia"
+msgstr "స్థిర టాకికార్డియా"
+
+#: .\templates\acls\tachycardia_stable.html:6
+msgid "Evaluate rhythm type."
+msgstr "రిద్దమ్ రకాన్ని విశ్లేషించండి."
+
+#: .\templates\acls\tachycardia_stable.html:9
+msgid "SVT"
+msgstr "SVT"
+
+#: .\templates\acls\vasoactive_infusions.html:5
+msgid "Start Vasoactive Infusions"
+msgstr "వాసోయాక్టివ్ ఇన్ఫ్యూషన్స్ ప్రారంభించండి"
+
+#: .\templates\acls\vasoactive_infusions.html:6
+msgid "Start dopamine or epinephrine infusion. Consult cardiology if needed."
+msgstr "డోపమైన్ లేదా ఎపినెఫ్రిన్ ఇన్ఫ్యూషన్ ప్రారంభించండి. అవసరమైతే కార్డియాలజీ సంప్రదించండి."
+
+#: .\templates\acls\vasoactive_infusions.html:9
+msgid "Complete"
+msgstr "పూర్తి"
+
+#: .\templates\acls\vf_drugs.html:5
+msgid "VF Drugs Administration"
+msgstr "VF మందుల అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\vf_drugs.html:6
+msgid "Administer VF drugs as per protocol. Proceed when ready."
+msgstr "ప్రోటోకాల్ ప్రకారం VF మందుల అడ్మినిస్టర్ చేయండి. సిద్ధంగా ఉన్నప్పుడు కొనసాగించండి."
+
+#: .\templates\acls\vf_workflow.html:5
+msgid "Ventricular Fibrillation Workflow"
+msgstr "వెంట్రిక్యులర్ ఫిబ్రిలేషన్ వర్క్‌ఫ్లో"
+
+#: .\templates\acls\vf_workflow.html:6
+msgid ""
+"Perform CPR for 2 minutes. Epinephrine at 1 minute. Amiodarone at later "
+"cycles."
+msgstr "2 నిమిషాల పాటు CPR నిర్వహించండి. 1 నిమిషంలో ఎపినెఫ్రిన్. తర్వాత సైకిల్స్‌లో అమియోడారోన్."
+
+#: .\templates\acls\vf_workflow.html:9
+#: .\templates\acls\vt_no_pulse_workflow.html:9
+msgid "Deliver Shock"
+msgstr "షాక్ అందించండి"
+
+#: .\templates\acls\vt_no_pulse_drugs.html:5
+msgid "VT No Pulse Drugs Administration"
+msgstr "VT పల్స్ లేని మందుల అడ్మినిస్ట్రేషన్"
+
+#: .\templates\acls\vt_no_pulse_drugs.html:6
+msgid "Administer VT no pulse drugs as per protocol. Proceed when ready."
+msgstr "ప్రోటోకాల్ ప్రకారం VT పల్స్ లేని మందుల అడ్మినిస్టర్ చేయండి. సిద్ధంగా ఉన్నప్పుడు కొనసాగించండి."
+
+#: .\templates\acls\vt_no_pulse_workflow.html:5
+msgid "VT No Pulse Workflow"
+msgstr "VT పల్స్ లేని వర్క్‌ఫ్లో"
+
+#: .\templates\acls\vt_no_pulse_workflow.html:6
+msgid "Similar to VF: CPR 2 min cycles, epinephrine, amiodarone."
+msgstr "VFతో సమానం: CPR 2 నిమి సైకిల్స్, ఎపినెఫ్రిన్, అమియోడారోన్."
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:5
+msgid "Wide + Irregular Rhythm"
+msgstr "వైడ్ + అనియమిత రిద్దమ్"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:6
+msgid ""
+"Options: Atrial fibrillation with aberrancy, Multifocal atrial tachycardia "
+"(MAT), Torsades de Pointes"
+msgstr ""
+"ఎంపికలు: అట్రియల్ ఫిబ్రిలేషన్ విత్ అబెరాన్సీ, మల్టిఫోకల్ అట్రియల్ టాకికార్డియా (MAT), టోర్సేడ్స్ డి పాయింట్స్"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:7
+msgid "AF with aberrancy: Consider Calcium channel blockers / Beta blockers"
+msgstr "AF విత్ అబెరాన్సీ: క్యాల్షియం ఛానెల్ బ్లాకర్స్ / బీటా బ్లాకర్స్ పరిగణించండి"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:8
+msgid "MAT: Give Oxygen"
+msgstr "MAT: ఆక్సిజన్ ఇవ్వండి"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:9
+msgid "Torsades: Manage as per protocol (e.g., magnesium if implemented)"
+msgstr "టోర్సేడ్స్: ప్రోటోకాల్ ప్రకారం నిర్వహించండి (ఉదా., మ్యాగ్నీషియం అమలు చేసినట్లయితే)"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:12
+msgid "Atrial fibrillation with aberrancy"
+msgstr "అట్రియల్ ఫిబ్రిలేషన్ విత్ అబెరాన్సీ"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:13
+msgid "Multifocal atrial tachycardia (MAT)"
+msgstr "మల్టిఫోకల్ అట్రియల్ టాకికార్డియా (MAT)"
+
+#: .\templates\acls\vt_pulse_irregular_treatment.html:14
+msgid "Torsades de Pointes"
+msgstr "టోర్సేడ్స్ డి పాయింట్స్"
+
+#: .\templates\acls\vt_pulse_regularity.html:5
+msgid "Wide QRS Tachycardia"
+msgstr "వైడ్ QRS టాకికార్డియా"
+
+#: .\templates\acls\vt_pulse_regularity.html:6
+msgid "Is the rhythm Regular or Irregular?"
+msgstr "రిద్దమ్ సాధారణమా లేదా అనియమితమా?"
+
+#: .\templates\acls\vt_pulse_regularity.html:9
+msgid "Regular"
+msgstr "సాధారణం"
+
+#: .\templates\acls\vt_pulse_regularity.html:10
+msgid "Irregular"
+msgstr "అనియమితం"
+
+#: .\templates\acls\vt_pulse_workflow.html:5
+msgid "VT with Pulse Workflow"
+msgstr "పల్స్ తో VT వర్క్‌ఫ్లో"
+
+#: .\templates\acls\vt_pulse_workflow.html:6
+msgid "Check Patient Stability"
+msgstr "రోగి స్థిరత్వాన్ని తనిఖీ చేయండి."
+
+#: .\templates\acls\vt_pulse_workflow.html:7
+msgid ""
+"Signs of instability: Hypotension, Altered mental status, Signs of shock, "
+"Ischemic chest discomfort, Acute heart failure"
+msgstr ""
+"అస్థిరత్వ లక్షణాలు: హైపోటెన్షన్, మార్చబడిన మానసిక స్థితి, షాక్ లక్షణాలు, ఇస్కెమిక్ వక్షోజం అసౌకర్యం, తీవ్ర "
+"హృదయ వైఫల్యం"
+
+#: .\templates\acls\witnessed.html:4
+msgid "Did you see a person collapse on the road?"
+msgstr "రోడ్డు మీద ఎవరైనా ఒక వ్యక్తి పడిపోవడం మీరు చూశారా?"
+
+#: .\templates\base\_page_head.html:27
+msgid "Back"
+msgstr "వెనుకకు"
+
+#: .\templates\base\_page_head.html:30
+msgid "Home"
+msgstr "హోమ్"
+
+#: .\templates\base\_page_head.html:43
+msgid "Listen"
+msgstr "వినండి"
+
+#: .\templates\registration\password_reset_complete.html:4
+msgid "Password Reset Complete"
+msgstr "పాస్‌వర్డ్ రీసెట్ పూర్తైంది"
+
+#: .\templates\registration\password_reset_complete.html:6
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "మీ పాస్‌వర్డ్ సెట్ చేయబడింది. మీరు ఇప్పుడు లాగిన్ చేయవచ్చు."
+
+#: .\templates\registration\password_reset_complete.html:9
+msgid "Log in"
+msgstr "లాగిన్"
+
+#: .\templates\registration\password_reset_confirm.html:12
+msgid "Confirm new password"
+msgstr "కొత్త పాస్‌వర్డ్ నిర్ధారించండి"
+
+#: .\templates\registration\password_reset_confirm.html:13
+msgid "Change password"
+msgstr "పాస్‌వర్డ్ మార్చు"
+
+#: .\templates\registration\password_reset_confirm.html:16
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a new password reset."
+msgstr ""
+"పాస్‌వర్డ్ రీసెట్ లింక్ చెల్లనిది, బహుశా ఇది ఇప్పటికే ఉపయోగించబడింది. దయచేసి కొత్త పాస్‌వర్డ్ రీసెట్ అభ్యర్థించండి."
+
+#: .\templates\registration\password_reset_done.html:4
+msgid "Password Reset Sent"
+msgstr "పాస్‌వర్డ్ రీసెట్ పంపబడింది"
+
+#: .\templates\registration\password_reset_done.html:6
+msgid ""
+"We've emailed you instructions for setting your password, if an account with "
+"the email you entered exists. You should receive them shortly."
+msgstr ""
+"మీరు నమోదు చేసిన ఇమెయిల్‌తో ఖాతా ఉంటే, మీ పాస్‌వర్డ్ సెట్ చేయడానికి సూచనలను మేము ఇమెయిల్ చేసాము. మీరు వాటిని "
+"త్వరలో అందుకుంటారు."
+
+#: .\templates\registration\password_reset_done.html:8
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"మీకు ఇమెయిల్ అందకపోతే, దయచేసి మీరు నమోదు చేసిన చిరునామాను నమోదు చేసినట్లు నిర్ధారించుకోండి మరియు మీ స్పామ్ "
+"ఫోల్డర్‌ను తనిఖీ చేయండి."
+
+#: .\templates\registration\password_reset_email.html:2
+msgid ""
+"You're receiving this email because a password reset was requested for your "
+"account."
+msgstr "మీ ఖాతా కోసం పాస్‌వర్డ్ రీసెట్ అభ్యర్థించబడినందున మీరు ఈ ఇమెయిల్ అందుకుంటున్నారు."
+
+#: .\templates\registration\password_reset_email.html:4
+msgid "Reset link:"
+msgstr "రీసెట్ లింక్:"
+
+#: .\templates\registration\password_reset_email.html:6
+msgid "If you didn't request this, please ignore this email."
+msgstr "మీరు దీనిని అభ్యర్థించకపోతే, దయచేసి ఈ ఇమెయిల్‌ను విస్మరించండి."
+
+#~ msgid "Treat as tachycardia with pulse."
+#~ msgstr "పల్స్ తో టాకికార్డియా లాగా చికిత్స చేయండి."
+
+#~ msgid "Proceed to Tachycardia Workflow"
+#~ msgstr "టాకికార్డియా వర్క్‌ఫ్లోకు కొనసాగించండి"
+
+ m s g i d   \  
+ S t r o k e  
+ M o d u l e \ 
+ m s g s t r   \ 8MM0KM 
+ .>!M/B2M\ 
+ 
+ m s g i d   \ S t a r t  
+ t h e  
+ S t r o k e  
+ a s s e s s m e n t ? \ 
+ m s g s t r   \ 8MM0KM 
+ 8F8M .FM (A 
+ *M0>0-?>2>? \ 
+ 
+ m s g i d   \ A C S  
+ M o d u l e \ 
+ m s g s t r   \ A C S  
+ .>!M/B2M\ 
+ 
+ m s g i d   \ S t a r t  
+ t h e  
+ A C S  
+ a s s e s s m e n t ? \ 
+ m s g s t r   \ A C S  
+ 8F8M .FM (A 
+ *M0>0-?>2>? \ 
+ 
+ m s g i d   \ T r a u m a  
+ M o d u l e \ 
+ m s g s t r   \ M0>.> 
+ .>!M/B2M\ 
+ 
+ m s g i d   \ S t a r t  
+ t h e  
+ T r a u m a  
+ a s s e s s m e n t ? \ 
+ m s g s t r   \ M0>.> 
+ 8F8M .FM (A 
+ *M0>0-?>2>? \ 
+ 
+ m s g i d   \ P o i s o n i n g  
+ M o d u l e \ 
+ m s g s t r   \ 5?7 
+ *M0/K 
+ .>!M/B2M\ 
+ 
+ m s g i d   \ S t a r t  
+ t h e  
+ P o i s o n i n g  
+ a s s e s s m e n t ? \ 
+ m s g s t r   \ 5?7 
+ *M0/K 
+ 8F8M .FM (A 
+ *M0>0-?>2>? \ 
+ 
+ m s g i d   \ 5 H s   &   5 T s  
+ C h e c k l i s t \ 
+ m s g s t r   \ 5 H s   &   5 T s  
+ FM 
+ 2?8MM\ 
+ 
+ m s g i d   \ V i e w  
+ t h e  
+ 5 H s   &   5 T s  
+ C h e c k l i s t ? \ 
+ m s g s t r   \ 5 H s   &   5 T s  
+ FM 
+ 2?8MM (A 
+ B!>2>? \ 
+ 
+ m s g i d   \ Y E S \ 
+ m s g s t r   \ 5A(A\ 
+ 
+ m s g i d   \ N O \ 
+ m s g s t r   \ >&A\ 
+ 
+ m s g i d   \ S T A R T \ 
+ m s g s t r   \ *M0>0-\ 
+ 
+ m s g i d   \ B A C K \ 
+ m s g s t r   \ 5F(AA\ 
+  
+ 
