@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from unittest.mock import patch
 
-from .workflow_data import WORKFLOW_STEPS
+from .workflows import WORKFLOW_STEPS
 
 User = get_user_model()
 
@@ -49,15 +49,25 @@ class WorkflowAPITestCase(TestCase):
     def test_api_get_step_not_found(self):
         response = self.client.get(reverse("api_step", args=["missing_step"]))
         self.assertEqual(response.status_code, 404)
-        self.assertIn("error", response.json())
+        data = response.json()
+        # API returns 'code' and 'detail' fields, not 'error'
+        self.assertIn("code", data)
+        self.assertEqual(data.get("code"), "step_not_found")
 
     def test_api_bulk_sync_includes_all_steps(self):
         response = self.client.get(reverse("api_sync_all"))
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertEqual(len(data), len(WORKFLOW_STEPS))
-        self.assertIn("scene_safety_start", data)
-        self.assertIn("bls_start", data)
+        # Response is paginated with steps and pagination info
+        self.assertIn("steps", data)
+        self.assertIn("pagination", data)
+        self.assertIsInstance(data["steps"], dict)
+        self.assertGreater(len(data["steps"]), 0)
+        # Verify pagination info
+        pagination = data["pagination"]
+        self.assertIn("page", pagination)
+        self.assertIn("total_pages", pagination)
+        self.assertGreater(pagination["total_steps"], 0)
 
     def test_api_dashboard_data_structure(self):
         response = self.client.get(reverse("api_dashboard"))

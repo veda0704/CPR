@@ -1,11 +1,12 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/animated_ecg.dart';
+import '../../core/theme/theme_provider.dart';
+import '../../core/widgets/loading_spinner.dart';
 import '../settings/language_provider.dart';
+import '../../core/storage/local_storage.dart';
 import 'auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   bool _obscure = true;
+  bool _rememberMe = false;
+  String? _localError;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedData();
+  }
+
+  Future<void> _loadRememberedData() async {
+    final rememberMe = LocalStorage.getRememberMe();
+    if (rememberMe) {
+      final authState = ref.read(authProvider);
+      authState.whenData((data) {
+        if (data.email != null) {
+          setState(() {
+            _emailCtrl.text = data.email!;
+            _rememberMe = true;
+          });
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -28,359 +52,461 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _submit() {
+    final isTe = ref.read(languageProvider) == 'te';
+    final email = _emailCtrl.text.trim();
+    final password = _passCtrl.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() => _localError = isTe ? 'దయచేసి ఇమెయిల్ మరియు పాస్‌వర్డ్ రెండింటినీ నమోదు చేయండి' : 'Please enter both email and password');
+      return;
+    }
+
+    // Clear local validation error to allow server error to show
+    setState(() => _localError = null);
+
     ref
         .read(authProvider.notifier)
-        .login(_emailCtrl.text.trim(), _passCtrl.text);
+        .login(email, password, _rememberMe);
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authAsync = ref.watch(authProvider);
     final lang = ref.watch(languageProvider);
     final isTe = lang == 'te';
 
     ref.listen(authProvider, (_, next) {
-      if (next.status == AuthStatus.authenticated) {
-        if (context.mounted) context.go('/dashboard');
-      }
+      next.whenData((authState) {
+        if (authState.status == AuthStatus.authenticated) {
+          if (context.mounted) {
+            context.go('/dashboard');
+          }
+        }
+      });
     });
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final authState = authAsync.value;
+
+    if (authAsync.isLoading && authState == null) {
+      return const Scaffold(body: Center(child: LoadingSpinner.fullScreen(message: 'Loading...')));
+    }
+
+    if (authAsync.hasError && authState == null) {
+      return Scaffold(body: Center(child: Text(authAsync.error.toString())));
+    }
+
+    final effectiveState = authState ?? const AuthState(status: AuthStatus.unauthenticated);
+
     return Scaffold(
-      body: AnimatedECGBackground(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: Theme.of(context).brightness == Brightness.dark
-                ? LinearGradient(
+      backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+      body: Stack(
+        children: [
+            // Top Pastel Green Banner
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: MediaQuery.of(context).size.height * 0.42,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [
-                      const Color(0xFF0F172A),
-                      const Color(0xFF1E293B).withValues(alpha: 0.8),
-                    ],
-                  )
-                : AppColors.bgGradient,
-          ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset('assets/images/iacls-logo.png',
-                            height: 100, fit: BoxFit.contain),
-                        _buildLangBar(lang, ref),
-                      ],
-                    ),
+                    colors: isDark 
+                      ? [const Color(0xFF1E293B), const Color(0xFF0F172A)]
+                      : [const Color(0xFFE0F2F1), const Color(0xFFB2DFDB)],
                   ),
-                  const SizedBox(height: 60),
-                  Stack(
-                    clipBehavior: Clip.none,
+                ),
+                child: SafeArea(
+                  child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(24),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(28, 70, 28, 48),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white.withValues(alpha: 0.05)
-                                  : Colors.white.withValues(alpha: 0.4),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                  color: Theme.of(context).brightness == Brightness.dark
-                                      ? Colors.white10
-                                      : Colors.white.withValues(alpha: 0.6)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: AppColors.darkOrange
-                                        .withValues(alpha: 0.08),
-                                    blurRadius: 48,
-                                    offset: const Offset(0, 24))
-                              ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              'assets/images/iacls-logo.png',
+                              height: 75, // Impactful hero logo
+                              fit: BoxFit.contain,
                             ),
-                            child: _buildForm(authState, isTe),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: -55,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            width: 110,
-                            height: 110,
-                            decoration: BoxDecoration(
-                              color: AppColors.darkOrange,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 6),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Color(0x669A3412),
-                                    blurRadius: 32,
-                                    offset: Offset(0, 16))
-                              ],
-                            ),
-                            child: const Icon(Icons.person_rounded,
-                                color: Colors.white, size: 48),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: -28,
-                        left: 20,
-                        right: 20,
-                        child: SizedBox(
-                          height: 56,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: AppColors.accentGradient,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                    color:
-                                        AppColors.orange.withValues(alpha: 0.4),
-                                    blurRadius: 24,
-                                    offset: const Offset(0, 8))
-                              ],
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: authState.status == AuthStatus.loading
-                                  ? null
-                                  : _submit,
-                              child: authState.status == AuthStatus.loading
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                          color: Colors.white, strokeWidth: 2))
-                                  : Text(isTe ? 'లాగిన్' : 'LOGIN',
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => ref.read(languageProvider.notifier).setLanguage(isTe ? 'en' : 'te'),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.5),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
+                                    ),
+                                    child: Text(
+                                      isTe ? 'English' : 'తెలుగు',
                                       style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 17,
-                                          letterSpacing: 1.5,
-                                          color: Colors.white)),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w800,
+                                        color: AppColors.tealDark,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                _buildThemeToggle(),
+                              ],
                             ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Hero Illustration
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 32),
+                        height: 180,
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.12),
+                              blurRadius: 24,
+                              offset: const Offset(0, 8),
+                            )
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(28),
+                          child: Image.asset(
+                            'assets/images/loginacls.png',
+                            fit: BoxFit.fitHeight,
                           ),
                         ),
                       ),
+                      const SizedBox(height: 12),
                     ],
                   ),
-                  const SizedBox(height: 60),
-                  Text.rich(
-                    TextSpan(
-                      text: isTe ? 'ఖాతా లేదా? ' : "Don't have an account? ",
-                      style: GoogleFonts.inter(
-                          color: Theme.of(context).textTheme.bodySmall?.color ??
-                              AppColors.darkOrange,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15),
-                      children: [
-                        WidgetSpan(
-                            child: GestureDetector(
-                                onTap: () => context.push('/signup'),
-                                child: Text(isTe ? 'సైన్ అప్' : 'Sign Up',
-                                    style: GoogleFonts.inter(
-                                        color: AppColors.orange,
-                                        fontWeight: FontWeight.w800))))
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                  _FooterWidget(isTe: isTe),
-                  const SizedBox(height: 24),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
 
-  Widget _buildLangBar(String current, WidgetRef ref) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(20)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _tab('EN', 'en', current == 'en', ref),
-          _tab('తె', 'te', current == 'te', ref),
+            // Form Content
+            Positioned.fill(
+              top: MediaQuery.of(context).size.height * 0.38,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF0F172A) : Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isTe ? 'మళ్ళీ స్వాగతం 👋' : 'Welcome Back 👋',
+                              style: GoogleFonts.inter(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w900,
+                                color: isDark ? Colors.white : AppColors.teal,
+                                letterSpacing: -1,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            _buildForm(effectiveState, isTe, isDark),
+                            const SizedBox(height: 12),
+                            
+                            // Login Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 60,
+                              child: ElevatedButton(
+                                onPressed: effectiveState.status == AuthStatus.loading || authAsync.isLoading ? null : _submit,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.teal,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                  elevation: 4,
+                                ),
+                                child: (effectiveState.status == AuthStatus.loading || authAsync.isLoading)
+                                  ? const LoadingSpinner.compact(message: '')
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(isTe ? 'లాగిన్' : 'Login', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+                                        const SizedBox(width: 12),
+                                        const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                                      ],
+                                    ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () => context.push('/signup'),
+                                child: Text.rich(
+                                  TextSpan(
+                                    text: isTe ? 'ఖాతా లేదా? ' : "Don't have an account? ",
+                                    style: GoogleFonts.inter(
+                                      color: AppColors.muted,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: isTe ? 'సైన్ అప్' : 'Sign Up',
+                                        style: const TextStyle(color: AppColors.teal, fontWeight: FontWeight.w900),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SafeArea(
+                      top: false,
+                      child: _buildFooter(isTe),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _tab(String label, String code, bool active, WidgetRef ref) {
+  Widget _buildThemeToggle() {
     return GestureDetector(
-      onTap: () => ref.read(languageProvider.notifier).setLanguage(code),
+      onTap: () => ref.read(themeModeProvider.notifier).toggle(),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: active ? AppColors.orange : Colors.transparent,
-            borderRadius: BorderRadius.circular(16)),
-        child: Text(label,
-            style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                color: active ? Colors.white : AppColors.darkOrange)),
+          color: Colors.white.withValues(alpha: 0.6),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          Theme.of(context).brightness == Brightness.dark ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
+          color: AppColors.tealDark,
+          size: 20,
+        ),
       ),
     );
   }
 
-  Widget _buildForm(AuthState state, bool isTe) {
+  Widget _buildForm(AuthState state, bool isTe, bool isDark) {
+    final hasError = state.status == AuthStatus.error || _localError != null;
+    final errorMsg = _localError ?? state.errorMessage ?? (isTe ? 'చెల్లుబాటు కాని ఆధారాలు' : 'Invalid credentials');
+
     return Column(
       children: [
         _buildInput(
-            controller: _emailCtrl,
-            hint: isTe ? 'ఈమెయిల్' : 'Email Address',
-            icon: Icons.email_outlined),
-        const SizedBox(height: 20),
+          controller: _emailCtrl,
+          hint: 'Email',
+          icon: Icons.person_outline_rounded,
+          isDark: isDark,
+          keyboardType: TextInputType.emailAddress,
+          action: TextInputAction.next,
+        ),
+        const SizedBox(height: 16),
         _buildInput(
-            controller: _passCtrl,
-            hint: isTe ? 'పాస్వర్డ్' : 'Password',
-            icon: Icons.lock_outline_rounded,
-            isPassword: true,
-            obscure: _obscure,
-            onToggleObscure: () => setState(() => _obscure = !_obscure)),
-        const SizedBox(height: 24),
+          controller: _passCtrl,
+          hint: 'Password',
+          icon: Icons.lock_outline_rounded,
+          isDark: isDark,
+          isPassword: true,
+          obscure: _obscure,
+          onToggle: () => setState(() => _obscure = !_obscure),
+          action: TextInputAction.done,
+          onSubmitted: (_) => _submit(),
+        ),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
                 SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Checkbox(
-                        value: true,
-                        onChanged: (v) {},
-                        activeColor: AppColors.orange)),
+                  width: 20,
+                  height: 20,
+                  child: Checkbox(
+                    value: _rememberMe,
+                    onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                    activeColor: AppColors.teal,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                  ),
+                ),
                 const SizedBox(width: 8),
-                Text(isTe ? 'నన్ను గుర్తుంచుకోండి' : 'Remember me',
-                    style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkOrange)),
+                Text(isTe ? 'నన్ను గుర్తుంచుకోండి' : 'Remember me', 
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: AppColors.muted, fontSize: 13)),
               ],
             ),
-            Text(isTe ? 'పాస్‌వర్డ్ మర్చిపోయారా?' : 'Forgot Password?',
-                style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkOrange.withValues(alpha: 0.7))),
+            Text(isTe ? 'పాస్‌వర్డ్ మరిచిపోయారా?' : 'Forgot password?', 
+              style: const TextStyle(color: AppColors.teal, fontWeight: FontWeight.w800, fontSize: 13)),
           ],
         ),
-        if (state.status == AuthStatus.error && state.errorMessage != null)
-          Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text(state.errorMessage!,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                      color: AppColors.red,
+        if (hasError)
+          Container(
+            margin: const EdgeInsets.only(top: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.red.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.error_outline_rounded, color: Colors.red, size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    errorMsg,
+                    style: GoogleFonts.inter(
+                      color: Colors.red.shade700,
+                      fontWeight: FontWeight.w700,
                       fontSize: 13,
-                      fontWeight: FontWeight.w600))),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
 
-  Widget _buildInput(
-      {required TextEditingController controller,
-      required String hint,
-      required IconData icon,
-      bool isPassword = false,
-      bool obscure = false,
-      VoidCallback? onToggleObscure}) {
-    return Container(
-      height: 56,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF1E293B)
-              : Colors.white.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x0D000000), blurRadius: 10, offset: Offset(0, 4))
-          ]),
-      child: Row(
-        children: [
-          Container(
-              width: 56,
-              height: 56,
-              color: AppColors.darkOrange,
-              child: Icon(icon, color: Colors.white, size: 22)),
-          Expanded(
-              child: TextFormField(
+  Widget _buildInput({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    required bool isDark,
+    bool isPassword = false,
+    bool obscure = false,
+    VoidCallback? onToggle,
+    TextInputType? keyboardType,
+    TextInputAction? action,
+    ValueChanged<String>? onSubmitted,
+  }) {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return Focus(
+          onFocusChange: (hasFocus) => setState(() {}),
+          child: Builder(
+            builder: (context) {
+              final hasFocus = Focus.of(context).hasFocus;
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: hasFocus 
+                          ? AppColors.teal 
+                          : (isDark ? Colors.white24 : const Color(0xFFE2E8F0)),
+                      width: 2,
+                    ),
+                  ),
+                ),
+                child: TextField(
                   controller: controller,
                   obscureText: obscure,
+                  keyboardType: keyboardType,
+                  textInputAction: action,
+                  onSubmitted: onSubmitted,
+                  cursorColor: AppColors.teal,
                   style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: Theme.of(context).textTheme.bodyLarge?.color,
-                      fontWeight: FontWeight.w500),
+                    color: isDark ? Colors.white : const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                   decoration: InputDecoration(
-                      hintText: hint,
-                      hintStyle: GoogleFonts.inter(
-                          color: AppColors.muted, fontSize: 15),
-                      border: InputBorder.none,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16),
-                      suffixIcon: isPassword
-                          ? IconButton(
-                              icon: Icon(
-                                  obscure
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                  color: AppColors.muted,
-                                  size: 20),
-                              onPressed: onToggleObscure)
-                          : null))),
-        ],
-      ),
+                    filled: false,
+                    hintText: hint,
+                    hintStyle: GoogleFonts.inter(
+                      color: AppColors.muted,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Icon(
+                        icon, 
+                        color: hasFocus ? AppColors.teal : AppColors.muted, 
+                        size: 22
+                      ),
+                    ),
+                    prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                    suffixIcon: isPassword && onToggle != null 
+                      ? IconButton(
+                          icon: Icon(
+                            obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: hasFocus ? AppColors.teal : AppColors.muted,
+                            size: 20,
+                          ),
+                          onPressed: onToggle,
+                        )
+                      : null,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              );
+            }
+          ),
+        );
+      }
     );
   }
-}
 
-class _FooterWidget extends StatelessWidget {
-  final bool isTe;
-  const _FooterWidget({required this.isTe});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "© 2025 | ${isTe ? 'శక్తినిచ్చింది' : 'Powered by'}",
-              style: GoogleFonts.inter(
+  Widget _buildFooter(bool isTe) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isTe ? '© 2026 iACLS ప్రోటోకాల్' : '© 2026 iACLS Protocol',
+                style: GoogleFonts.inter(
                   color: AppColors.muted,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(width: 8),
-            Image.asset('assets/images/bavya-logo.png',
-                height: 24, fit: BoxFit.contain),
-          ],
-        ),
-      ],
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                height: 12,
+                width: 1,
+                color: Colors.grey.withValues(alpha: 0.2),
+              ),
+              Row(
+                children: [
+                  Text(
+                    isTe ? 'పవర్డ్ బై ' : 'Powered by ',
+                    style: GoogleFonts.inter(
+                      color: AppColors.muted,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Image.asset('assets/images/bavya-logo.png', height: 14),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

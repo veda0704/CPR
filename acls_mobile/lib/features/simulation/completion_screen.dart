@@ -84,7 +84,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.orange.withValues(alpha: 0.15),
+                      color: AppColors.skyBlue.withValues(alpha: 0.15),
                       blurRadius: 40,
                       offset: const Offset(0, 16),
                     )
@@ -102,7 +102,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.orange.withValues(alpha: 0.35),
+                            color: AppColors.skyBlue.withValues(alpha: 0.35),
                             blurRadius: 24,
                             offset: const Offset(0, 8),
                           )
@@ -150,7 +150,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                       style: GoogleFonts.inter(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.text,
+                        color: AppColors.eliteSlate,
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -174,18 +174,18 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF16A34A).withValues(alpha: 0.08),
+                          color: AppColors.eliteTeal.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(
                               color:
-                                  const Color(0xFF16A34A).withValues(alpha: 0.2)),
+                                  AppColors.eliteTeal.withValues(alpha: 0.2)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.check_circle_outline_rounded,
                                 size: 16,
-                                color: Color(0xFF16A34A)),
+                                color: AppColors.eliteTeal),
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
@@ -193,7 +193,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF15803D),
+                                  color: AppColors.eliteTeal,
                                 ),
                               ),
                             ),
@@ -235,7 +235,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
 
   List<Widget> _confettiDots() {
     final colors = [
-      AppColors.orange, AppColors.yellow, const Color(0xFF34D399),
+      AppColors.skyBlue, AppColors.yellow, const Color(0xFF34D399),
       const Color(0xFF60A5FA), const Color(0xFFA78BFA),
     ];
     return List.generate(30, (i) {
@@ -275,7 +275,7 @@ class _GradientButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: AppColors.orange.withValues(alpha: 0.3),
+                color: AppColors.skyBlue.withValues(alpha: 0.3),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               )

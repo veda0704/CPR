@@ -1,15 +1,19 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Dashboard from './components/Dashboard';
-import ACLSWorkflow from './components/ACLSWorkflow';
-import { getMe } from './services/api';
+import { getMe, logout } from './services/api';
 import { useTheme } from './hooks/useTheme';
 
+// Lazy load components for code splitting
+const Login = lazy(() => import('./components/Login'));
+const Signup = lazy(() => import('./components/Signup'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const ACLSWorkflow = lazy(() => import('./components/ACLSWorkflow'));
+
 function App() {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
@@ -19,10 +23,15 @@ function App() {
     const resetTimer = () => {
       if (timeout) clearTimeout(timeout);
       // Logout after 30 minutes of inactivity (1800000 ms)
-      timeout = setTimeout(() => {
-        if (localStorage.getItem('access_token')) {
+      timeout = setTimeout(async () => {
+        if (localStorage.getItem('access_token') || sessionStorage.getItem('access_token')) {
+          try {
+            await logout();
+          } catch (err) {
+            console.error('Logout on inactivity failed', err);
+          }
           localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
+          sessionStorage.removeItem('access_token');
           setUser(null);
         }
       }, 1800000);
@@ -62,7 +71,7 @@ function App() {
       setLoading(false);
     }, 10000); // 10 second timeout
 
-    if (localStorage.getItem('access_token')) {
+    if (localStorage.getItem('access_token') || sessionStorage.getItem('access_token')) {
       fetchUser();
     } else {
       setLoading(false);
@@ -71,53 +80,72 @@ function App() {
     return () => clearTimeout(timeout);
   }, []);
 
-  if (loading) return <LoadingSpinner fullScreen message="Loading Application" />;
+  if (loading) return <LoadingSpinner fullScreen message={t('loading_app') || "Loading Application"} />;
 
   return (
     <Router>
       {/* Global Application Layout */}
-      <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: 'var(--bg)', transition: 'background 0.3s ease' }}>
+      <div style={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'auto', background: 'var(--bg-main)', transition: 'background 0.3s ease' }}>
 
         <style>{`
-          @keyframes ecgScrollGlobal {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-400px); }
+          @media (prefers-reduced-motion: reduce) {
+            .ecg-scroll-global {
+              animation: none !important;
+            }
           }
         `}</style>
 
-        {/* Global Fixed Background (Orbs + Animated ECG) */}
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '50vw', height: '50vw', background: '#ea580c', filter: 'blur(120px)', opacity: theme === 'dark' ? 0.04 : 0.15, transition: 'opacity 0.3s' }} />
-          <div style={{ position: 'absolute', bottom: '-20%', right: '-10%', width: '60vw', height: '60vw', background: '#ef4444', filter: 'blur(140px)', opacity: theme === 'dark' ? 0.03 : 0.1, transition: 'opacity 0.3s' }} />
-          <div style={{ position: 'absolute', top: '30%', right: '20%', width: '40vw', height: '40vw', background: '#f59e0b', filter: 'blur(100px)', opacity: theme === 'dark' ? 0.04 : 0.15, transition: 'opacity 0.3s' }} />
-
-          <div style={{
-            position: 'absolute', top: '50%', left: 0, width: 'calc(100vw + 400px)', height: '150px',
-            marginTop: '-75px', animation: 'ecgScrollGlobal 3s linear infinite',
-            filter: 'blur(3px)', opacity: theme === 'dark' ? 0.2 : 0.5
-          }}>
-            <svg width="100%" height="100%">
-              <pattern id="ecg-pattern-global" x="0" y="0" width="400" height="150" patternUnits="userSpaceOnUse">
-                <path d="M0 75 L 280 75 L 290 65 L 300 75 L 310 75 L 320 90 L 335 10 L 350 120 L 360 75 L 370 75 L 380 55 L 390 75 L 400 75"
-                  fill="none" stroke="#ea580c" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"
-                  style={{ filter: 'drop-shadow(0 0 8px rgba(234,88,12,0.5))' }} />
-              </pattern>
-              <rect x="0" y="0" width="100%" height="100%" fill="url(#ecg-pattern-global)" />
-            </svg>
-          </div>
-        </div>
+        {/* Clean background */}
 
         {/* Global Foreground Scrolling Content */}
         <div style={{ position: 'relative', width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', zIndex: 10 }}>
-          <Routes>
-            <Route path="/login" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
-            <Route path="/signup" element={!user ? <Signup theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
-            <Route path="/dashboard" element={user ? <Dashboard user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
-            <Route path="/acls/*" element={user ? <ACLSWorkflow theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
-            <Route path="/" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
-          </Routes>
+          <Suspense fallback={<LoadingSpinner fullScreen message={t('loading') || "Loading..."} />}>
+            <Routes>
+              <Route path="/login" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
+              <Route path="/signup" element={!user ? <Signup theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={user ? <Dashboard user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
+              <Route path="/acls/*" element={user ? <ACLSWorkflow user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
+              <Route path="/" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
+            </Routes>
+          </Suspense>
         </div>
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster 
+          position="top-right" 
+          reverseOrder={false}
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              color: '#0F172A',
+              padding: '16px 24px',
+              borderRadius: '20px',
+              fontSize: '15px',
+              fontWeight: '700',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+            },
+            success: {
+              iconTheme: {
+                primary: '#005B41',
+                secondary: '#fff',
+              },
+              style: {
+                borderLeft: '5px solid #005B41',
+              }
+            },
+            error: {
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+              style: {
+                borderLeft: '5px solid #ef4444',
+              }
+            }
+          }}
+        />
       </div>
     </Router>
   );

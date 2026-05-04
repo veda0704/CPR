@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 STROKE_WORKFLOW = {
     "stroke_start": {
         "title": _("Step 1: Check Face & Arms"),
-        "question": _("Ask the person to smile. Does one side of the face drop? Ask them to lift both arms. Does one arm fall down?"),
+        "question": _("Perform the F.A.S.T Check:\n1. FACE: Ask them to smile. Does one side drop?\n2. ARMS: Ask them to lift both arms. Does one fall?\n3. SPEECH: Is their speech slurred?\n4. TIME: Note the time.\n\nProceed?"),
         "video": "/static/images/stroke_assessment.png",
         "choices": [
             {"label": _("YES, they look like a stroke"), "next": "stroke_time", "color": "danger"},
@@ -21,9 +21,18 @@ STROKE_WORKFLOW = {
     "stroke_transport": {
         "title": _("Step 3: Go to Hospital Fast"),
         "question": _("Do NOT give them any water or food. Take them to a big hospital very fast!"),
+        "video": "/static/images/call_108.png",
+        "choices": [
+            {"label": _("FINISH STROKE"), "next": "stroke_complete", "color": "success"},
+        ]
+    },
+    "stroke_complete": {
+        "title": _("Stroke Complete"),
+        "question": _("Acute stroke assessment complete. Would you like to review the full Systematic Approach (ABCDE) next?"),
         "video": "/static/images/abcde_start.png",
         "choices": [
-            {"label": _("Going to hospital now"), "next": "dashboard", "color": "success", "isExit": True},
+            {"label": _("CONTINUE TO ABCDE"), "next": "abcde_start", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
-    }
+    },
 }

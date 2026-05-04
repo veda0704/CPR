@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 ABCDE_WORKFLOW = {
     "abcde_start": {
         "title": _("Systematic Approach"),
-        "question": _("Start with ABCDE: Airway, Breathing, Circulation, Disability, Exposure. Proceed?"),
+        "question": _("Start with the Systematic Approach (ABCDE):\n- Airway\n- Breathing\n- Circulation\n- Disability\n- Exposure\n\nProceed?"),
         "video": "/static/images/abcde_start.png",
         "choices": [
             {"label": _("AIRWAY (A)"), "next": "abcde_airway", "color": "primary"},
@@ -21,8 +21,8 @@ ABCDE_WORKFLOW = {
                     "label": _("AIRWAY OPEN"),
                     "description": _("The throat is clear and air can move in and out."),
                     "notice": _("An open airway lets breathing happen normally."),
-                    "image": "/static/images/airway_patent_v2.png",
-                    "next": "abcde_breathing",
+                    "image": "/static/images/airway_patent_v3.png",
+                    "next": "abcde_airway_open_info",
                     "theme": "orange",
                     "badge": "check",
                     "action_label": _("SELECT OPEN AIRWAY")
@@ -31,7 +31,7 @@ ABCDE_WORKFLOW = {
                     "label": _("AIRWAY BLOCKED"),
                     "description": _("Something is blocking the throat. Act now."),
                     "notice": _("A blocked airway stops air from going into the lungs."),
-                    "image": "/static/images/airway_obstructed_v2.png",
+                    "image": "/static/images/airway_obstructed_v3.png",
                     "next": "abcde_airway_intervention",
                     "theme": "red",
                     "badge": "alert",
@@ -40,6 +40,16 @@ ABCDE_WORKFLOW = {
             ]
         },
         "choices": []
+    },
+    "abcde_airway_open_info": {
+        "title": _("Airway Open"),
+        "question": _("The airway is patent. Before proceeding to Breathing, would you like to review how to manage a blocked airway?"),
+        "video": "/static/images/airway_patent_v3.png",
+        "choices": [
+            {"label": _("EXPLORE BLOCKED AIRWAY"), "next": "abcde_airway_intervention", "color": "danger"},
+            {"label": _("CONTINUE TO BREATHING"), "next": "abcde_breathing", "color": "success"},
+            {"label": _("BACK"), "next": "abcde_airway", "color": "secondary"}
+        ]
     },
     "abcde_airway_intervention": {
         "title": _("Airway Intervention"),
@@ -120,7 +130,7 @@ ABCDE_WORKFLOW = {
     },
     "abcde_secondary": {
         "title": _("Detailed Check"),
-        "question": _("After ABCDE is complete, continue with S-A-M-P-L-E history and focused head-to-toe examination."),
+        "question": _("After ABCDE is complete, continue with S-A-M-P-L-E history:\n- Signs & Symptoms\n- Allergies\n- Medications\n- Past Medical History\n- Last Meal\n- Events Leading Up\n\nAnd perform a focused head-to-toe examination."),
         "video": "/static/images/abcde_start.png",
         "choices": [
             {"label": _("FINISH SYSTEMATIC APPROACH"), "next": "dashboard", "color": "success"},

@@ -2,12 +2,31 @@ from django.utils.translation import gettext_lazy as _
 
 ECG_WORKFLOW = {
     "ecg_start": {
-        "title": _("ECG Basics - Introduction"),
-        "question": _("An Electrocardiogram (ECG) shows the electrical activity of the heart. It helps identify rhythms, rates, and life-threatening arrhythmias.\n\nRemember: ALWAYS treat the patient, not just the ECG. Proceed?"),
-        "video": "/static/images/ecg_intro.png",
+        "title": _("ECG & Rhythm Management"),
+        "question": _("Master the art of ECG interpretation. Choose your learning path:"),
+        "interactive_component": "choice_cards",
+        "interactive_props": {
+            "options": [
+                {
+                    "label": _("ECG BASICS"),
+                    "description": _("Learn waves, intervals, and paper scales."),
+                    "image": "/static/images/ecg_intro.png",
+                    "next": "ecg_waves",
+                    "theme": "teal",
+                    "action_label": _("LEARN BASICS")
+                },
+                {
+                    "label": _("RHYTHM STUDY"),
+                    "description": _("Master Sinus, Tachy, Arrest, and Blocks."),
+                    "image": "/static/images/ecg_rhythms.png",
+                    "next": "rhythms_start",
+                    "theme": "orange",
+                    "action_label": _("STUDY RHYTHMS")
+                }
+            ]
+        },
         "choices": [
-            {"label": _("YES (LEARN WAVES)"), "next": "ecg_waves", "color": "primary"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "ecg_waves": {
@@ -51,7 +70,7 @@ ECG_WORKFLOW = {
         "question": _("1. Assess patient first (ABC)\n2. Shockable (VT/VF): Start CPR + ACLS immediately\n3. Stable: Monitor & Take help\n4. ACS/STEMI: Aspirin 300mg, O2 (if <94%), Transmit ECG & Rapid Transport\n\nGolden Rules:\n- Treat the patient, not the ECG\n- Don't get lost in interpretation\n- Correlate with symptoms"),
         "video": "/static/images/ecg_rules.png",
         "choices": [
-            {"label": _("COMPLETE"), "next": "dashboard", "color": "success"},
+            {"label": _("CONTINUE TO RHYTHM STUDY"), "next": "rhythms_start", "color": "success"},
             {"label": _("BACK"), "next": "ecg_common_rhythms", "color": "secondary"}
         ]
     },

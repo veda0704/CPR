@@ -1,228 +1,377 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { getDashboard } from '../services/api';
-import { LogOut, Play, Zap, Heart, Activity, Thermometer, ClipboardList, Wind, AlertTriangle, Monitor, HeartPulse, Brain, Baby, ShieldAlert, Siren, ListChecks } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { getDashboard, logout } from '../services/api';
+import {
+  LogOut, Play, Zap, Heart, Activity, Thermometer, ClipboardList, Wind,
+  AlertTriangle, Monitor, HeartPulse, Brain, Baby, ShieldAlert, Siren,
+  ListChecks, Search, ChevronRight, CheckCircle2, Moon, Sun, User, Clock, Trophy, RotateCcw
+} from 'lucide-react';
 import Footer from './Footer';
 import iaclsLogo from '../assets/iacls-logo.png';
-import { getModuleStatus, setModuleStatus, getStatusLabel, getStatusColor } from '../utils/moduleStatus';
+import bavyaLogo from '../assets/bavya-logo.png';
+import { getModuleStatus, setModuleStatus, getModuleProgress } from '../utils/moduleStatus';
+
+const Skeleton = ({ className }) => <div className={`skeleton ${className}`} />;
 
 const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [levels, setLevels] = useState([]);
   const [moduleStatusMap, setModuleStatusMap] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const moduleIcons = {
-    scene_safety: <ShieldAlert size={24} />,
-    abcde: <ClipboardList size={24} />,
-    bls: <HeartPulse size={24} />,
-    airway: <Wind size={24} />,
-    adv_airway: <Thermometer size={24} />,
-    choking: <AlertTriangle size={24} />,
-    ecg: <Monitor size={24} />,
-    rhythms: <Activity size={24} />,
-    cardiac_alg: <Zap size={24} />,
-    stroke: <Brain size={24} />,
-    delivery: <Baby size={24} />,
-    poisoning: <ShieldAlert size={24} />,
-    snake_bite: <AlertTriangle size={24} />,
-    disaster: <Siren size={24} />,
-    h5t5: <ListChecks size={24} />,
-    acls: <Heart size={24} />,
+  const getModuleIcon = (modId) => {
+    const mapping = {
+      scene_safety: ShieldAlert,
+      abcde: ClipboardList,
+      bls: HeartPulse,
+      choking: AlertTriangle,
+      airway: Wind,
+      adv_airway: Activity,
+      trauma: Siren,
+      poisoning: Thermometer,
+      snake_bite: ShieldAlert,
+      stroke: Brain,
+      disaster: ListChecks,
+      intro: Monitor,
+      delivery: Baby,
+      ecg: Monitor,
+      rhythms: Activity,
+      cardiac_alg: Zap,
+      h5t5: CheckCircle2,
+      acls: Play,
+      ecg_rhythms: Monitor,
+    };
+    return mapping[modId] || Monitor;
   };
 
+  const moduleSubtitles = {
+    intro: 'description_acls',
+    scene_safety: 'description_scene_safety',
+    abcde: 'description_abcde',
+    bls: 'description_bls',
+    choking: 'description_choking',
+    airway: 'description_airway',
+    adv_airway: 'description_adv_airway',
+    ecg: 'description_ecg_rhythms',
+    ecg_rhythms: 'description_ecg_rhythms',
+    cardiac_alg: 'description_cardiac_alg',
+    stroke: 'description_stroke',
+    delivery: 'description_delivery',
+    poisoning: 'description_poisoning',
+    snake_bite: 'description_snake_bite',
+    disaster: 'description_disaster',
+    trauma: 'description_trauma',
+    h5t5: 'description_h5t5',
+    acls: 'description_acls',
+  };
+
+  const getModuleImage = (modId) => {
+    const mapping = {
+      scene_safety: 'scenesafetym1.png',
+      abcde: 'abcdem2.png',
+      bls: 'blscprm3.png',
+      choking: 'chokingm4.png',
+      airway: 'airwayanatomy.png',
+      adv_airway: 'advancedairway.png',
+      trauma: 'trauma.png',
+      poisoning: 'poisionmanagement.png',
+      snake_bite: 'snakebite.png',
+      stroke: 'strokemanagement.png',
+      disaster: 'diastermanagement.png',
+      intro: 'abcdem2.png',
+      ecg: 'ecgm13.png',
+      rhythms: 'advancedairway.png',
+      cardiac_alg: 'blscprm3.png',
+      h5t5: 'scenesafetym1.png',
+      acls: 'abcdem2.png',
+      ecg_rhythms: 'ecgm13.png'
+    };
+    const filename = mapping[modId] || 'abcdem2.png';
+    return `http://10.2.1.15:8002/static/images/module-bgs/${filename}`;
+  };
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
+        setLoading(true);
         const res = await getDashboard();
         const levelsData = res.data.levels || [];
         setLevels(levelsData);
         const statusMap = {};
         levelsData.forEach((level) => {
           level.modules.forEach((mod) => {
-            statusMap[mod.id] = getModuleStatus(mod.id);
+            statusMap[mod.id] = getModuleStatus(mod.id, user?.email);
           });
         });
         setModuleStatusMap(statusMap);
+        setError(null);
       } catch (err) {
         console.error(err);
+        setError(t('api_error') || 'Failed to load dashboard data. Please try again.');
+        toast.error(t('api_error') || 'Server connection failed');
+      } finally {
+        setLoading(false);
       }
     };
     fetchDashboard();
-  }, []);
+  }, [i18n.language, user?.email]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    setUser(null);
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout API call failed', err);
+    } finally {
+      sessionStorage.removeItem('access_token');
+      localStorage.removeItem('access_token');
+      setUser(null);
+      toast.success(t('logout_success'), { icon: '👋' });
+      navigate('/login');
+    }
   };
 
-
   const handleModuleClick = (mod) => {
-    setModuleStatus(mod.id, 'in_progress');
-    setModuleStatusMap((prev) => ({ ...prev, [mod.id]: 'in_progress' }));
+    if (moduleStatusMap[mod.id] === 'locked') {
+      toast.error(t('module_locked'));
+      return;
+    }
+    if (moduleStatusMap[mod.id] !== 'completed') {
+      setModuleStatus(mod.id, 'in_progress', user?.email);
+      setModuleStatusMap((prev) => ({ ...prev, [mod.id]: 'in_progress' }));
+    }
     navigate(`/acls/${mod.start_step}`);
   };
 
-  return (
-    <div className="app-container" style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: 'transparent' }}>
-      <header className="site-header" style={{ width: 'calc(100% - 48px)', margin: '24px auto 48px auto', backdropFilter: 'blur(20px)', background: 'var(--card)', border: '1px solid var(--card-border)', borderRadius: '24px', boxShadow: 'var(--shadow-md)' }}>
-        <div style={{ padding: '12px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className="brand" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={iaclsLogo} alt="iACLS Logo" style={{ height: '85px', objectFit: 'contain', filter: 'var(--logo-filter)' }} />
+  const calculateLevelProgress = (modules) => {
+    if (!modules || modules.length === 0) return 0;
+    const completed = modules.filter(m => moduleStatusMap[m.id] === 'completed').length;
+    return Math.round((completed / modules.length) * 100);
+  };
+
+  const getStatusDisplay = (status) => {
+    switch (status) {
+      case 'completed': return { icon: <CheckCircle2 size={14} />, label: t('completed') || 'Completed', class: 'completed' };
+      case 'in_progress': return { icon: <Activity size={14} />, label: t('in_progress') || 'In Progress', class: 'in_progress' };
+      default: return { icon: <ShieldAlert size={14} />, label: t('locked') || 'Locked', class: 'locked' };
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="medical-bg" style={{ minHeight: '100vh' }}>
+        <nav className="floating-nav"><Skeleton className="nav-skeleton" /></nav>
+        <main className="app-container dashboard-main">
+          <Skeleton className="hero-skeleton" />
+          <div className="module-grid">
+            {[1, 2, 3].map(i => <Skeleton key={i} className="card-skeleton" />)}
           </div>
+        </main>
+      </div>
+    );
+  }
 
-          <div className="nav" style={{ gap: '24px', display: 'flex', alignItems: 'center' }}>
-            <div className="language-selector" style={{ background: 'var(--card)', padding: '4px', borderRadius: '12px', border: '1px solid var(--card-border)' }}>
-              <button
-                onClick={() => { i18n.changeLanguage('en'); localStorage.setItem('i18nextLng', 'en'); }}
-                className={i18n.language === 'en' ? 'active' : ''}
-                style={{
-                  background: i18n.language === 'en' ? 'var(--orange)' : 'transparent',
-                  color: i18n.language === 'en' ? 'white' : 'var(--muted)',
-                  border: 'none',
-                  padding: '6px 14px',
-                  borderRadius: '10px',
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                ENGLISH
-              </button>
-              <button
-                onClick={() => { i18n.changeLanguage('te'); localStorage.setItem('i18nextLng', 'te'); }}
-                className={i18n.language === 'te' ? 'active' : ''}
-                style={{
-                  background: i18n.language === 'te' ? 'var(--orange)' : 'transparent',
-                  color: i18n.language === 'te' ? 'white' : 'var(--muted)',
-                  border: 'none',
-                  padding: '6px 14px',
-                  borderRadius: '10px',
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                తెలుగు
-              </button>
-            </div>
+  if (error) {
+    return (
+      <div className="medical-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="glass-card animate-reveal" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px' }}>
+          <AlertTriangle size={64} color="var(--danger)" style={{ marginBottom: '24px', filter: 'drop-shadow(0 0 10px rgba(239, 68, 68, 0.2))' }} />
+          <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-main)' }}>
+            {t('api_error') || 'Server Connection Failed'}
+          </h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '32px', lineHeight: 1.6 }}>
+            We couldn't reach the medical database. Please check your network or try again.
+          </p>
+          <button 
+            className="lms-button-refined" 
+            onClick={() => window.location.reload()}
+            style={{ margin: '0 auto', width: '100%', justifyContent: 'center', height: '54px' }}
+          >
+            <RotateCcw size={18} />
+            <span>{t('retry') || 'Retry Connection'}</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '2px solid var(--card-border)', paddingLeft: '24px', height: '40px' }}>
-              <button
-                onClick={toggleTheme}
-                className="theme-toggle-btn"
-                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                aria-label="Toggle theme"
-              >
-                {theme === 'dark' ? '☀️' : '🌙'}
-              </button>
-              <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                {user && (user.first_name || user.username) && (
-                  <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--red)', lineHeight: '1.2' }}>{user.first_name || user.username}</div>
-                )}
-              </div>
-              <button onClick={handleLogout} style={{ background: 'var(--red)', border: 'none', width: '40px', height: '40px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: 'var(--shadow-sm)', transition: 'transform 0.2s' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                <LogOut size={18} color="#ffffff" style={{ marginLeft: '4px' }} />
-              </button>
-            </div>
+  return (
+    <div className="medical-bg">
+      <nav className="floating-nav animate-reveal">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <img 
+            src={iaclsLogo} 
+            alt="IACLS Logo" 
+            style={{ 
+              height: '75px', 
+              objectFit: 'contain', 
+              filter: 'brightness(0) invert(1) drop-shadow(0 0 0.5px white)' 
+            }} 
+          />
+          <div className="search-container nav-search">
+            <Search size={18} />
+            <input
+              type="text"
+              placeholder={t('search_modules') || "Search modules..."}
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
         </div>
-      </header>
 
-      <main style={{ flex: 1 }}>
-        <section style={{ marginBottom: '64px', padding: '0 24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div className="nav-controls-pill">
+            <button onClick={() => {
+              const next = i18n.language === 'en' ? 'te' : 'en';
+              i18n.changeLanguage(next);
+              localStorage.setItem('i18nextLng', next);
+            }} className="lang-pill">
+              {i18n.language === 'en' ? 'తెలుగు' : 'English'}
+            </button>
+            <div className="theme-pill" onClick={toggleTheme}>
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </div>
+          </div>
 
-          {levels.map((level, lIdx) => (
-            <div key={level.id} style={{ marginBottom: '56px' }}>
-              {/* Level Section Header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                    <h2 style={{ fontSize: '26px', fontWeight: 900, margin: 0, color: 'var(--text)' }}>{level.name}</h2>
-                    {lIdx === 0 && (
-                      <span style={{ background: 'var(--orange)', color: 'white', fontSize: '11px', fontWeight: 900, padding: '4px 12px', borderRadius: '20px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                        {level.tag}
-                      </span>
-                    )}
-                    {lIdx > 0 && (
-                      <span style={{ background: 'var(--card)', color: 'var(--muted)', fontSize: '11px', fontWeight: 800, padding: '4px 12px', borderRadius: '20px', letterSpacing: '1px', textTransform: 'uppercase', border: '1px solid var(--card-border)' }}>
-                        {level.tag}
-                      </span>
-                    )}
+          <div className="user-nav-block">
+            <div className="user-info">
+              <span className="user-name">{user?.first_name || t('clinical_user')}</span>
+            </div>
+            <div className="user-avatar">
+              <User size={20} />
+            </div>
+            <button 
+              onClick={handleLogout} 
+              className="logout-btn"
+              style={{ 
+                background: 'white', 
+                width: '38px', 
+                height: '38px', 
+                borderRadius: '10px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                color: '#004D40',
+                border: 'none',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                cursor: 'pointer'
+              }}
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main className="app-container dashboard-main">
+        {levels.map((level) => {
+          const progress = calculateLevelProgress(level.modules);
+          const activeMod = level.modules.find(m => moduleStatusMap[m.id] === 'in_progress') || level.modules[0];
+          const nextStep = level.modules.find(m => moduleStatusMap[m.id] === 'locked' || moduleStatusMap[m.id] === undefined) || level.modules[0];
+          const lastAccessed = level.modules.find(m => moduleStatusMap[m.id] !== 'locked') || level.modules[0];
+          
+          const filteredModules = level.modules.filter(m => 
+            t(m.name).toLowerCase().includes(searchQuery.toLowerCase())
+          );
+
+          if (searchQuery && filteredModules.length === 0) return null;
+
+          return (
+            <div key={level.id} className="animate-reveal dashboard-section">
+              <section className="dashboard-hero compact-hero-row">
+                <div className="hero-row-content">
+                  <div className="hero-visual-section">
+                    <div className="hero-tag-circle-mini">
+                      <div className="hero-progress-text" style={{ position: 'relative', top: 'auto', left: 'auto', transform: 'none' }}>
+                        <Trophy size={32} color="var(--primary)" strokeWidth={2.5} />
+                      </div>
+                    </div>
                   </div>
-                  <p style={{ margin: 0, color: 'var(--muted)', fontSize: '15px' }}>{level.description}</p>
+
+                  <div className="hero-text-section">
+                    <span className="hero-subheading">{t('learning_journey')}</span>
+                    <h2 className="hero-heading">{t(level.name)}</h2>
+                    <p className="hero-description">{t(level.description || moduleSubtitles[level.modules[0]?.id])}</p>
+                  </div>
+
+                  <div className="hero-cards-section">
+                    <div className="hero-stat-pill" onClick={() => handleModuleClick(activeMod)} style={{ cursor: 'pointer' }}>
+                      <div className="pill-icon-box"><Activity size={16} /></div>
+                      <div className="pill-content">
+                        <span className="pill-label">{t('active_module')}</span>
+                        <span className="pill-value">{t(activeMod.name)}</span>
+                        <span className="pill-status"><span className="status-dot"></span> {t('in_progress')}</span>
+                      </div>
+                    </div>
+
+                    <div className="hero-stat-pill" onClick={() => handleModuleClick(nextStep)} style={{ cursor: 'pointer' }}>
+                      <div className="pill-icon-box"><Zap size={16} /></div>
+                      <div className="pill-content">
+                        <span className="pill-label">{t('next_step')}</span>
+                        <span className="pill-value">{t(nextStep.name)}</span>
+                        <span className="pill-link">{t('continue_learning')} →</span>
+                      </div>
+                    </div>
+
+                    <div className="hero-stat-pill" onClick={() => handleModuleClick(lastAccessed)} style={{ cursor: 'pointer' }}>
+                      <div className="pill-icon-box"><Clock size={16} /></div>
+                      <div className="pill-content">
+                        <span className="pill-label">{t('last_accessed')}</span>
+                        <span className="pill-value">{t(lastAccessed.name)}</span>
+                        <span className="pill-time">{t('today_time')}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </section>
 
-              {/* Module Cards Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-                {level.modules.map((mod, idx) => (
-                  <div
-                    key={mod.id}
-                    className={`card stagger-${(idx % 4) + 1}`}
-                    onClick={() => handleModuleClick(mod)}
-                    style={{
-                      padding: '40px',
-                      cursor: 'pointer',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '24px',
-                      background: 'var(--card)',
-                      borderRadius: '24px',
-                      border: '1px solid var(--card-border)',
-                      boxShadow: 'var(--shadow-sm)',
-                      transition: 'all 0.3s ease',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-10px)';
-                      e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                      e.currentTarget.style.borderColor = 'var(--orange)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                      e.currentTarget.style.borderColor = 'var(--card-border)';
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <div style={{ background: lIdx === 0 ? 'var(--accent-gradient)' : 'var(--card)', padding: '16px', borderRadius: '18px', color: lIdx === 0 ? 'white' : 'var(--orange)', border: lIdx === 0 ? 'none' : '1px solid var(--card-border)' }}>
-                        {moduleIcons[mod.id] || <Activity size={24} />}
+              <div className="module-grid">
+                {filteredModules.map((mod, idx) => {
+                  const status = getStatusDisplay(moduleStatusMap[mod.id]);
+                  const modProgress = getModuleProgress(mod.id, user?.email);
+                  
+                  return (
+                    <div key={mod.id} className={`lms-module-card animate-reveal ${moduleStatusMap[mod.id] === 'locked' ? 'card-locked' : ''}`} 
+                         onClick={() => handleModuleClick(mod)} 
+                         style={{ animationDelay: `${idx * 0.1}s` }}>
+                      <div className="card-thumbnail">
+                        <div className={`module-status-pill ${status.class}`}>
+                          {status.icon} {status.label}
+                        </div>
+                        <img src={getModuleImage(mod.id)} alt={mod.name} className="module-card-img" />
+                        {moduleStatusMap[mod.id] === 'locked' && (
+                          <div className="lock-overlay"><ShieldAlert size={48} /></div>
+                        )}
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
-                        <div style={{ fontSize: '12px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '1px' }}>{t('module_prefix')} 0{idx + 1}</div>
+
+                      <div className="card-body">
+                        <div className="card-title-row">
+                          <div style={{ flex: 1 }}>
+                            <h3 className="card-title">{t(mod.name)}</h3>
+                            <p className="card-description">{t(moduleSubtitles[mod.id] || '')}</p>
+                          </div>
+                        </div>
+
+                        <div className="module-footer">
+                          <button className="lms-button-refined">
+                            <span>{moduleStatusMap[mod.id] === 'completed' ? t('Review') : (moduleStatusMap[mod.id] === 'in_progress' ? t('Continue') : t('Start'))}</span>
+                            <ChevronRight size={18} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-
-                    <div>
-                      <h3 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 12px', color: 'var(--text)' }}>{t(mod.name)}</h3>
-                      <p style={{ fontSize: '14px', lineHeight: 1.5, margin: '0 0 16px', color: 'var(--muted)' }}>{t(mod.id + '_desc')}</p>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', borderTop: '1px solid var(--card-border)', paddingTop: '16px' }}>
-                      <div style={{ background: `${getStatusColor(moduleStatusMap[mod.id])}25`, padding: '6px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: 700, color: getStatusColor(moduleStatusMap[mod.id]) }}>
-                        {getStatusLabel(moduleStatusMap[mod.id])}
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px', background: 'var(--orange)', color: 'white', padding: '6px 12px', borderRadius: '16px' }}>
-                        {t('explore_protocol')} <Play size={14} fill="white" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
-          ))}
-        </section>
-
+          );
+        })}
       </main>
-
       <Footer />
     </div>
   );

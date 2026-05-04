@@ -24,13 +24,13 @@ class AppLocalizationsTe extends AppLocalizations {
   String get no => 'కాదు';
 
   @override
-  String get module_complete => 'మాడ్యూల్ పూర్తైంది!';
+  String get module_complete => 'మాడ్యూల్ పూర్తయింది!';
 
   @override
-  String get back_to_dashboard => 'డాష్‌బోర్డ్‌కి తిరిగి వెళ్ళండి';
+  String get back_to_dashboard => 'డాష్‌బోర్డ్‌కి తిరిగి వెళ్లండి';
 
   @override
-  String get retry => 'మళ్లీ ప్రయత్новниంచండి';
+  String get retry => 'మళ్ళీ ప్రయత్నించండి';
 
   @override
   String get connection_error => 'కనెక్షన్ లోపం';
@@ -57,76 +57,76 @@ class AppLocalizationsTe extends AppLocalizations {
   String get module_prefix => 'మాడ్యూల్';
 
   @override
-  String get scene_safety_module => 'దృశ్య భద్రత & PPE';
+  String get scene_safety_module => 'సీన్ భద్రత & పి.పి.ఇ';
 
   @override
-  String get abcde_module => 'క్రమబద్ధమైన విధానం (ABCDE)';
+  String get abcde_module => 'ఎ.బి.సి.డి.ఇ క్రమబద్ధమైన విధానం';
 
   @override
-  String get bls_cpr_module => 'BLS & అధిక నాణ్యత గల CPR';
+  String get bls_cpr_module => 'బి.ఎల్.ఎస్ & సి.పి.ఆర్';
 
   @override
-  String get airway_module => 'ఎయిర్‌వే మేనేజ్‌మెంట్';
+  String get airway_module => 'ఎయిర్‌వే అనాటమీ';
 
   @override
   String get adv_airway_module => 'అడ్వాన్స్‌డ్ ఎయిర్‌వే';
 
   @override
-  String get choking_module => 'ఉక్కిరిబిక్కిరి కావడం (FBAO)';
+  String get choking_module => 'చోకింగ్ మేనేజ్‌మెంట్';
 
   @override
-  String get ecg_basics_module => 'ECG బేసిక్స్';
+  String get ecg_rhythms_module => 'ఇ.సి.జి & రిథమ్ నిర్వహణ';
 
   @override
-  String get rhythms_blocks_module => 'రిథమ్స్ & హార్ట్ బ్లాక్స్';
+  String get cardiac_alg_module => 'కార్డియాక్ అల్గోరిథమ్స్';
 
   @override
-  String get cardiac_alg_module => 'గుండె అల్గోరిథమ్స్';
+  String get stroke_assessment => 'స్ట్రోక్ అస్సెస్మెంట్';
 
   @override
-  String get stroke_assessment => 'స్ట్రోక్ & న్యూరో';
+  String get delivery_module => 'ఎన్.ఎల్.ఎస్ & డెలివరీ';
 
   @override
-  String get delivery_module => 'ఎమర్జెన్సీ డెలివరీ';
-
-  @override
-  String get poisoning_module => 'పాయిజనింగ్ నిర్వహణ';
+  String get poisoning_module => 'విషప్రయోగం నిర్వహణ';
 
   @override
   String get snake_bite_module => 'పాముకాటు నిర్వహణ';
 
   @override
-  String get disaster_module => 'డిజాస్టర్ & ట్రియాజ్';
+  String get trauma_module => 'ట్రామా & రక్తస్రావం';
 
   @override
-  String get h5t5_module => 'H\'s & T\'s అస్సెస్సమెంట్';
+  String get disaster_module => 'డిజాస్టర్ మేనేజ్‌మెంట్';
 
   @override
-  String get start_acls => 'పూర్తి ACLS సిమ్యులేషన్';
+  String get h5t5_module => 'రివర్సిబుల్ కారణాలు (హెచ్.5.టి.5)';
 
   @override
-  String get abcde_desc => 'ఎయిర్‌వే, శ్వాస, రక్త ప్రసరణను అంచనా వేయండి.';
+  String get start_acls => 'ప్రొఫెషనల్ ఎ.సి.ఎల్.ఎస్ సిమ్యులేటర్';
+
+  @override
+  String get abcde_desc =>
+      'వాయుమార్గం, శ్వాస, రక్త ప్రసరణను అంచనా వేయండి (ఎ.బి.సి.డి.ఇ).';
 
   @override
   String get bls_desc => 'ప్రాథమిక జీవిత సహాయం మరియు ఛాతీ నొక్కులు.';
 
   @override
-  String get airway_desc => 'ఎదుటి వ్యక్తికి శ్వాస మార్గాన్ని క్లియర్ చేయడం.';
+  String get airway_desc => 'ఎగువ వాయుమార్గాన్ని నిర్వహించడం.';
 
   @override
-  String get adv_airway_desc => 'ఇంట్యూబేషన్ మరియు సూపర్‌గ్లోటిక్ పరికరాలు.';
+  String get adv_airway_desc => 'ఇంట్యూబేషన్ మరియు సూప్రాగ్లోటిక్ పరికరాలు.';
 
   @override
   String get choking_desc => 'విదేశీ వస్తువు అడ్డంకిని తొలగించడం.';
 
   @override
-  String get ecg_desc => 'లీడ్స్ మరియు వేవ్ సెగ్మెంట్లను అర్థం చేసుకోవడం.';
+  String get ecg_rhythms_desc =>
+      'ఇ.సి.జి రిథమ్ వ్యాఖ్యానం మరియు కార్డియాక్ బ్లాక్ నిర్వహణలో ప్రావీణ్యం పొందండి.';
 
   @override
-  String get rhythms_desc => 'సాధారణ అరిథ్మియాను గుర్తించడం.';
-
-  @override
-  String get cardiac_alg_desc => 'V-fib, Pulseless V-tach, Asystole, PEA.';
+  String get cardiac_alg_desc =>
+      'వి-ఫిబ్, పల్స్‌లెస్ వి-టాక్, అసిస్టోల్, పి.ఇ.ఎ.';
 
   @override
   String get stroke_desc => 'స్ట్రోక్ ప్రోటోకాల్స్ వేగంగా అంచనా వేయడం.';
@@ -136,14 +136,18 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get poisoning_desc =>
-      'విషప్రయోగం అంచనా, టాక్సిడ్రోమ్ గుర్తింపు, విరుగుడు మందులు, డీకంటామినేషన్, వేగవంతమైన రవాణా.';
+      'అంచనా, టాక్సిడ్రోమ్ గుర్తింపు, విరుగుడు మందులు, డీకంటామినేషన్ మరియు రవాణా.';
 
   @override
   String get snake_bite_desc =>
-      'విషపూరిత పాముకాటుకు అంచనా, ప్రాథమిక చికిత్స, మరియు వేగవంతమైన రవాణా.';
+      'విషపూరిత పాముకాటుకు అంచనా మరియు ప్రాథమిక చికిత్స.';
 
   @override
-  String get disaster_desc => 'START ట్రియాజ్ మరియు ఇన్సిడెంట్ కమాండ్.';
+  String get trauma_desc =>
+      'ప్రధాన గాయం మరియు రక్తస్రావం యొక్క ప్రారంభ అంచనా మరియు నిర్వహణ.';
+
+  @override
+  String get disaster_desc => 'స్టార్ట్ ట్రియాజ్ మరియు ఇన్సిడెంట్ కమాండ్.';
 
   @override
   String get h5t5_desc => 'గుండె ఆగిపోవడానికి గల కారణాలు.';
@@ -153,5 +157,48 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get scene_safety_desc =>
-      'సహాయం చేయడానికి ముందు ప్రమాదకర ప్రాంతాన్ని అంచనా వేయండి మరియు రక్షణ పరికరాలు ధరించండి.';
+      'సహాయం చేయడానికి ముందు ప్రమాదకర ప్రాంతాన్ని అంచనా వేయండి మరియు రక్షణ పరికరాలు (పి.పి.ఇ) ధరించండి.';
+
+  @override
+  String get start_module => 'మాడ్యూల్ ప్రారంభించండి';
+
+  @override
+  String get start => 'ప్రారంభించండి';
+
+  @override
+  String get continue_label => 'కొనసాగించండి';
+
+  @override
+  String get review => 'సమీక్షించండి';
+
+  @override
+  String get completed => 'పూర్తయింది';
+
+  @override
+  String get in_progress => 'కొనసాగుతోంది';
+
+  @override
+  String get locked => 'లాక్ చేయబడింది';
+
+  @override
+  String get not_started => 'ప్రారంభం కాలేదు';
+
+  @override
+  String get module_locked =>
+      'ఈ మాడ్యూల్‌ను అన్‌లాక్ చేయడానికి మునుపటి మాడ్యూల్స్ పూర్తి చేయండి';
+
+  @override
+  String get complete_label => 'పూర్తయింది';
+
+  @override
+  String get last_accessed => 'చివరగా చూసినది';
+
+  @override
+  String get total_content => 'మొత్తం కంటెంట్';
+
+  @override
+  String get modules_count => 'మాడ్యూల్స్';
+
+  @override
+  String get start_here => 'ఇక్కడ ప్రారంభించండి';
 }

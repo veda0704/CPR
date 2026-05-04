@@ -7,7 +7,7 @@ ACS_WORKFLOW = {
         "video": "/static/images/abcde_start.png",
         "choices": [
             {"label": _("YES (CHECK SYMPTOMS)"), "next": "acs_signs_symptoms", "color": "primary"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "acs_signs_symptoms": {

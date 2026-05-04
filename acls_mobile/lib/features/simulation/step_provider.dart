@@ -4,13 +4,13 @@ import '../../core/api/acls_api.dart';
 
 // ---- Dashboard Provider ----
 final dashboardProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  ref.watch(languageProvider); // Trigger refetch on language change
-  return await AclsApi.getDashboard();
+  final lang = ref.watch(languageProvider);
+  return await AclsApi.getDashboard(lang: lang);
 });
 
 // ---- Step Provider ----
 final stepProvider =
     FutureProvider.family<Map<String, dynamic>, String>((ref, stepId) async {
-  ref.watch(languageProvider); // Trigger refetch on language change
-  return await AclsApi.getStep(stepId);
+  final lang = ref.watch(languageProvider);
+  return await AclsApi.getStep(stepId, lang: lang);
 });

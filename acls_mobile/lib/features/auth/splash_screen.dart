@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/storage/local_storage.dart';
+import '../../core/widgets/loading_spinner.dart';
 import '../../core/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,7 +11,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
@@ -22,13 +24,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 1500),
     );
     _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    
+
     _controller.forward();
 
     // Navigate after animation + small delay
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () async {
+      debugPrint('🕒 [SplashScreen] Checking login state...');
+      final loggedIn = await LocalStorage.isLoggedIn;
+      debugPrint('🔑 [SplashScreen] isLoggedIn: $loggedIn');
       if (mounted) {
-        final loggedIn = LocalStorage.isLoggedIn;
         if (loggedIn) {
           context.go('/dashboard');
         } else {
@@ -56,11 +60,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/images/iacls-logo.png', width: 220),
-                const SizedBox(height: 24),
-                const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.orange),
-                  strokeWidth: 3,
+                Image.asset('assets/images/iacls-logo.png', width: 260),
+                const SizedBox(height: 48),
+                const LoadingSpinner.compact(
+                  message: 'Initializing ACLS System...',
+                  showSpinner: false,
                 ),
               ],
             ),

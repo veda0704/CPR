@@ -73,6 +73,24 @@ Ensure you have the following installed:
 
 ---
 
+## 4. Mobile App Setup (Flutter)
+1. Ensure you have the **Flutter SDK** and **Android Studio** installed.
+2. Navigate to the mobile directory:
+   ```bash
+   cd acls_mobile
+   ```
+3. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+4. Run the application:
+   ```bash
+   flutter run
+   ```
+   *Note: Ensure the backend is running first so the app can detect the API.*
+
+---
+
 ## 🛠️ Key Features
 - **Interactive Interface**: Smooth, responsive UI for simulation navigation.
 - **Natural Voice Guidance**: Automated audio instructions powered by standard TTS.
@@ -82,7 +100,7 @@ Ensure you have the following installed:
 ## 📁 Project Structure
 - `acls-backend/`: Django REST Framework API, Translation Engine, and Workflow Data.
 - `acls-frontend/`: React (Vite) application with responsive UI components.
+- `acls_mobile/`: Flutter mobile application with offline-first synchronization.
 
 ## ⚖️ License
 Protected content. Powered by **Bhavya**. &copy; 2025
-

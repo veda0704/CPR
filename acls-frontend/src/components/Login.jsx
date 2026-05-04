@@ -3,9 +3,10 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../services/api';
-import { User, Lock } from 'lucide-react';
-import Footer from './Footer';
+import { User, Lock, Eye, EyeOff, Sun, Moon, ArrowRight } from 'lucide-react';
 import iaclsLogo from '../assets/iacls-logo.png';
+import bavyaLogo from '../assets/bavya-logo.png';
+import loginHeroImg from '../assets/loginacls.png';
 
 const Login = ({ onLogin, theme, toggleTheme }) => {
   const { t, i18n } = useTranslation();
@@ -13,173 +14,573 @@ const Login = ({ onLogin, theme, toggleTheme }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const toggleLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem('i18nextLng', lang);
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    return localStorage.getItem('remember_me') === 'true';
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setError('');
     try {
-      const res = await login(email, password);
-      localStorage.setItem('access_token', res.data.tokens.access);
-      localStorage.setItem('refresh_token', res.data.tokens.refresh);
+      const res = await login(email, password, rememberMe);
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem('access_token', res.data.access);
+      if (rememberMe) localStorage.setItem('remember_me', 'true');
       onLogin(res.data.user);
-      toast.success(i18n.language === 'te' ? 'లాగిన్ విజయవంతమైంది!' : 'Login successful!', {
-        style: {
-          background: '#9a3412',
-          color: '#fff',
-          fontWeight: 'bold',
-        }
-      });
+      toast.success(i18n.language === 'te' ? 'లాగిన్ విజయవంతమైంది!' : 'Login successful!');
       navigate('/dashboard');
     } catch (err) {
-      console.error(err);
-      const errorMsg = t('invalid_credentials');
+      const errorMsg = err.response?.data?.detail || t('invalid_credentials');
       setError(errorMsg);
-      toast.error(errorMsg, {
-        style: {
-          background: '#ef4444',
-          color: '#fff',
-          fontWeight: 'bold'
-        }
-      });
+      toast.error(errorMsg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const rememberMeLabel = i18n.language === 'te' ? 'నన్ను గుర్తుంచుకోండి' : 'Remember me';
-  const forgotPasswordLabel = i18n.language === 'te' ? 'పాస్‌వర్డ్ మర్చిపోయారా?' : 'Forgot Password?';
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100%', paddingBottom: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 32px', zIndex: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <img src={iaclsLogo} alt="iACLS Logo" style={{ height: '100px', objectFit: 'contain', filter: 'var(--logo-filter)' }} />
+    <div className="login-split-container">
+      {/* Left Panel - Pastel Green Branding */}
+      <div className="login-left-panel">
+        <div className="login-branding-top">
+          <img src={iaclsLogo} alt="iACLS" className="login-panel-logo" />
         </div>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button onClick={() => toggleLanguage('en')} style={{ background: i18n.language === 'en' ? 'var(--orange)' : 'var(--card)', color: i18n.language === 'en' ? '#fff' : 'var(--red)', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>EN</button>
-          <button onClick={() => toggleLanguage('te')} style={{ background: i18n.language === 'te' ? 'var(--orange)' : 'var(--card)', color: i18n.language === 'te' ? '#fff' : 'var(--red)', border: 'none', padding: '6px 16px', borderRadius: '20px', fontWeight: 'bold', cursor: 'pointer', boxShadow: 'var(--shadow-sm)' }}>తెలుగు</button>
-          <button onClick={toggleTheme} className="theme-toggle-btn" title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} aria-label="Toggle theme">
-            {theme === 'dark' ? '☀️' : '🌙'}
-          </button>
+        
+        <div className="login-illustration-container">
+          <div className="illustration-glass-card">
+            <img src={loginHeroImg} alt="Clinical Simulation" className="login-hero-img" />
+          </div>
+        </div>
+
+        <div className="login-branding-bottom">
+          <div className="login-controls-group">
+            <div className="login-lang-toggle">
+              {i18n.language === 'en' ? (
+                <button onClick={() => { i18n.changeLanguage('te'); localStorage.setItem('i18nextLng', 'te'); }} className="lang-icon-btn">తె</button>
+              ) : (
+                <button onClick={() => { i18n.changeLanguage('en'); localStorage.setItem('i18nextLng', 'en'); }} className="lang-icon-btn">EN</button>
+              )}
+            </div>
+            <div className="login-theme-toggle" onClick={toggleTheme}>
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </div>
+          </div>
         </div>
       </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8px', zIndex: 10 }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '500px', marginTop: '16px' }}>
-          <div
-            style={{
-              background: 'var(--card)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid var(--card-border)',
-              borderRadius: '24px',
-              padding: '56px 40px 24px 40px',
-              boxShadow: 'var(--shadow-lg)',
-              position: 'relative',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                top: '-55px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '110px',
-                height: '110px',
-                borderRadius: '50%',
-                background: 'var(--red)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 16px 32px rgba(154, 52, 18, 0.4)',
-                border: '6px solid var(--card-border)',
-              }}
-            >
-              <User size={48} color="#ffffff" />
+      {/* Right Panel - Login Form */}
+      <div className="login-right-panel">
+        <div className="login-form-wrapper">
+          <h1 className="login-greeting">
+            {t('welcome_back')} <span className="greeting-icon">👋</span>
+          </h1>
+          
+          <form onSubmit={handleLogin} className="login-form-stack">
+            <div className="login-input-group">
+              <div className="login-input-icon"><User size={20} /></div>
+              <input 
+                type="email" 
+                placeholder={t('email')} 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required 
+              />
             </div>
 
-            <form onSubmit={handleLogin} id="login-form" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ display: 'flex', height: '56px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
-                <div style={{ width: '56px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <User size={22} color="#ffffff" />
-                </div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('email')}
-                  style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 16px', fontSize: '16px', color: 'var(--text)', outline: 'none' }}
-                  required
-                />
-              </div>
-
-              <div style={{ display: 'flex', height: '56px', overflow: 'hidden', borderRadius: '8px', boxShadow: 'var(--shadow-sm)' }}>
-                <div style={{ width: '56px', background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Lock size={22} color="#ffffff" />
-                </div>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t('password')}
-                  style={{ flex: 1, border: 'none', background: 'var(--input-bg)', padding: '0 16px', fontSize: '16px', color: 'var(--text)', outline: 'none' }}
-                  required
-                />
-              </div>
-
-              {error && <div style={{ color: '#ef4444', fontSize: '14px', fontWeight: 600, textAlign: 'center', marginTop: '-4px' }}>{error}</div>}
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', fontSize: '15px', color: 'var(--text)', fontWeight: 600 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                  <input type="checkbox" style={{ accentColor: 'var(--orange)', cursor: 'pointer', width: '18px', height: '18px', margin: 0 }} />
-                  {rememberMeLabel}
-                </label>
-                <span style={{ cursor: 'pointer', fontStyle: 'italic', opacity: 0.8 }}>{forgotPasswordLabel}</span>
-              </div>
-            </form>
-
-            <div style={{ textAlign: 'center', marginTop: '28px', paddingBottom: '16px' }}>
-              <span style={{ fontSize: '15px', color: 'var(--red)', fontWeight: 500 }}>
-                {t('dont_have_account')} <Link to="/signup" style={{ color: 'var(--orange)', fontWeight: 800, textDecoration: 'none' }}>{t('signup')}</Link>
-              </span>
+            <div className="login-input-group">
+              <div className="login-input-icon"><Lock size={20} /></div>
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder={t('password')} 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required 
+              />
+              <button type="button" className="pw-toggle" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
-          </div>
 
-          <div style={{ position: 'relative', marginTop: '-28px', display: 'flex', justifyContent: 'center', zIndex: 12 }}>
-            <button
-              type="submit"
-              form="login-form"
-              style={{
-                padding: '0',
-                height: '56px',
-                width: '280px',
-                background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '16px',
-                fontSize: '17px',
-                fontWeight: 800,
-                letterSpacing: '1.5px',
-                cursor: 'pointer',
-                boxShadow: '0 8px 24px rgba(234, 88, 12, 0.4)',
-                transition: 'transform 0.2s',
-                textTransform: 'uppercase',
-              }}
-              onMouseOver={(e) => { e.target.style.transform = 'translateY(-2px)'; }}
-              onMouseOut={(e) => { e.target.style.transform = 'translateY(0)'; }}
-            >
-              {t('login') || 'LOGIN'}
+            <div className="login-extra-actions">
+              <label className="login-remember">
+                <input 
+                  type="checkbox" 
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <span>{t('remember_me')}</span>
+              </label>
+              <Link to="/forgot-password" title="Coming Soon" className="login-forgot">{t('forgot_password')}</Link>
+            </div>
+
+            {error && <div className="login-error-msg">{error}</div>}
+
+            <button type="submit" className="login-submit-btn" disabled={isLoading}>
+              {isLoading ? (
+                <div className="login-btn-loader"></div>
+              ) : (
+                <>
+                  <span>{t('login_btn')}</span>
+                  <ArrowRight size={20} />
+                </>
+              )}
             </button>
+          </form>
+
+          <div className="login-signup-prompt">
+            {t('signup_prompt')} <Link to="/signup">{t('signup_link')}</Link>
+          </div>
+
+          <div className="login-footer-branding">
+            <span className="copyright">{t('copyright_text')}</span>
+            <span className="powered-by">
+              {t('powered_by')} <img src={bavyaLogo} alt="BAVYA" />
+            </span>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '16px', zIndex: 10 }}>
-        <Footer />
-      </div>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .login-split-container {
+          display: flex;
+          height: 100vh;
+          background: #fff;
+          font-family: 'Inter', sans-serif;
+        }
+
+        /* Left Panel */
+        .login-left-panel {
+          flex: 0 0 58%;
+          background: #E0F2F1;
+          background: linear-gradient(145deg, #E0F2F1 0%, #B2DFDB 100%);
+          display: flex;
+          flex-direction: column;
+          padding: 32px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .login-branding-top {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+        }
+
+        .login-panel-logo {
+          height: 150px;
+          object-fit: contain;
+          filter: drop-shadow(0 4px 12px rgba(0, 121, 107, 0.1));
+        }
+
+        .login-illustration-container {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .illustration-glass-card {
+          width: 100%;
+          max-width: 620px;
+          aspect-ratio: 16/10;
+          background: rgba(255, 255, 255, 0.4);
+          border-radius: 40px;
+          padding: 24px;
+          box-shadow: 0 40px 80px rgba(0, 77, 64, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.6);
+          overflow: hidden;
+          transform: perspective(1000px) rotateY(-5deg);
+          animation: float 6s ease-in-out infinite;
+          transition: transform 0.4s ease;
+        }
+
+        .illustration-glass-card:hover {
+          transform: perspective(1000px) rotateY(-2deg) translateY(-5px);
+        }
+
+        @keyframes float {
+          0%, 100% { transform: perspective(1000px) rotateY(-5deg) translateY(0); }
+          50% { transform: perspective(1000px) rotateY(-5deg) translateY(-15px); }
+        }
+
+        .login-hero-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 28px;
+        }
+
+        .login-branding-bottom {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          width: 100%;
+        }
+
+        .lang-icon-btn {
+          font-family: 'Inter', sans-serif;
+          font-weight: 800;
+          font-size: 14px;
+          color: #00796B;
+          background: rgba(0, 121, 107, 0.1);
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(0, 121, 107, 0.2);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .lang-icon-btn:hover {
+          background: #00796B;
+          color: #fff;
+          transform: scale(1.1);
+        }
+
+        .login-controls-group {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          background: rgba(255, 255, 255, 0.6);
+          padding: 8px 16px;
+          border-radius: 100px;
+          border: 1px solid rgba(255, 255, 255, 0.8);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .login-lang-toggle {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 14px;
+          font-weight: 700;
+        }
+
+        .login-theme-toggle {
+          cursor: pointer;
+          color: #00695C;
+          display: flex;
+          transition: transform 0.3s ease;
+        }
+
+        .login-theme-toggle:hover {
+          transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Right Panel */
+        .login-right-panel {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          background: #fff;
+        }
+
+        .login-form-wrapper {
+          width: 100%;
+          max-width: 380px;
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        .login-greeting {
+          font-size: 2.1rem;
+          font-weight: 900;
+          color: #00796B;
+          margin-bottom: 20px;
+          letter-spacing: -0.04em;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .greeting-icon {
+          font-size: 1.8rem;
+        }
+
+        .login-form-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .login-input-group {
+          position: relative;
+          display: flex;
+          align-items: center;
+          border-bottom: 2px solid #E2E8F0;
+          transition: all 0.3s ease;
+          padding-bottom: 4px;
+        }
+
+        .login-input-group:hover {
+          border-color: #CBD5E1;
+        }
+
+        .login-input-group:focus-within {
+          border-color: #00796B;
+          transform: translateY(-1px);
+        }
+
+        .login-input-group input {
+          width: 100%;
+          border: none;
+          background: none;
+          padding: 10px 10px 10px 40px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #1E293B;
+          outline: none;
+        }
+
+        .login-input-icon {
+          position: absolute;
+          left: 0;
+          color: #94A3B8;
+          transition: all 0.3s ease;
+        }
+
+        .login-input-group:focus-within .login-input-icon {
+          color: #00796B;
+          transform: scale(1.1);
+        }
+
+        .pw-toggle {
+          position: absolute;
+          right: 0;
+          background: none;
+          border: none;
+          color: #94A3B8;
+          cursor: pointer;
+          display: flex;
+          padding: 8px;
+          transition: color 0.3s ease;
+        }
+
+        .pw-toggle:hover {
+          color: #00796B;
+        }
+
+        .login-extra-actions {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 4px;
+        }
+
+        .login-remember {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #64748B;
+          cursor: pointer;
+          transition: color 0.3s ease;
+        }
+
+        .login-remember:hover {
+          color: #1E293B;
+        }
+
+        .login-forgot {
+          color: #00796B;
+          font-weight: 700;
+          font-size: 14px;
+          text-decoration: none;
+          transition: opacity 0.3s ease;
+        }
+
+        .login-forgot:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+
+        .login-submit-btn {
+          height: 56px;
+          background: var(--primary, #00796B);
+          color: #fff;
+          border: none;
+          border-radius: 16px;
+          font-size: 17px;
+          font-weight: 800;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 12px 24px rgba(0, 121, 107, 0.15);
+          margin-top: 8px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .login-submit-btn:hover:not(:disabled) {
+          background: var(--primary-strong, #00695C);
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 20px 40px rgba(0, 121, 107, 0.25);
+        }
+
+        .login-submit-btn:active:not(:disabled) {
+          transform: translateY(0) scale(0.98);
+        }
+
+        .login-submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .login-btn-loader {
+          width: 24px;
+          height: 24px;
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          border-top-color: #fff;
+          animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-signup-prompt {
+          text-align: center;
+          margin-top: 24px;
+          font-size: 15px;
+          font-weight: 600;
+          color: #64748B;
+        }
+
+        .login-signup-prompt a {
+          color: #00796B;
+          font-weight: 800;
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+
+        .login-signup-prompt a:hover {
+          color: #004D40;
+          text-decoration: underline;
+        }
+
+        .login-footer-branding {
+          margin-top: 32px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 20px;
+          border-top: 1px solid #F1F5F9;
+        }
+
+        .copyright {
+          font-size: 13px;
+          color: #64748B;
+          font-weight: 600;
+        }
+
+        .powered-by {
+          font-size: 13px;
+          color: #64748B;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-weight: 700;
+        }
+
+        .powered-by img {
+          height: 20px;
+          object-fit: contain;
+          transition: transform 0.3s ease;
+        }
+
+        .powered-by:hover img {
+          transform: scale(1.1);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+          .login-left-panel {
+            display: none;
+          }
+          .login-right-panel {
+            padding: 24px;
+          }
+          .login-form-wrapper {
+            max-width: 100%;
+          }
+        }
+
+        /* Dark Mode Overrides */
+        [data-theme="dark"] .login-split-container {
+          background: #0F172A;
+        }
+
+        [data-theme="dark"] .login-left-panel {
+          background: linear-gradient(145deg, #071124 0%, #0F172A 100%);
+          color: #81C784;
+          border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .login-right-panel {
+          background: #0F172A;
+        }
+
+        [data-theme="dark"] .login-greeting {
+          color: #F8FAFC;
+        }
+
+        [data-theme="dark"] .login-input-group {
+          border-color: #334155;
+        }
+
+        [data-theme="dark"] .login-input-group input {
+          color: #F8FAFC;
+        }
+
+        [data-theme="dark"] .login-input-group:focus-within {
+          border-color: #00796B;
+        }
+
+        [data-theme="dark"] .login-remember {
+          color: #94A3B8;
+        }
+
+        [data-theme="dark"] .illustration-glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="dark"] .login-controls-group {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .login-lang-toggle button {
+          color: #81C784;
+        }
+
+        [data-theme="dark"] .login-theme-toggle {
+          color: #81C784;
+        }
+
+        [data-theme="dark"] .login-footer-branding {
+          border-color: rgba(255, 255, 255, 0.05);
+        }
+      ` }} />
     </div>
   );
 };

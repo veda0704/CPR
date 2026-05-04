@@ -68,9 +68,18 @@ SNAKE_BITE_WORKFLOW = {
     "snake_bite_doctor": {
         "title": _("Step 9: Expert Advice"),
         "question": _("When in doubt, contact a doctor or specialist. Mission complete?"),
-        "video": "/static/images/abcde_start.png",
+        "video": "/static/images/ems_backup.png",
         "choices": [
-            {"label": _("FINISH"), "next": "dashboard", "color": "success"}
+            {"label": _("FINISH SNAKE BITE"), "next": "snake_bite_complete", "color": "success"}
         ]
-    }
+    },
+    "snake_bite_complete": {
+        "title": _("Snake Bite Complete"),
+        "question": _("Snake bite management protocol complete. Would you like to review general Poisoning management steps next?"),
+        "video": "/static/images/poisoning.png",
+        "choices": [
+            {"label": _("CONTINUE TO POISONING"), "next": "poisoning_start", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
+        ]
+    },
 }

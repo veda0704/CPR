@@ -11,7 +11,7 @@ CHOKING_WORKFLOW = {
                 {
                     "label": _("ADULT"),
                     "description": _("12 years or older"),
-                    "image": "/static/images/adult_avatar_rect.png",
+                    "image": "/static/images/adult_avatar_v2.png",
                     "next": "adult_choking_step1",
                     "theme": "orange",
                     "badge": "check",
@@ -20,7 +20,7 @@ CHOKING_WORKFLOW = {
                 {
                     "label": _("BABY"),
                     "description": _("Under 12 months"),
-                    "image": "/static/images/infant_avatar_rect.png",
+                    "image": "/static/images/infant_avatar_v2.png",
                     "next": "infant_choking_step1",
                     "theme": "red",
                     "badge": "alert",
@@ -78,8 +78,17 @@ CHOKING_WORKFLOW = {
         "question": _("Is the obstructing object removed from the airway?"),
         "video": "/static/images/choking_step6.png",
         "choices": [
-            {"label": _("YES"), "next": "dashboard", "color": "success"},
+            {"label": _("YES"), "next": "adult_choking_complete", "color": "success"},
             {"label": _("NO"), "next": "adult_choking_step7", "color": "danger"}
+        ]
+    },
+    "adult_choking_complete": {
+        "title": _("Adult Choking Complete"),
+        "question": _("You have successfully handled adult choking. Would you like to review infant choking management steps next?"),
+        "video": "/static/images/infant_avatar_v2.png",
+        "choices": [
+            {"label": _("CONTINUE TO BABY"), "next": "infant_choking_step1", "color": "success"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "secondary"}
         ]
     },
     "adult_choking_step7": {
@@ -147,8 +156,17 @@ CHOKING_WORKFLOW = {
         "question": _("Is the obstructing object removed from the infant's airway?"),
         "video": "/static/images/infant_choking_relief.png",
         "choices": [
-            {"label": _("YES"), "next": "dashboard", "color": "success"},
+            {"label": _("YES"), "next": "infant_choking_complete", "color": "success"},
             {"label": _("NO"), "next": "infant_choking_step8", "color": "danger"}
+        ]
+    },
+    "infant_choking_complete": {
+        "title": _("Infant Choking Complete"),
+        "question": _("You have successfully handled infant choking. Would you like to review adult choking management steps next?"),
+        "video": "/static/images/adult_avatar_v2.png",
+        "choices": [
+            {"label": _("CONTINUE TO ADULT"), "next": "adult_choking_step1", "color": "success"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "secondary"}
         ]
     },
     "infant_choking_step8": {

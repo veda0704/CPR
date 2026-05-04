@@ -8,14 +8,16 @@ const safeParse = (value) => {
   }
 };
 
-const getStoredStatuses = () => {
-  if (typeof localStorage === 'undefined') return {};
-  return safeParse(localStorage.getItem(STORAGE_KEY));
+const getStoredStatuses = (userId) => {
+  if (typeof localStorage === 'undefined' || !userId) return {};
+  const key = `${STORAGE_KEY}_${userId}`;
+  return safeParse(localStorage.getItem(key));
 };
 
-const setStoredStatuses = (statuses) => {
-  if (typeof localStorage === 'undefined') return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses));
+const setStoredStatuses = (userId, statuses) => {
+  if (typeof localStorage === 'undefined' || !userId) return;
+  const key = `${STORAGE_KEY}_${userId}`;
+  localStorage.setItem(key, JSON.stringify(statuses));
 };
 
 export const STATUS_LABELS = {
@@ -25,24 +27,72 @@ export const STATUS_LABELS = {
 };
 
 export const STATUS_COLORS = {
-  not_started: '#9ca3af',
-  in_progress: '#f59e0b',
-  completed: '#16a34a',
+  not_started: 'var(--muted)',
+  in_progress: 'var(--orange)',
+  completed: 'var(--sage)',
 };
 
-export const getModuleStatus = (moduleId) => {
-  if (!moduleId) return 'not_started';
-  const statuses = getStoredStatuses();
-  return statuses[moduleId] || 'not_started';
+export const getModuleStatus = (moduleId, userId) => {
+  if (!moduleId || !userId) return 'not_started';
+  const statuses = getStoredStatuses(userId);
+  const data = statuses[moduleId];
+  if (!data) return 'not_started';
+  if (typeof data === 'string') return data; // Backward compatibility
+  return data.status || 'not_started';
 };
 
-export const setModuleStatus = (moduleId, status) => {
-  if (!moduleId) return;
-  const statuses = getStoredStatuses();
-  const currentStatus = statuses[moduleId];
-  if (currentStatus === 'completed' && status === 'in_progress') return;
-  statuses[moduleId] = status;
-  setStoredStatuses(statuses);
+export const setModuleStatus = (moduleId, status, userId) => {
+  if (!moduleId || !userId) return;
+  const statuses = getStoredStatuses(userId);
+  let current = statuses[moduleId] || { status: 'not_started', progress: 0 };
+  
+  // Convert legacy string to object if needed
+  if (typeof current === 'string') {
+    current = { status: current, progress: current === 'completed' ? 100 : 0 };
+  }
+  
+  if (current.status === 'completed' && status === 'in_progress') return;
+  
+  statuses[moduleId] = { 
+    ...current,
+    status 
+  };
+  if (status === 'completed') statuses[moduleId].progress = 100;
+  
+  setStoredStatuses(userId, statuses);
+};
+
+export const getModuleProgress = (moduleId, userId) => {
+  if (!moduleId || !userId) return 0;
+  const statuses = getStoredStatuses(userId);
+  const data = statuses[moduleId];
+  if (!data) return 0;
+  if (typeof data === 'string') return data === 'completed' ? 100 : 0; // Backward compatibility
+  return data.progress || 0;
+};
+
+export const setModuleProgress = (moduleId, progress, userId) => {
+  if (!moduleId || !userId) return;
+  const statuses = getStoredStatuses(userId);
+  let current = statuses[moduleId] || { status: 'in_progress', progress: 0 };
+  
+  // Convert legacy string to object if needed
+  if (typeof current === 'string') {
+    current = { status: current, progress: current === 'completed' ? 100 : 0 };
+  }
+  
+  // Don't downgrade from 100%
+  if (current.progress === 100 && progress < 100) return;
+  
+  statuses[moduleId] = {
+    ...current,
+    progress: Math.max(current.progress, progress)
+  };
+  
+  if (progress >= 100) statuses[moduleId].status = 'completed';
+  else if (progress > 0) statuses[moduleId].status = 'in_progress';
+  
+  setStoredStatuses(userId, statuses);
 };
 
 export const getStatusLabel = (status) => STATUS_LABELS[status] || STATUS_LABELS.not_started;

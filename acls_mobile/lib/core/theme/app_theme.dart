@@ -2,19 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const Color bg = Color(0xFFFFF7ED);
-  static const Color card = Color(0xCCFFFFFF);
-  static const Color primary = Color(0xFFEA580C);
-  static const Color orange = Color(0xFFEA580C);
-  static const Color orangeLight = Color(0xFFFB923C);
-  static const Color darkOrange = Color(0xFF9A3412); // #9a3412
+  /* Clinical Precision Design System - Elite Web Parity */
+  static const Color eliteTeal = Color(0xFF005B41);
+  static const Color eliteDarkTeal = Color(0xFF004431);
+  static const Color eliteSlate = Color(0xFF0F172A);
+  static const Color eliteGrey = Color(0xFF64748B);
+  static const Color eliteOrange = Color(0xFFF97316);
+  
+  static const Color slate = eliteSlate;
+  static const Color skyBlue = eliteTeal; // Primary Elite Branding
+  static const Color skyBlueHover = eliteDarkTeal;
+  static const Color skyBlueSoft = Color(0xFFECFDF5);
+  static const Color slateLight = Color(0xFF1E293B);
+  static const Color softGrey = Color(0xFFF1F5F9);
+  static const Color pastelGreen = Color(0xFFD1FAE5);
+  static const Color teal = eliteTeal;
+  static const Color tealDark = eliteDarkTeal;
+
+  // Main Tokens
+  static const Color primary = eliteTeal;
+  static const Color accent = eliteTeal;
+  static const Color bg = Color(0xFFF8FAFC);
+  static const Color card = Colors.white;
+  static const Color subCard = Color(0xFFF1F5F9);
+
+  static const Color orange = eliteOrange;
+  static const Color darkOrange = Color(0xFFEA580C);
   static const Color yellow = Color(0xFFF59E0B);
-  static const Color red = Color(0xFFDC2626);
-  static const Color muted = Color(0xFF64748B);
-  static const Color text = Color(0xFF111827);
-  static const Color success = Color(0xFF16A34A);
-  static const Color danger = Color(0xFFDC2626);
-  static const Color warning = Color(0xFFD97706);
+  static const Color red = Color(0xFFEF4444);
+  static const Color muted = eliteGrey;
+  static const Color text = Color(0xFF0F172A);
+  static const Color success = Color(0xFF10B981);
+  static const Color danger = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFF59E0B);
   static const Color white = Colors.white;
 
   static final Map<String, IconData> moduleIcons = {
@@ -23,8 +43,7 @@ class AppColors {
     'airway': Icons.air_outlined,
     'adv_airway': Icons.medical_services_outlined,
     'choking': Icons.warning_amber_rounded,
-    'ecg': Icons.monitor_heart_outlined,
-    'rhythms': Icons.show_chart_outlined,
+    'ecg_rhythms': Icons.monitor_heart_outlined,
     'cardiac_alg': Icons.electric_bolt_outlined,
     'stroke': Icons.psychology_outlined,
     'delivery': Icons.child_care_outlined,
@@ -37,19 +56,21 @@ class AppColors {
   static const LinearGradient accentGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFB923C), Color(0xFFEA580C)],
+    colors: [Color(0xFF005B41), Color(0xFF004431)],
   );
 
   static const LinearGradient bgGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFFFFF7ED), Color(0xFFFFEDD5), Color(0xFFFED7AA)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFFF8FAFC), Color(0xFFF1F5F9)],
   );
 
   static Color fromLabel(String label) {
     switch (label) {
       case 'primary':
-        return orange;
+        return skyBlue;
+      case 'secondary':
+        return softGrey;
       case 'success':
         return success;
       case 'danger':
@@ -59,7 +80,7 @@ class AppColors {
       case 'white':
         return white;
       default:
-        return orange;
+        return skyBlue;
     }
   }
 }
@@ -67,27 +88,29 @@ class AppColors {
 class AppTheme {
   static ThemeData get lightTheme {
     final base = ThemeData(
-      colorSchemeSeed: AppColors.orange,
+      colorSchemeSeed: AppColors.skyBlue, // Elite Teal
       scaffoldBackgroundColor: AppColors.bg,
       useMaterial3: true,
       brightness: Brightness.light,
     );
 
-    return _buildTheme(base, AppColors.text, Colors.white.withValues(alpha: 0.9));
+    return _buildTheme(
+        base, AppColors.text, Colors.white.withValues(alpha: 0.9));
   }
 
-  static ThemeData get darkTheme {
-    final base = ThemeData(
-      colorSchemeSeed: AppColors.orange,
-      scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate 900
-      useMaterial3: true,
-      brightness: Brightness.dark,
-    );
+  static ThemeData get darkTheme => _buildTheme(
+        ThemeData(
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: const Color(0xFF0F172A),
+          colorSchemeSeed: AppColors.skyBlue, // Elite Teal
+          useMaterial3: true,
+        ),
+        const Color(0xFFF8FAFC),
+        const Color(0xFF1E293B),
+      );
 
-    return _buildTheme(base, const Color(0xFFF8FAFC), const Color(0xFF1E293B)); // Slate 50 text, Slate 800 surface
-  }
-
-  static ThemeData _buildTheme(ThemeData base, Color textColor, Color surfaceColor) {
+  static ThemeData _buildTheme(
+      ThemeData base, Color textColor, Color surfaceColor) {
     return base.copyWith(
       textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
         bodyColor: textColor,
@@ -104,13 +127,13 @@ class AppTheme {
           fontWeight: FontWeight.w700,
         ),
       ),
-      elevatedButtonTheme: _elevatedButtonTheme(AppColors.orange),
+      elevatedButtonTheme: _elevatedButtonTheme(AppColors.eliteTeal),
       inputDecorationTheme: _inputDecorationTheme(surfaceColor),
       cardTheme: CardThemeData(
         color: surfaceColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(24),
           side: BorderSide(
             color: base.brightness == Brightness.dark
                 ? Colors.white.withValues(alpha: 0.05)
@@ -129,7 +152,7 @@ class AppTheme {
         foregroundColor: Colors.white,
         minimumSize: const Size(double.infinity, 56),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
         textStyle: GoogleFonts.inter(
           fontSize: 16,
@@ -154,7 +177,7 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.orange, width: 2),
+        borderSide: const BorderSide(color: AppColors.eliteTeal, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );

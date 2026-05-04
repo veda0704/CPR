@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .workflows import WORKFLOW_STEPS
 from django.utils.translation import activate
@@ -17,7 +17,8 @@ def api_get_step(request, step_id):
     Returns a single simulation step.
     """
     # Language is handled by LocaleMiddleware
-    lang = getattr(request, 'LANGUAGE_CODE', 'en')
+    # Language is handled by LocaleMiddleware, but also check query param
+    lang = request.query_params.get('lang', getattr(request, 'LANGUAGE_CODE', 'en'))
     
     step = WORKFLOW_STEPS.get(step_id)
     if not step:
@@ -101,40 +102,39 @@ def api_dashboard_data(request):
     levels = [
         {
             "id": "level1",
-            "name": str(_("Level 1: Basic Life Saving")),
-            "tag": str(_("START HERE")),
+            "name": "Level 1: Basic Life Saving",
+            "tag": "START HERE",
             "modules": [
-                {"name": _("Scene Safety & PPE"), "id": "scene_safety", "start_step": "scene_safety_start"},
-                {"name": _("Systematic ABCDE"), "id": "abcde", "start_step": "abcde_start"},
-                {"name": _("BLS & CPR"), "id": "bls", "start_step": "bls_start"},
-                {"name": _("Choking Management"), "id": "choking", "start_step": "choking_start"},
+                {"name": "Scene Safety & PPE", "id": "scene_safety", "start_step": "scene_safety_start", "thumbnail": "/static/images/module-bgs/scenesafetym1.png"},
+                {"name": "Systematic ABCDE", "id": "abcde", "start_step": "abcde_start", "thumbnail": "/static/images/module-bgs/abcdem2.png"},
+                {"name": "BLS & CPR", "id": "bls", "start_step": "bls_start", "thumbnail": "/static/images/module-bgs/blscprm3.png"},
+                {"name": "Choking Management", "id": "choking", "start_step": "choking_start", "thumbnail": "/static/images/module-bgs/chokingm4.png"},
             ]
         },
         {
             "id": "level2",
-            "name": str(_("Level 2: Emergency Management")),
-            "tag": str(_("INTERMEDIATE")),
+            "name": "Level 2: Emergency Management",
+            "tag": "INTERMEDIATE",
             "modules": [
-                {"name": _("Airway Anatomy"), "id": "airway", "start_step": "airway_start"},
-                {"name": _("Advanced Airway"), "id": "adv_airway", "start_step": "adv_airway_start"},
-                {"name": _("Trauma & Bleeding"), "id": "trauma", "start_step": "trauma_start"},
-                {"name": _("Poisoning Management"), "id": "poisoning", "start_step": "poisoning_start"},
-                {"name": _("Snake Bite Management"), "id": "snake_bite", "start_step": "snake_bite_initial"},
-                {"name": _("Stroke Assessment"), "id": "stroke", "start_step": "stroke_start"},
-                {"name": _("Disaster Management"), "id": "disaster", "start_step": "disaster_start"},
-                {"name": _("NLS & Delivery"), "id": "delivery", "start_step": "delivery_start"},
+                {"name": "Airway Anatomy", "id": "airway", "start_step": "airway_start", "thumbnail": "/static/images/module-bgs/airwaym5.png"},
+                {"name": "Advanced Airway", "id": "adv_airway", "start_step": "adv_airway_start", "thumbnail": "/static/images/module-bgs/advairwaym6.png"},
+                {"name": "Trauma & Bleeding", "id": "trauma", "start_step": "trauma_start", "thumbnail": "/static/images/module-bgs/traumam7.png"},
+                {"name": "Poisoning Management", "id": "poisoning", "start_step": "poisoning_start", "thumbnail": "/static/images/module-bgs/poisoningm8.png"},
+                {"name": "Snake Bite Management", "id": "snake_bite", "start_step": "snake_bite_initial", "thumbnail": "/static/images/module-bgs/snakebitem9.png"},
+                {"name": "Stroke Assessment", "id": "stroke", "start_step": "stroke_start", "thumbnail": "/static/images/module-bgs/strokem10.png"},
+                {"name": "Disaster Management", "id": "disaster", "start_step": "disaster_start", "thumbnail": "/static/images/module-bgs/disasterm11.png"},
+                {"name": "NLS & Delivery", "id": "delivery", "start_step": "delivery_start", "thumbnail": "/static/images/module-bgs/nlsm12.png"},
             ]
         },
         {
             "id": "level3",
-            "name": str(_("Level 3: Advanced Cardiac (ACLS)")),
-            "tag": str(_("ADVANCED")),
+            "name": "Level 3: Advanced Cardiac (ACLS)",
+            "tag": "ADVANCED",
             "modules": [
-                {"name": _("ECG Waves & Basics"), "id": "ecg", "start_step": "ecg_start"},
-                {"name": _("Rhythms & Blocks"), "id": "rhythms", "start_step": "rhythms_start"},
-                {"name": _("Cardiac Algorithms"), "id": "cardiac_alg", "start_step": "cardiac_alg_start"},
-                {"name": _("Reversible Causes (H5T5)"), "id": "h5t5", "start_step": "h5t5_start"},
-                {"name": _("Professional ACLS Simulator"), "id": "acls", "start_step": "1"},
+                {"name": "ECG & Rhythm Management", "id": "ecg", "start_step": "ecg_start", "thumbnail": "/static/images/module-bgs/ecgm13.png"},
+                {"name": "Cardiac Algorithms", "id": "cardiac_alg", "start_step": "cardiac_alg_start", "thumbnail": "/static/images/module-bgs/cardiacalgm15.png"},
+                {"name": "Reversible Causes (H5T5)", "id": "h5t5", "start_step": "h5t5_start", "thumbnail": "/static/images/module-bgs/h5t5m16.png"},
+                {"name": "Professional ACLS Simulator", "id": "acls", "start_step": "1", "thumbnail": "/static/images/module-bgs/aclsm17.png"},
             ]
         }
     ]

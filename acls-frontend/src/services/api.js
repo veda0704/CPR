@@ -4,10 +4,11 @@ const API_URL = '/api';
 
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access_token');
+  const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
   const lang = localStorage.getItem('i18nextLng') || 'en';
   
   if (token) {
@@ -34,29 +35,21 @@ api.interceptors.response.use(
       }
 
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('refresh_token');
+      try {
+        const res = await axios.post(`${API_URL}/accounts/refresh/`, {}, { withCredentials: true });
+        const newAccessToken = res.data.access;
+        const storage = localStorage.getItem('remember_me') === 'true' ? localStorage : sessionStorage;
+        storage.setItem('access_token', newAccessToken);
 
-      if (refreshToken) {
-        try {
-          // Attempt to get a new access token
-          const res = await axios.post(`${API_URL}/accounts/refresh/`, { refresh: refreshToken });
-          const newAccessToken = res.data.access;
-          
-          localStorage.setItem('access_token', newAccessToken);
-
-          // Update the header and retry the original request
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return api(originalRequest);
-        } catch (refreshError) {
-          // If refresh also fails, logout the user
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          window.location.href = '/login';
-          return Promise.reject(refreshError);
-        }
-      } else {
-        // No refresh token available
+        // Update the header and retry the original request
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        // If refresh also fails, logout the user
+        sessionStorage.removeItem('access_token');
+        localStorage.removeItem('access_token');
         window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
 
@@ -65,8 +58,9 @@ api.interceptors.response.use(
 );
 
 // Accounts API
-export const login = (email, password) => api.post('/accounts/login/', { email, password });
+export const login = (email, password, remember_me = false) => api.post('/accounts/login/', { email, password, remember_me });
 export const signup = (data) => api.post('/accounts/signup/', data);
+export const logout = () => api.post('/accounts/logout/');
 export const getMe = () => api.get('/accounts/me/');
 
 // ACLS Simulation API

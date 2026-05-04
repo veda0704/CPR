@@ -293,18 +293,18 @@ const SingleMonitor = ({ rhythmType }) => {
         const waveformFunction = createWaveform(rhythmType);
 
         const render = (time) => {
-            ctx.fillStyle = '#111827';
+            ctx.fillStyle = '#1A1716'; // Deep Charcoal
             ctx.fillRect(0, 0, width, canvas.height);
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#1F2937';
-            for(let i=0; i<width; i+=20) {
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = 'rgba(138, 63, 12, 0.15)'; // Subtle Burnt Brown Grid
+            for(let i=0; i<width; i+=40) {
                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
             }
-            for(let j=0; j<canvas.height; j+=20) {
+            for(let j=0; j<canvas.height; j+=40) {
                ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(width, j); ctx.stroke();
             }
             ctx.lineWidth = 2.5;
-            ctx.strokeStyle = '#10B981';
+            ctx.strokeStyle = '#F2A007'; // Warm Amber Wave
             ctx.lineJoin = 'round';
             ctx.beginPath();
             timeOffset = time;
@@ -320,8 +320,8 @@ const SingleMonitor = ({ rhythmType }) => {
             }
             ctx.stroke();
             const grad = ctx.createLinearGradient(width - 50, 0, width, 0);
-            grad.addColorStop(0, 'rgba(17, 24, 39, 0)');
-            grad.addColorStop(1, 'rgba(17, 24, 39, 1)');
+            grad.addColorStop(0, 'rgba(26, 23, 22, 0)');
+            grad.addColorStop(1, 'rgba(26, 23, 22, 1)');
             ctx.fillStyle = grad;
             ctx.fillRect(width - 50, 0, 50, canvas.height);
             animationFrameId = requestAnimationFrame(render);
@@ -331,11 +331,11 @@ const SingleMonitor = ({ rhythmType }) => {
     }, [rhythmType]);
 
     return (
-        <div style={{ position: 'relative', width: '100%', marginBottom: '16px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #374151', background: '#111827' }}>
-            <div style={{ position: 'absolute', top: '8px', left: '12px', color: '#10B981', fontWeight: 600, fontSize: '13px', zIndex: 10, letterSpacing: '0.5px' }}>
+        <div style={{ position: 'relative', width: '100%', marginBottom: '16px', borderRadius: '12px', overflow: 'hidden', border: '1.5px solid var(--border)', background: '#1A1716', boxShadow: '0 8px 30px rgba(0,0,0,0.2)' }}>
+            <div style={{ position: 'absolute', top: '10px', left: '16px', color: '#F2A007', fontWeight: 900, fontSize: '14px', zIndex: 10, letterSpacing: '0.5px' }}>
                 II
             </div>
-             <div style={{ position: 'absolute', top: '8px', right: '12px', color: '#9CA3AF', fontSize: '12px', zIndex: 10 }}>
+             <div style={{ position: 'absolute', top: '10px', right: '16px', color: 'rgba(233, 224, 179, 0.6)', fontWeight: 800, fontSize: '11px', zIndex: 10, textTransform: 'uppercase', letterSpacing: '1px' }}>
                 {formatRhythmName(rhythmType)}
             </div>
             <canvas 
@@ -350,7 +350,7 @@ const SingleMonitor = ({ rhythmType }) => {
 
 const AnimatedECG = ({ rhythms = ['nsr'] }) => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', justifyContent: 'center', background: '#000', padding: '16px', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', justifyContent: 'center', background: 'transparent', padding: '16px', borderRadius: '16px' }}>
             {rhythms.map((rhythm, idx) => (
                 <SingleMonitor key={idx} rhythmType={rhythm} />
             ))}

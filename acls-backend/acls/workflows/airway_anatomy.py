@@ -8,7 +8,7 @@ AIRWAY_ANATOMY_WORKFLOW = {
         "choices": [
             {"label": _("ANATOMY & MANEUVERS"), "next": "airway_maneuvers", "color": "primary"},
             {"label": _("AIRWAY ADJUNCTS"), "next": "airway_adjuncts", "color": "success"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "airway_maneuvers": {

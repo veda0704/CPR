@@ -1,6 +1,5 @@
 from django.utils.translation import gettext_lazy as _
 
-
 POISONING_WORKFLOW = {
     "poisoning_start": {
         "title": _("Poisoning Management"),
@@ -59,9 +58,18 @@ POISONING_WORKFLOW = {
     "poisoning_hos": {
         "title": _("Transport & Handover"),
         "question": _("Initiate rapid transport. Provide detailed handover at the destination hospital. Mission complete?"),
-        "video": "/static/images/poisoning.png",
+        "video": "/static/images/call_108.png",
         "choices": [
-            {"label": _("COMPLETE"), "next": "dashboard", "color": "success", "isExit": True},
+            {"label": _("FINISH POISONING"), "next": "poisoning_complete", "color": "success"},
         ]
-    }
+    },
+    "poisoning_complete": {
+        "title": _("Poisoning Complete"),
+        "question": _("Poisoning management protocol complete. Would you like to review Snake Bite management steps next?"),
+        "video": "/static/images/snake_bite.png",
+        "choices": [
+            {"label": _("CONTINUE TO SNAKE BITE"), "next": "snake_bite_start", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
+        ]
+    },
 }

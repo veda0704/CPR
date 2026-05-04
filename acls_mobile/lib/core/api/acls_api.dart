@@ -1,33 +1,42 @@
 import 'package:dio/dio.dart';
 import 'api_client.dart';
-import '../services/cache_service.dart';
 
 class AclsApi {
-  static Future<Map<String, dynamic>> getDashboard() async {
-    final res = await ApiClient.dio.get('acls/dashboard/');
-    return res.data as Map<String, dynamic>;
+  static Options _requestOptions({String? lang}) {
+    final headers = <String, dynamic>{};
+    if (lang != null) {
+      headers['Accept-Language'] = lang;
+    }
+    return Options(headers: headers);
   }
 
-  static Future<Map<String, dynamic>> getStep(String stepId, {String? lang}) async {
+  static Future<Map<String, dynamic>> getDashboard({String? lang}) async {
     final res = await ApiClient.dio.get(
-      'acls/step/$stepId/?tts=true',
-      options: lang != null ? Options(headers: {'Accept-Language': lang}) : null,
+      'acls/dashboard/',
+      queryParameters: lang != null ? {'lang': lang} : null,
+      options: _requestOptions(lang: lang),
     );
     return res.data as Map<String, dynamic>;
   }
 
-  static Future<Map<String, dynamic>> getSpeechFromText(String text, String lang) async {
-    final res = await ApiClient.dio.post('acls/tts-text/', data: {'text': text, 'lang': lang});
-    return res.data as Map<String, dynamic>;
-  }
-
-  static Future<Map<String, dynamic>> getBulkSync({String? lang}) async {
-    // Clear cache before sync to ensure fresh data
-    await CacheService.apiCacheOptions.store?.clean();
+  static Future<Map<String, dynamic>> getStep(String stepId,
+      {String? lang}) async {
     final res = await ApiClient.dio.get(
-      'acls/sync-all/',
-      options: lang != null ? Options(headers: {'Accept-Language': lang}) : null,
+      'acls/step/$stepId/',
+      queryParameters: {
+        'tts': 'true',
+        if (lang != null) 'lang': lang,
+      },
+      options: _requestOptions(lang: lang),
     );
     return res.data as Map<String, dynamic>;
   }
+
+  static Future<Map<String, dynamic>> getSpeechFromText(
+      String text, String lang) async {
+    final res = await ApiClient.dio
+        .post('acls/tts-text/', data: {'text': text, 'lang': lang});
+    return res.data as Map<String, dynamic>;
+  }
+
 }

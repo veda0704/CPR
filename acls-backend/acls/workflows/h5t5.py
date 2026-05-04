@@ -7,7 +7,7 @@ H5T5_WORKFLOW = {
         "video": "/static/images/cardiacarrest.png",
         "choices": [
             {"label": _("BEGIN CHECK"), "next": "h1_hypovolemia", "color": "primary"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "h1_hypovolemia": {
@@ -77,7 +77,7 @@ H5T5_WORKFLOW = {
     "t4_thrombosis_p": {
         "title": _("T4: Lung Blood Clot"),
         "question": _("Could there be a blood clot in the lungs? Look for fast heart rate and breathing trouble. Treatment: follow protocol for clot dissolving or surgery."),
-        "video": "/static/images/rhythms_arrest.png",
+        "video": "/static/images/thrombosis_lungs.png",
         "choices": [
             {"label": _("CHECKED (NEXT)"), "next": "t5_thrombosis_c", "color": "primary"}
         ]
@@ -85,9 +85,18 @@ H5T5_WORKFLOW = {
     "t5_thrombosis_c": {
         "title": _("T5: Heart Blood Clot"),
         "question": _("Could a blood clot be blocking the heart? Look for signs on ECG. Treatment: urgent hospital intervention."),
+        "video": "/static/images/thrombosis_heart.png",
+        "choices": [
+            {"label": _("FINISH H5T5"), "next": "h5t5_complete", "color": "success"}
+        ]
+    },
+    "h5t5_complete": {
+        "title": _("H5T5 Complete"),
+        "question": _("Reversible causes (5H & 5T) check complete. Would you like to return to the Cardiac Arrest algorithms next?"),
         "video": "/static/images/algorithm_vf_vt.png",
         "choices": [
-            {"label": _("FINISH CHECK"), "next": "dashboard", "color": "success"}
+            {"label": _("CONTINUE TO CARDIAC ARREST"), "next": "cardiac_alg_start", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     }
 }

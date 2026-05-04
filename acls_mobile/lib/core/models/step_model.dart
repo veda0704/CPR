@@ -34,6 +34,8 @@ class StepModel {
   final List<ChoiceModel> choices;
   final int? timeLimit;
   final String? timeOutNext;
+  final int currentStep;
+  final int totalSteps;
 
   const StepModel({
     required this.id,
@@ -46,6 +48,8 @@ class StepModel {
     required this.choices,
     this.timeLimit,
     this.timeOutNext,
+    this.currentStep = 1,
+    this.totalSteps = 8,
   });
 
   factory StepModel.fromJson(Map<String, dynamic> json) {
@@ -61,8 +65,10 @@ class StepModel {
       choices: choicesJson
           .map((c) => ChoiceModel.fromJson(c as Map<String, dynamic>))
           .toList(),
-      timeLimit: json['time_limit'] as int?,
+      timeLimit: int.tryParse(json['time_limit']?.toString() ?? ''),
       timeOutNext: json['timeout_next'] as String?,
+      currentStep: int.tryParse(json['current_step']?.toString() ?? '') ?? 1,
+      totalSteps: int.tryParse(json['total_steps']?.toString() ?? '') ?? 8,
     );
   }
 }

@@ -2,10 +2,15 @@ import 'api_client.dart';
 import '../storage/local_storage.dart';
 
 class AuthApi {
-  static Future<Map<String, dynamic>> login(String email, String password) async {
+  static Future<Map<String, dynamic>> login(
+      String email, String password, bool rememberMe) async {
     final res = await ApiClient.dio.post(
       'accounts/login/',
-      data: {'email': email, 'password': password},
+      data: {
+        'email': email,
+        'password': password,
+        'remember_me': rememberMe,
+      },
     );
     return res.data as Map<String, dynamic>;
   }
@@ -35,16 +40,20 @@ class AuthApi {
     return res.data as Map<String, dynamic>;
   }
 
+  static Future<bool> logout() async {
+    try {
+      await ApiClient.dio.post('accounts/logout/');
+    } catch (_) {
+      // Ignore logout errors.
+    }
+    return true;
+  }
+
   static Future<bool> refreshToken() async {
     try {
-      final refresh = LocalStorage.getRefreshToken();
-      if (refresh == null) return false;
-      final res = await ApiClient.dio.post(
-        'accounts/refresh/',
-        data: {'refresh': refresh},
-      );
+      final res = await ApiClient.dio.post('accounts/refresh/');
       final newAccess = res.data['access'] as String;
-      await LocalStorage.saveTokens(newAccess, refresh);
+      await LocalStorage.saveTokens(newAccess, null);
       return true;
     } catch (_) {
       return false;

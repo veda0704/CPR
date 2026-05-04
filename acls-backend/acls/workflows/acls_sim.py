@@ -7,7 +7,7 @@ ACLS_SIM_WORKFLOW = {
         "video": "/static/videos/check.mp4",
         "choices": [
             {"label": _("YES"), "next": "2", "color": "primary"},
-            {"label": _("NO"), "next": "dashboard", "color": "secondary"}
+            {"label": _("NO"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "2": {
@@ -15,7 +15,7 @@ ACLS_SIM_WORKFLOW = {
         "question": _("Is the patient responsive? (Tap and shout)"),
         "video": "/static/videos/responsive_2.mp4",
         "choices": [
-            {"label": _("YES"), "next": "dashboard", "color": "secondary"},
+            {"label": _("YES"), "next": "dashboard", "color": "secondary", "isExit": True},
             {"label": _("NO"), "next": "3", "color": "primary"}
         ]
     },
@@ -54,7 +54,7 @@ ACLS_SIM_WORKFLOW = {
         "video": "/static/videos/CPR.mp4",
         "choices": [
             {"label": _("YES"), "next": "7", "color": "primary"},
-            {"label": _("NO"), "next": "dashboard", "color": "secondary"}
+            {"label": _("NO"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "7": {

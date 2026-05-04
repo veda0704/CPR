@@ -10,7 +10,7 @@ CARDIAC_ALG_WORKFLOW = {
             {"label": _("BRADYCARDIA (With Pulse)"), "next": "alg_brady_assess", "color": "warning"},
             {"label": _("CARDIAC ARREST (No Pulse)"), "next": "8", "color": "dark"},
             {"label": _("POST-ARREST CARE (ROSC)"), "next": "alg_post_arrest_start", "color": "success"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "alg_tachy_assess": {
@@ -58,7 +58,16 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["vtach"]},
         "choices": [
-            {"label": _("DONE"), "next": "dashboard", "color": "success"}
+            {"label": _("DONE"), "next": "alg_tachy_complete", "color": "success"}
+        ]
+    },
+    "alg_tachy_complete": {
+        "title": _("Tachycardia Complete"),
+        "question": _("Tachycardia management review complete. Would you like to review Bradycardia (Slow Heart Rate) steps next?"),
+        "video": "/static/images/algorithm_brady.png",
+        "choices": [
+            {"label": _("CONTINUE TO BRADYCARDIA"), "next": "alg_brady_assess", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "alg_tachy_narrow": {
@@ -66,7 +75,7 @@ CARDIAC_ALG_WORKFLOW = {
         "question": _("Vagal maneuvers.\nAdenosine 6mg rapid IV push (if regular).\nBeta-blocker or Calcium channel blocker.\nSeek Expert Consultation."),
         "video": "/static/videos/vagal_maneuver.mp4",
         "choices": [
-            {"label": _("DONE"), "next": "dashboard", "color": "success"}
+            {"label": _("DONE"), "next": "alg_tachy_complete", "color": "success"}
         ]
     },
     "alg_brady_assess": {
@@ -93,7 +102,7 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["sinus_brady"]},
         "choices": [
-            {"label": _("COMPLETE"), "next": "dashboard", "color": "success"}
+            {"label": _("COMPLETE"), "next": "alg_brady_complete", "color": "success"}
         ]
     },
     "alg_brady_treatment": {
@@ -111,7 +120,16 @@ CARDIAC_ALG_WORKFLOW = {
         "question": _("Initiate Transcutaneous Pacing OR\nDopamine IV infusion (5-20 mcg/kg/min) OR\nEpinephrine IV infusion (2-10 mcg/min).\nConsider Transvenous pacing / Expert Consult."),
         "video": "/static/videos/pacing.mp4",
         "choices": [
-            {"label": _("DONE"), "next": "dashboard", "color": "success"}
+            {"label": _("DONE"), "next": "alg_brady_complete", "color": "success"}
+        ]
+    },
+    "alg_brady_complete": {
+        "title": _("Bradycardia Complete"),
+        "question": _("Bradycardia management review complete. Would you like to review Cardiac Arrest algorithms next?"),
+        "video": "/static/images/algorithm_vf_vt.png",
+        "choices": [
+            {"label": _("CONTINUE TO CARDIAC ARREST"), "next": "vf_workflow", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "vf_workflow": {
@@ -258,7 +276,7 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["nsr"]},
         "choices": [
-            {"label": _("COMPLETE ALGORITHM"), "next": "dashboard", "color": "success"}
+            {"label": _("COMPLETE ALGORITHM"), "next": "alg_post_arrest_complete", "color": "success"}
         ]
     },
     "post_arrest_awake": {
@@ -267,7 +285,16 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["nsr"]},
         "choices": [
-            {"label": _("COMPLETE ALGORITHM"), "next": "dashboard", "color": "success"}
+            {"label": _("COMPLETE ALGORITHM"), "next": "alg_post_arrest_complete", "color": "success"}
+        ]
+    },
+    "alg_post_arrest_complete": {
+        "title": _("Post-Arrest Complete"),
+        "question": _("Post-Cardiac Arrest management review complete. Would you like to review Reversible Causes (5H & 5T) next?"),
+        "video": "/static/images/cardiacarrest.png",
+        "choices": [
+            {"label": _("CONTINUE TO 5H & 5T"), "next": "h5t5_start", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
 }

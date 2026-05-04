@@ -203,19 +203,19 @@ abstract class AppLocalizations {
   /// No description provided for @abcde_module.
   ///
   /// In en, this message translates to:
-  /// **'Systematic Approach (ABCDE)'**
+  /// **'Systematic ABCDE'**
   String get abcde_module;
 
   /// No description provided for @bls_cpr_module.
   ///
   /// In en, this message translates to:
-  /// **'BLS & High Quality CPR'**
+  /// **'BLS & CPR'**
   String get bls_cpr_module;
 
   /// No description provided for @airway_module.
   ///
   /// In en, this message translates to:
-  /// **'Airway Management'**
+  /// **'Airway Anatomy'**
   String get airway_module;
 
   /// No description provided for @adv_airway_module.
@@ -227,20 +227,14 @@ abstract class AppLocalizations {
   /// No description provided for @choking_module.
   ///
   /// In en, this message translates to:
-  /// **'Choking (FBAO)'**
+  /// **'Choking Management'**
   String get choking_module;
 
-  /// No description provided for @ecg_basics_module.
+  /// No description provided for @ecg_rhythms_module.
   ///
   /// In en, this message translates to:
-  /// **'ECG Basics'**
-  String get ecg_basics_module;
-
-  /// No description provided for @rhythms_blocks_module.
-  ///
-  /// In en, this message translates to:
-  /// **'Rhythms & Heart Blocks'**
-  String get rhythms_blocks_module;
+  /// **'ECG & Rhythm Management'**
+  String get ecg_rhythms_module;
 
   /// No description provided for @cardiac_alg_module.
   ///
@@ -251,13 +245,13 @@ abstract class AppLocalizations {
   /// No description provided for @stroke_assessment.
   ///
   /// In en, this message translates to:
-  /// **'Stroke & Neuro'**
+  /// **'Stroke Assessment'**
   String get stroke_assessment;
 
   /// No description provided for @delivery_module.
   ///
   /// In en, this message translates to:
-  /// **'Emergency Delivery'**
+  /// **'NLS & Delivery'**
   String get delivery_module;
 
   /// No description provided for @poisoning_module.
@@ -269,25 +263,31 @@ abstract class AppLocalizations {
   /// No description provided for @snake_bite_module.
   ///
   /// In en, this message translates to:
-  /// **'Snake Bite'**
+  /// **'Snake Bite Management'**
   String get snake_bite_module;
+
+  /// No description provided for @trauma_module.
+  ///
+  /// In en, this message translates to:
+  /// **'Trauma & Bleeding'**
+  String get trauma_module;
 
   /// No description provided for @disaster_module.
   ///
   /// In en, this message translates to:
-  /// **'Disaster & Triage'**
+  /// **'Disaster Management'**
   String get disaster_module;
 
   /// No description provided for @h5t5_module.
   ///
   /// In en, this message translates to:
-  /// **'H\'s & T\'s Assessment'**
+  /// **'Reversible Causes (H5T5)'**
   String get h5t5_module;
 
   /// No description provided for @start_acls.
   ///
   /// In en, this message translates to:
-  /// **'Full ACLS Simulation'**
+  /// **'Professional ACLS Simulator'**
   String get start_acls;
 
   /// No description provided for @abcde_desc.
@@ -320,17 +320,11 @@ abstract class AppLocalizations {
   /// **'Foreign Body Airway Obstruction maneuvers.'**
   String get choking_desc;
 
-  /// No description provided for @ecg_desc.
+  /// No description provided for @ecg_rhythms_desc.
   ///
   /// In en, this message translates to:
-  /// **'Understanding leads and wave segments.'**
-  String get ecg_desc;
-
-  /// No description provided for @rhythms_desc.
-  ///
-  /// In en, this message translates to:
-  /// **'Identifying common arrhythmias.'**
-  String get rhythms_desc;
+  /// **'Master ECG rhythm interpretation and cardiac block management.'**
+  String get ecg_rhythms_desc;
 
   /// No description provided for @cardiac_alg_desc.
   ///
@@ -362,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Assessment and prehospital management of venomous snakebite.'**
   String get snake_bite_desc;
 
+  /// No description provided for @trauma_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial assessment and management of major trauma and bleeding.'**
+  String get trauma_desc;
+
   /// No description provided for @disaster_desc.
   ///
   /// In en, this message translates to:
@@ -385,6 +385,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Assess danger zones and wear protective equipment before helping.'**
   String get scene_safety_desc;
+
+  /// No description provided for @start_module.
+  ///
+  /// In en, this message translates to:
+  /// **'START MODULE'**
+  String get start_module;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @continue_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continue_label;
+
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @in_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get in_progress;
+
+  /// No description provided for @locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get locked;
+
+  /// No description provided for @not_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Started'**
+  String get not_started;
+
+  /// No description provided for @module_locked.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete previous modules to unlock this module.'**
+  String get module_locked;
+
+  /// No description provided for @complete_label.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPLETE'**
+  String get complete_label;
+
+  /// No description provided for @last_accessed.
+  ///
+  /// In en, this message translates to:
+  /// **'LAST ACCESSED'**
+  String get last_accessed;
+
+  /// No description provided for @total_content.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL CONTENT'**
+  String get total_content;
+
+  /// No description provided for @modules_count.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get modules_count;
+
+  /// No description provided for @start_here.
+  ///
+  /// In en, this message translates to:
+  /// **'START HERE'**
+  String get start_here;
 }
 
 class _AppLocalizationsDelegate

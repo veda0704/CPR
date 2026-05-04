@@ -8,7 +8,7 @@ ADV_AIRWAY_WORKFLOW = {
         "choices": [
             {"label": _("LMA (Supraglottic)"), "next": "lma_prep", "color": "success"},
             {"label": _("ET TUBE (RSI)"), "next": "rsi_steps_main", "color": "primary"},
-            {"label": _("BACK"), "next": "dashboard", "color": "secondary"}
+            {"label": _("BACK"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
     "lma_prep": {
@@ -34,7 +34,16 @@ ADV_AIRWAY_WORKFLOW = {
         "question": _("1. Inflate cuff\n2. Connect Bag-Valve\n3. Confirm placement (chest rise/breath sounds)\n4. Secure LMA with tape\n\nComplete?"),
         "video": "/static/images/lma_procedure.png",
         "choices": [
-            {"label": _("FINISH"), "next": "dashboard", "color": "success"}
+            {"label": _("FINISH LMA"), "next": "lma_complete_choice", "color": "success"}
+        ]
+    },
+    "lma_complete_choice": {
+        "title": _("LMA Complete"),
+        "question": _("LMA insertion successful. Would you like to review the Endotracheal Tube (RSI) steps next?"),
+        "video": "/static/images/rsi_procedure.png",
+        "choices": [
+            {"label": _("CONTINUE TO ET TUBE"), "next": "rsi_steps_main", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "rsi_steps_main": {
@@ -42,8 +51,17 @@ ADV_AIRWAY_WORKFLOW = {
         "question": _("1. Preparation\n2. Preoxygenation\n3. Pretreatment\n4. Paralysis with Induction\n5. Protection/Positioning\n6. Placement of Tube (ETT)\n7. Postintubation Management\n\nComplete?"),
         "video": "/static/images/rsi_procedure.png",
         "choices": [
-            {"label": _("COMPLETE"), "next": "dashboard", "color": "success"},
+            {"label": _("COMPLETE RSI"), "next": "rsi_complete_choice", "color": "success"},
             {"label": _("BACK"), "next": "adv_airway_start", "color": "secondary"}
+        ]
+    },
+    "rsi_complete_choice": {
+        "title": _("RSI Complete"),
+        "question": _("ET Tube (RSI) protocol complete. Would you like to review the LMA (Supraglottic) steps next?"),
+        "video": "/static/images/lma_procedure.png",
+        "choices": [
+            {"label": _("CONTINUE TO LMA"), "next": "lma_prep", "color": "primary"},
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
 }

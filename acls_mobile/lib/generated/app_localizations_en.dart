@@ -60,49 +60,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scene_safety_module => 'Scene Safety & PPE';
 
   @override
-  String get abcde_module => 'Systematic Approach (ABCDE)';
+  String get abcde_module => 'Systematic ABCDE';
 
   @override
-  String get bls_cpr_module => 'BLS & High Quality CPR';
+  String get bls_cpr_module => 'BLS & CPR';
 
   @override
-  String get airway_module => 'Airway Management';
+  String get airway_module => 'Airway Anatomy';
 
   @override
   String get adv_airway_module => 'Advanced Airway';
 
   @override
-  String get choking_module => 'Choking (FBAO)';
+  String get choking_module => 'Choking Management';
 
   @override
-  String get ecg_basics_module => 'ECG Basics';
-
-  @override
-  String get rhythms_blocks_module => 'Rhythms & Heart Blocks';
+  String get ecg_rhythms_module => 'ECG & Rhythm Management';
 
   @override
   String get cardiac_alg_module => 'Cardiac Algorithms';
 
   @override
-  String get stroke_assessment => 'Stroke & Neuro';
+  String get stroke_assessment => 'Stroke Assessment';
 
   @override
-  String get delivery_module => 'Emergency Delivery';
+  String get delivery_module => 'NLS & Delivery';
 
   @override
   String get poisoning_module => 'Poisoning Management';
 
   @override
-  String get snake_bite_module => 'Snake Bite';
+  String get snake_bite_module => 'Snake Bite Management';
 
   @override
-  String get disaster_module => 'Disaster & Triage';
+  String get trauma_module => 'Trauma & Bleeding';
 
   @override
-  String get h5t5_module => 'H\'s & T\'s Assessment';
+  String get disaster_module => 'Disaster Management';
 
   @override
-  String get start_acls => 'Full ACLS Simulation';
+  String get h5t5_module => 'Reversible Causes (H5T5)';
+
+  @override
+  String get start_acls => 'Professional ACLS Simulator';
 
   @override
   String get abcde_desc =>
@@ -121,10 +121,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choking_desc => 'Foreign Body Airway Obstruction maneuvers.';
 
   @override
-  String get ecg_desc => 'Understanding leads and wave segments.';
-
-  @override
-  String get rhythms_desc => 'Identifying common arrhythmias.';
+  String get ecg_rhythms_desc =>
+      'Master ECG rhythm interpretation and cardiac block management.';
 
   @override
   String get cardiac_alg_desc => 'V-fib, Pulseless V-tach, Asystole, PEA.';
@@ -144,6 +142,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Assessment and prehospital management of venomous snakebite.';
 
   @override
+  String get trauma_desc =>
+      'Initial assessment and management of major trauma and bleeding.';
+
+  @override
   String get disaster_desc => 'START triage and incident command.';
 
   @override
@@ -155,4 +157,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scene_safety_desc =>
       'Assess danger zones and wear protective equipment before helping.';
+
+  @override
+  String get start_module => 'START MODULE';
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get continue_label => 'Continue';
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get in_progress => 'In Progress';
+
+  @override
+  String get locked => 'Locked';
+
+  @override
+  String get not_started => 'Not Started';
+
+  @override
+  String get module_locked =>
+      'Complete previous modules to unlock this module.';
+
+  @override
+  String get complete_label => 'COMPLETE';
+
+  @override
+  String get last_accessed => 'LAST ACCESSED';
+
+  @override
+  String get total_content => 'TOTAL CONTENT';
+
+  @override
+  String get modules_count => 'Modules';
+
+  @override
+  String get start_here => 'START HERE';
 }

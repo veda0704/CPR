@@ -39,11 +39,11 @@ msgstr "పల్స్ ఉందా (10 సెకండ్లలోపు)?"
 
 #: .\acls\views.py:186
 msgid "Is the rhythm Ventricular Fibrillation (VF)?"
-msgstr "రిద్దమ్ వెంట్రిక్యులర్ ఫిబ్రిలేషన్ (VF) అనేదా?"
+msgstr "రిథమ్ వెంట్రిక్యులర్ ఫిబ్రిలేషన్ (వి.ఎఫ్) అనేదా?"
 
 #: .\acls\views.py:187
 msgid "Is the rhythm Pulseless Ventricular Tachycardia (VT)?"
-msgstr "రిద్దమ్ పల్స్ లేని వెంట్రిక్యులర్ టాకికార్డియా (VT) అనేదా?"
+msgstr "రిథమ్ పల్స్ లేని వెంట్రిక్యులర్ టాకికార్డియా (వి.టి) అనేదా?"
 
 #: .\acls\views.py:188
 msgid "Is the rhythm Asystole?"
@@ -53,7 +53,7 @@ msgstr "రిద్దమ్ అసిస్టోల్ అనేదా?"
 #, fuzzy
 #| msgid "Pulseless Electrical Activity (PEA)"
 msgid "Is the rhythm Pulseless Electrical Activity (PEA)?"
-msgstr "పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (PEA)"
+msgstr "రిథమ్ పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (పి.ఇ.ఎ) అనేదా?"
 
 #: .\templates\acls\adenosine_admin.html:5
 msgid "Adenosine Administration"
@@ -61,7 +61,7 @@ msgstr "అడెనోసిన్ అడ్మినిస్ట్రేష�
 
 #: .\templates\acls\adenosine_admin.html:6
 msgid "Administer adenosine for SVT."
-msgstr "SVT కోసం అడెనోసిన్ అడ్మినిస్టర్ చేయండి."
+msgstr "ఎస్.వి.టి కోసం అడెనోసిన్ అడ్మినిస్టర్ చేయండి."
 
 #: .\templates\acls\adenosine_admin.html:9
 #: .\templates\acls\cardioversion.html:9
@@ -88,7 +88,7 @@ msgstr "హృదయ రిద్దమ్ విశ్లేషించండ�
 msgid ""
 "The monitor shows the heart rhythm. Further ACLS steps are performed based "
 "on that rhythm."
-msgstr "మానిటర్ హృదయ రిద్దమ్ చూపిస్తుంది. ఆ రిద్దమ్ ఆధారంగా మరిన్ని ACLS దశలు నిర్వహించబడతాయి."
+msgstr "మానిటర్ హృదయ రిథమ్ చూపిస్తుంది. ఆ రిథమ్ ఆధారంగా మరిన్ని ఎ.సి.ఎల్.ఎస్ దశలు నిర్వహించబడతాయి."
 
 #: .\templates\acls\analyze_rhythm.html:8
 #: .\templates\acls\attach_monitor.html:8 .\templates\acls\cpr.html:8
@@ -150,13 +150,13 @@ msgstr "అసిస్టోల్ వర్క్‌ఫ్లో"
 
 #: .\templates\acls\asystole_workflow.html:6
 msgid "Perform CPR cycles, epinephrine every 3-5 minutes."
-msgstr "CPR సైకిల్స్ నిర్వహించండి, ఎపినెఫ్రిన్ ప్రతి 3-5 నిమిషాలకు."
+msgstr "సి.పి.ఆర్ సైకిల్స్ నిర్వహించండి, ఎపినెఫ్రిన్ ప్రతి 3-5 నిమిషాలకు."
 
 #: .\templates\acls\asystole_workflow.html:9
 #: .\templates\acls\pea_workflow.html:9 .\templates\acls\vf_workflow.html:10
 #: .\templates\acls\vt_no_pulse_workflow.html:10
 msgid "Continue CPR"
-msgstr "CPR కొనసాగించు"
+msgstr "సి.పి.ఆర్ కొనసాగించు"
 
 #: .\templates\acls\atropine_admin.html:5
 msgid "Atropine Administration"
@@ -248,27 +248,27 @@ msgstr "రక్తపోటు (సిస్టాలిక్ మరియు
 
 #: .\templates\acls\check_bp.html:9
 msgid "Systolic BP:"
-msgstr "సిస్టాలిక్ బిపి:"
+msgstr "సిస్టాలిక్ బి.పి:"
 
 #: .\templates\acls\check_bp.html:10
 msgid "Diastolic BP:"
-msgstr "డయాస్టాలిక్ బిపి:"
+msgstr "డయాస్టాలిక్ బి.పి:"
 
 #: .\templates\acls\cpr.html:4
 msgid "Start CPR"
-msgstr "CPRను ప్రారంభించండి"
+msgstr "సి.పి.ఆర్ ప్రారంభించండి"
 
 #: .\templates\acls\cpr.html:5
 msgid "Perform CPR immediately."
-msgstr "వెంటనే CPR నిర్వహించండి."
+msgstr "వెంటనే సి.పి.ఆర్ నిర్వహించండి."
 
 #: .\templates\acls\cpr_cycle.html:5
 msgid "CPR Cycle"
-msgstr "CPR సైకిల్"
+msgstr "సి.పి.ఆర్ సైకిల్"
 
 #: .\templates\acls\cpr_cycle.html:6
 msgid "Perform CPR for 2 minutes, then reassess rhythm."
-msgstr "2 నిమిషాల పాటు CPR నిర్వహించండి, తర్వాత రిద్దమ్ మళ్లీ విశ్లేషించండి."
+msgstr "2 నిమిషాల పాటు సి.పి.ఆర్ నిర్వహించండి, తర్వాత రిథమ్ మళ్లీ విశ్లేషించండి."
 
 #: .\templates\acls\cpr_cycle.html:9
 msgid "Reassess Rhythm"
@@ -285,7 +285,7 @@ msgstr "ACLS డ్యాష్‌బోర్డ్‌కు స్వాగత
 #: .\templates\acls\dashboard.html:8 .\templates\acls\start.html:4
 #: .\templates\acls\start_acls.html:4
 msgid "Start ACLS"
-msgstr "ACLSను ప్రారంభించండి"
+msgstr "ఎ.సి.ఎల్.ఎస్ ప్రారంభించండి"
 
 #: .\templates\acls\dashboard.html:12
 msgid "Logout"
@@ -301,7 +301,7 @@ msgstr "ECG విశ్లేషణ"
 
 #: .\templates\acls\ecg_evaluation.html:6
 msgid "Obtain 12-lead ECG if possible."
-msgstr "సాధ్యమైతే 12-లీడ్ ECG పొందండి."
+msgstr "సాధ్యమైతే 12-లీడ్ ఇ.సి.జి పొందండి."
 
 #: .\templates\acls\forgot_password.html:4
 msgid "Forgot Password"
@@ -317,7 +317,7 @@ msgstr "OTP మళ్లీ పంపండి"
 
 #: .\templates\acls\forgot_password.html:24
 msgid "Enter OTP"
-msgstr "OTP నమోదు చేయండి"
+msgstr "ఒ.టి.పి నమోదు చేయండి"
 
 #: .\templates\acls\forgot_password.html:25
 #: .\templates\registration\password_reset_confirm.html:10
@@ -335,7 +335,7 @@ msgstr "పాస్‌వర్డ్ రీసెట్"
 
 #: .\templates\acls\forgot_password.html:29
 msgid "Generate OTP"
-msgstr "OTP ఉత్పత్తి చేయండి"
+msgstr "ఒ.టి.పి ఉత్పత్తి చేయండి"
 
 #: .\templates\acls\forgot_password.html:34
 #: .\templates\registration\password_reset_confirm.html:20
@@ -345,7 +345,7 @@ msgstr "సైన్ ఇన్‌కు తిరిగి వెళ్ళు"
 
 #: .\templates\acls\guided_checklist.html:4
 msgid "Guided ACLS Checklist"
-msgstr "మార్గదర్శక ACLS చెక్‌లిస్ట్"
+msgstr "మార్గదర్శక ఎ.సి.ఎల్.ఎస్ చెక్‌లిస్ట్"
 
 #: .\templates\acls\guided_checklist.html:8
 msgid "Back to dashboard"
@@ -509,7 +509,7 @@ msgstr "వెంట్రిక్యులర్ టాకికార్డ�
 
 #: .\templates\acls\rhythm.html:15
 msgid "Pulseless Electrical Activity (PEA)"
-msgstr "పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (PEA)"
+msgstr "పల్స్ లేని ఎలక్ట్రికల్ యాక్టివిటీ (పి.ఇ.ఎ)"
 
 #: .\templates\acls\rhythm.html:16
 msgid "Asystole"
@@ -581,7 +581,7 @@ msgstr "ప్రారంభం"
 
 #: .\templates\acls\start_acls.html:5
 msgid "ACLS workflow will be handled server-side"
-msgstr "ACLS వర్క్‌ఫ్లో సర్వర్ వైపు నిర్వహించబడుతుంది"
+msgstr "ఎ.సి.ఎల్.ఎస్ వర్క్‌ఫ్లో సర్వర్ వైపు నిర్వహించబడుతుంది"
 
 #: .\templates\acls\svt_workflow.html:5
 msgid "SVT Workflow"
