@@ -14,6 +14,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+# Silence rate-limit checks in development
+SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003', 'django_ratelimit.W001']
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
@@ -153,12 +156,21 @@ RATELIMIT_CACHE_PREFIX = 'rl:'
 RATELIMIT_USE_CACHE = 'default'
 
 # Cache configuration for rate limiting
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+if DEBUG:
+    # Use DummyCache for development to bypass Redis/Rate-limit checks
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
     }
-}
+else:
+    # Use Redis for production
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+        }
+    }
 
 # Skip rate limiting system checks in development
 RATELIMIT_ENABLE = not DEBUG

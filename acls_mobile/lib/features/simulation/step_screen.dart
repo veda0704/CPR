@@ -740,15 +740,16 @@ class _StepHeader extends ConsumerWidget {
                   child: Row(
                     children: [
                       // Branded Logo
-                      Image.asset(
-                        'assets/images/iacls-logo.png',
-                        height: 54, // Standardized Elite branding
-                        color: Colors.white,
-                        fit: BoxFit.contain,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4), // Shifted left like in Dashboard
+                        child: Image.asset(
+                          'assets/images/iacls-logo.png',
+                          height: 62, // Increased size for high-fidelity impact
+                          color: Colors.white,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                      Container(width: 1, height: 18, color: Colors.white.withValues(alpha: 0.15)),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 14), // Balanced spacing
 
                       // Floating Title Pill
                       Expanded(

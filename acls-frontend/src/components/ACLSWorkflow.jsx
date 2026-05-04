@@ -436,7 +436,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
             />
           </div>
           <div style={{ display: 'flex', gap: '10px', marginLeft: '12px', paddingLeft: '20px', borderLeft: '1px solid rgba(255,255,255,0.2)' }}>
-            {stepData.current_step > 1 && !stepId.includes('_start') && !stepId.includes('_initial') && stepId !== '1' && (
+            {!stepId.includes('_start') && !stepId.includes('_initial') && stepId !== '1' && (
               <button className="icon-btn" onClick={() => { stopAudio(); navigate(-1); }} title={t('back')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px' }}>
                 <ArrowLeft size={20} />
               </button>
@@ -482,7 +482,26 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
           {(stepData.interactive_component === 'choice_cards' || stepData.interactive_component === 'patient_type_selector') ? (
             <div className="selector-layout animate-reveal">
               <div className="selector-grid-container">
-                <h2 className="selector-grid-title">{t(stepData.question)}</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                  <h2 className="selector-grid-title" style={{ margin: 0 }}>{t(stepData.question)}</h2>
+                  <button 
+                    className={`icon-btn ${voiceEnabled ? 'active' : ''}`} 
+                    onClick={toggleVoice} 
+                    style={{ 
+                      flexShrink: 0, 
+                      width: '42px', 
+                      height: '42px', 
+                      borderRadius: '12px', 
+                      background: voiceEnabled ? 'var(--primary-soft)' : 'rgba(0,0,0,0.03)',
+                      border: '1px solid rgba(0,0,0,0.05)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    {voiceEnabled ? <Volume2 size={20} color="var(--primary)" /> : <VolumeX size={20} color="var(--text-muted)" />}
+                  </button>
+                </div>
                 <div className="selector-grid">
                   {(stepData.interactive_props?.options || []).map((choice, idx) => (
                     <div 

@@ -24,9 +24,9 @@
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 32px 80px rgba(0, 0, 0, 0.12);
-    --radius: 24px;
-    --max-width: 1400px;
-    --page-gutter: 40px;
+    --radius: 20px;
+    --max-width: 1800px;
+    --page-gutter: 1.5%;
     --accent: #E0F2F1;
     --background: #F8FAFC;
 }
@@ -114,7 +114,7 @@ button {
 
 /* --- Page Layout --- */
 .app-container {
-    width: min(var(--max-width), calc(100% - 2 * var(--page-gutter)));
+    width: min(var(--max-width), 98%);
     margin: 0 auto;
     padding-bottom: 0px;
 }
@@ -123,7 +123,7 @@ button {
     position: sticky;
     top: 12px;
     z-index: 100;
-    width: min(var(--max-width), calc(100% - 2 * var(--page-gutter)));
+    width: min(var(--max-width), 98%);
     margin: 0 auto 40px;
     padding: 8px 32px;
     display: flex;
@@ -637,7 +637,7 @@ button {
 
 .acls-workflow-layout.has-media {
     display: grid;
-    grid-template-columns: 1fr 460px;
+    grid-template-columns: 1.25fr 1fr;
     gap: 32px;
     align-items: start;
     width: 100%;
@@ -1169,7 +1169,7 @@ button {
 .selector-grid {
     display: grid;
     gap: 32px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 420px));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     justify-content: center;
 }
 
