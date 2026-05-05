@@ -468,7 +468,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
               className="auth-pill-toggle nav-toggle"
               onClick={toggleTheme}
             >
-              {theme === 'dark' ? <Sun size={15} strokeWidth={3} color="white" /> : <Moon size={15} strokeWidth={3} color="white" />}
+              {theme === 'dark' ? <Sun size={15} strokeWidth={3} /> : <Moon size={15} strokeWidth={3} />}
             </div>
           </div>
         </div>
