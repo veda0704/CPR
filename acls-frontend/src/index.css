@@ -9,6 +9,7 @@
     --primary: #005B41;
     --primary-strong: #004D40;
     --primary-soft: rgba(0, 91, 65, 0.14);
+    --primary-text: #ffffff;
     --secondary: #475569;
     --success: #16A34A;
     --warning: #D97706;
@@ -19,7 +20,7 @@
     --text: #0F172A;
     --text-main: #0F172A;
     --text-muted: #64748B;
-    --bg-main: #E0F2F1;
+    --bg-main: #F1F5F9; /* Neutral gray instead of teal-green */
     --border: #CBD5E1;
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.08);
@@ -27,7 +28,7 @@
     --radius: 20px;
     --max-width: 1800px;
     --page-gutter: 1.5%;
-    --accent: #E0F2F1;
+    --accent: var(--primary-soft);
     --background: #F8FAFC;
 }
 
@@ -38,12 +39,12 @@
     --text: #F8FAFC;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
-    --bg-main: #071124;
+    --bg-main: #070D19;
     --secondary: #CBD5E1;
     --surface-dark: #E2E8F0;
     --border: #334155;
     --background: linear-gradient(180deg, #020617 0%, #111827 100%);
-    --primary-soft: rgba(0, 121, 107, 0.22);
+    --primary-soft: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .dashboard-hero.compact-hero-row {
@@ -109,7 +110,7 @@ button {
 }
 
 ::selection {
-    background: rgba(0, 121, 107, 0.2);
+    background: var(--primary-soft);
 }
 
 /* --- Page Layout --- */
@@ -132,9 +133,9 @@ button {
     min-height: 80px;
     border-radius: 24px;
     border: 2px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
     backdrop-filter: blur(24px);
-    box-shadow: 0 16px 48px rgba(0, 77, 64, 0.25);
+    box-shadow: 0 16px 48px var(--primary-soft);
     color: white;
 }
 
@@ -190,8 +191,8 @@ button {
     text-overflow: ellipsis;
     padding: 12px 24px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--primary) 0%, #26A69A 100%);
-    box-shadow: 0 8px 20px rgba(38, 166, 154, 0.25);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
+    box-shadow: 0 8px 20px var(--primary-soft);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -240,8 +241,8 @@ button {
     gap: 8px;
     padding: 10px 14px;
     border-radius: 18px;
-    background: rgba(38, 166, 154, 0.10);
-    border: 1px solid rgba(38, 166, 154, 0.18);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-soft);
     color: var(--primary);
     font-weight: 700;
     min-width: 120px;
@@ -260,7 +261,7 @@ button {
     width: 84px;
     height: 84px;
     border-radius: 22px;
-    background: rgba(0, 121, 107, 0.08);
+    background: var(--primary-soft);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -336,7 +337,7 @@ button {
 .choice-card:hover,
 .lms-module-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0, 121, 107, 0.1);
+    box-shadow: 0 20px 40px var(--primary-soft);
     border-color: var(--primary);
 }
 
@@ -449,15 +450,15 @@ button {
     min-height: 200px;
     display: grid;
     place-items: center;
-    background: linear-gradient(180deg, rgba(0, 121, 107, 0.12), rgba(38, 166, 154, 0.08));
+    background: linear-gradient(180deg, var(--primary-soft), var(--primary-soft));
 }
 
 .module-icon-bg {
     width: 96px;
     height: 96px;
     border-radius: 26px;
-    border: 1px solid rgba(0, 121, 107, 0.22);
-    background: rgba(0, 121, 107, 0.1);
+    border: 1px solid var(--primary-soft);
+    background: var(--primary-soft);
     display: grid;
     place-items: center;
     color: var(--primary);
@@ -538,7 +539,7 @@ button {
 
 .choice-card-image-box {
     height: 170px;
-    background: linear-gradient(180deg, rgba(0, 121, 107, 0.14), rgba(38, 166, 154, 0.08));
+    background: linear-gradient(180deg, var(--primary-soft), var(--primary-soft));
     display: grid;
     place-items: center;
     border-radius: 24px 24px 0 0;
@@ -685,7 +686,7 @@ button {
 
 .choice-card-btn,
 .simulator-btn.primary {
-    background: linear-gradient(135deg, #00796B 0%, #004D40 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
     color: #fff;
 }
 
@@ -905,8 +906,8 @@ button {
 
 /* --- Page Variants --- */
 .medical-bg {
-    background: radial-gradient(circle at top left, rgba(0, 121, 107, 0.12), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(38, 166, 154, 0.08), transparent 25%),
+    background: radial-gradient(circle at top left, var(--primary-soft), transparent 30%),
+                radial-gradient(circle at bottom right, var(--primary-soft), transparent 25%),
                 var(--background);
     background-attachment: fixed;
 }
@@ -1294,8 +1295,8 @@ button {
     background: var(--surface);
     border-radius: 32px;
     padding: 32px 40px;
-    box-shadow: 0 40px 100px rgba(0, 121, 107, 0.08);
-    border: 1px solid rgba(0, 121, 107, 0.08);
+    box-shadow: 0 40px 100px var(--primary-soft);
+    border: 1px solid var(--primary-soft);
     position: relative;
     overflow: hidden;
 }
@@ -1304,9 +1305,9 @@ button {
     padding: 16px 24px;
     background: linear-gradient(135deg, rgba(240, 253, 250, 0.9) 0%, rgba(204, 251, 241, 0.9) 100%);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 121, 107, 0.15);
+    border: 1px solid var(--primary-soft);
     border-radius: 20px;
-    box-shadow: 0 12px 36px rgba(0, 121, 107, 0.08);
+    box-shadow: 0 12px 36px var(--primary-soft);
     position: relative;
     overflow: hidden;
 }
@@ -1318,7 +1319,7 @@ button {
     right: -10%;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(0, 121, 107, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--primary-soft) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -1457,7 +1458,7 @@ button {
 .progress-bar-wrap {
     width: 100%;
     height: 10px;
-    background: rgba(0, 121, 107, 0.1);
+    background: var(--primary-soft);
     border-radius: 999px;
     overflow: hidden;
     margin-bottom: 12px;
@@ -1465,7 +1466,7 @@ button {
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #26A69A, var(--primary));
+    background: linear-gradient(90deg, var(--primary), var(--primary));
     border-radius: 999px;
     transition: width 0.8s ease;
 }
@@ -1515,8 +1516,8 @@ button {
     flex-direction: column;
     border-radius: 20px;
     background: var(--surface);
-    box-shadow: 0 12px 30px rgba(0, 121, 107, 0.05);
-    border: 1.5px solid rgba(0, 121, 107, 0.15);
+    box-shadow: 0 12px 30px var(--primary-soft);
+    border: 1.5px solid var(--primary-soft);
     position: relative;
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     cursor: pointer;
@@ -1524,8 +1525,8 @@ button {
 
 .lms-module-card:hover {
     transform: translateY(-12px);
-    box-shadow: 0 40px 100px rgba(0, 121, 107, 0.15);
-    border-color: #26A69A;
+    box-shadow: 0 40px 100px var(--primary-soft);
+    border-color: var(--primary);
     background: var(--surface);
 }
 
@@ -1597,12 +1598,12 @@ button {
     width: 104px;
     height: 104px;
     border-radius: 28px;
-    border: 1px solid rgba(59, 130, 246, 0.22);
-    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid var(--primary-soft);
+    background: var(--primary-soft);
     display: grid;
     place-items: center;
     color: var(--primary);
-    box-shadow: 0 18px 30px rgba(59, 130, 246, 0.12);
+    box-shadow: 0 18px 30px var(--primary-soft);
     transform: translateY(-30px);
 }
 
@@ -1694,7 +1695,7 @@ button {
     color: #fff;
     font-weight: 800;
     font-size: 0.95rem;
-    box-shadow: 0 18px 40px rgba(59, 130, 246, 0.22);
+    box-shadow: 0 18px 40px var(--primary-soft);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1702,8 +1703,8 @@ button {
 }
 
 .lms-button-refined:hover {
-    background: linear-gradient(135deg, #26A69A, var(--primary));
-    box-shadow: 0 12px 24px rgba(0, 121, 107, 0.3);
+    background: linear-gradient(135deg, var(--primary), var(--primary));
+    box-shadow: 0 12px 24px var(--primary-soft);
 }
 
 .card-body {
@@ -1756,8 +1757,8 @@ button {
 }
 
 .medical-bg {
-    background: radial-gradient(circle at top left, rgba(0, 121, 107, 0.15), transparent 25%),
-                radial-gradient(circle at bottom right, rgba(38, 166, 154, 0.10), transparent 20%),
+    background: radial-gradient(circle at top left, var(--primary-soft), transparent 25%),
+                radial-gradient(circle at bottom right, var(--primary-soft), transparent 20%),
                 var(--background);
     background-attachment: fixed;
 }
@@ -1874,16 +1875,16 @@ button {
     display: flex;
     align-items: center;
     gap: 12px;
-    border: 1px solid rgba(0, 121, 107, 0.12);
+    border: 1px solid var(--primary-soft);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-stat-box:hover {
     transform: translateY(-2px);
-    background: rgba(0, 121, 107, 0.05);
+    background: var(--primary-soft);
     border-color: var(--primary);
-    box-shadow: 0 12px 24px rgba(0, 121, 107, 0.08);
+    box-shadow: 0 12px 24px var(--primary-soft);
 }
 
 .stat-icon-wrap {
@@ -1987,7 +1988,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px rgba(0, 121, 107, 0.2);
+    box-shadow: 0 10px 25px var(--primary-soft);
 }
 
 .logout-btn {
@@ -2177,3 +2178,144 @@ button {
     width: 100%;
     margin-top: auto;
 }
+
+/* --- Settings Panel --- */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.settings-panel {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border-radius: 28px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: fit-content;
+    max-height: 90vh;
+}
+
+.settings-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.2rem;
+    font-weight: 850;
+    color: var(--text-main);
+}
+
+.settings-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-muted);
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+
+.settings-close:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.settings-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.settings-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    gap: 12px;
+}
+
+.theme-color-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 3px solid transparent;
+    display: grid;
+    place-items: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.theme-color-btn:hover {
+    transform: scale(1.1);
+}
+
+.theme-color-btn.active {
+    border-color: var(--text-main);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.settings-toggle-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-main);
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.settings-toggle-btn:hover {
+    border-color: var(--primary);
+    background: var(--surface);
+    transform: translateY(-2px);
+}
+
+.settings-footer {
+    padding: 20px 24px;
+    background: var(--surface-muted);
+    border-top: 1px solid var(--border);
+}
+
+.settings-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+

@@ -5,6 +5,7 @@ import { useState, useEffect, Suspense, lazy } from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
 import { getMe, logout } from './services/api';
 import { useTheme } from './hooks/useTheme';
+import { applyTheme } from './utils/theme';
 
 // Lazy load components for code splitting
 const Login = lazy(() => import('./components/Login'));
@@ -17,6 +18,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const savedColor = localStorage.getItem('themeColor');
+    if (savedColor) applyTheme(savedColor);
+  }, []);
 
   useEffect(() => {
     let timeout;

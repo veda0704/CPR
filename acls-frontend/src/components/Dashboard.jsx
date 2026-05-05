@@ -12,6 +12,8 @@ import Footer from './Footer';
 import iaclsLogo from '../assets/iacls-logo.png';
 import bavyaLogo from '../assets/bavya-logo.png';
 import { getModuleStatus, setModuleStatus, getModuleProgress } from '../utils/moduleStatus';
+import SettingsPanel from './SettingsPanel';
+import { Settings } from 'lucide-react';
 
 const Skeleton = ({ className }) => <div className={`skeleton ${className}`} />;
 
@@ -23,6 +25,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const getModuleIcon = (modId) => {
     const mapping = {
@@ -202,7 +205,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
   return (
     <div className="medical-bg">
       <nav className="floating-nav animate-reveal">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flex: 1 }}>
           <img 
             src={iaclsLogo} 
             alt="IACLS Logo" 
@@ -212,7 +215,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
               filter: 'brightness(0) invert(1) drop-shadow(0 0 0.5px white)' 
             }} 
           />
-          <div className="search-container nav-search">
+          <div className="search-container nav-search" style={{ flex: 1, maxWidth: '600px' }}>
             <Search size={18} />
             <input
               type="text"
@@ -225,48 +228,52 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div className="nav-controls-pill">
-            <button onClick={() => {
-              const next = i18n.language === 'en' ? 'te' : 'en';
-              i18n.changeLanguage(next);
-              localStorage.setItem('i18nextLng', next);
-            }} className="lang-pill">
-              {i18n.language === 'en' ? 'తెలుగు' : 'English'}
-            </button>
-            <div className="theme-pill" onClick={toggleTheme}>
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </div>
-          </div>
-
-          <div className="user-nav-block">
+          <div className="user-nav-block" style={{ borderLeft: 'none' }}>
             <div className="user-info">
-              <span className="user-name">{user?.first_name || t('clinical_user')}</span>
+              <span className="user-name" style={{ color: 'white' }}>{user?.first_name || t('clinical_user')}</span>
+              <span className="user-role" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.72rem' }}>{user?.role || 'Clinician'}</span>
             </div>
-            <div className="user-avatar">
+            <div className="user-avatar" style={{ background: 'rgba(255,255,255,0.2)', color: 'white' }}>
               <User size={20} />
             </div>
+            
+            <button 
+              className="icon-btn" 
+              onClick={() => setIsSettingsOpen(true)}
+              title={t('settings')}
+              style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '14px' }}
+            >
+              <Settings size={20} />
+            </button>
+
             <button 
               onClick={handleLogout} 
               className="logout-btn"
               style={{ 
-                background: 'white', 
-                width: '38px', 
-                height: '38px', 
-                borderRadius: '10px', 
+                background: 'rgba(255,255,255,0.15)', 
+                width: '42px', 
+                height: '42px', 
+                borderRadius: '14px', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                color: '#004D40',
-                border: 'none',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+                color: 'white',
+                border: '1px solid rgba(255,255,255,0.3)',
                 cursor: 'pointer'
               }}
             >
-              <LogOut size={18} />
+              <LogOut size={20} />
             </button>
           </div>
         </div>
       </nav>
+
+      <SettingsPanel 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        theme={theme} 
+        toggleTheme={toggleTheme} 
+      />
 
       <main className="app-container dashboard-main">
         {levels.map((level) => {

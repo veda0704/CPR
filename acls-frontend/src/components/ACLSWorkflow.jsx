@@ -9,6 +9,8 @@ import { ArrowLeft, Home, CheckCircle, Star, Trophy, ArrowRight, ChevronRight, P
 import Footer from './Footer';
 import ThemeToggle from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
+import SettingsPanel from './SettingsPanel';
+import { Settings } from 'lucide-react';
 import AnimatedECG from './AnimatedECG';
 import { getModuleStatus, setModuleStatus, setModuleProgress } from '../utils/moduleStatus';
 import iaclsLogo from '../assets/iacls-logo.png';
@@ -132,6 +134,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
   const [showCompletion, setShowCompletion] = useState(false);
   const [sceneTime, setSceneTime] = useState(0);
   const [completionInfo, setCompletionInfo] = useState(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [voiceEnabled, setVoiceEnabled] = useState(localStorage.getItem('voiceEnabled') === 'true');
   const voiceEnabledRef = useRef(voiceEnabled);
@@ -422,7 +425,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
   return (
     <div className="simulator-page medical-bg">
       <nav className="floating-nav animate-reveal">
-        <div className="floating-nav-left">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flex: 1 }}>
           <div className="nav-brand">
             <img 
               src={iaclsLogo} 
@@ -437,11 +440,11 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
           </div>
           <div style={{ display: 'flex', gap: '10px', marginLeft: '12px', paddingLeft: '20px', borderLeft: '1px solid rgba(255,255,255,0.2)' }}>
             {!stepId.includes('_start') && !stepId.includes('_initial') && stepId !== '1' && (
-              <button className="icon-btn" onClick={() => { stopAudio(); navigate(-1); }} title={t('back')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px' }}>
+              <button className="icon-btn" onClick={() => { stopAudio(); navigate(-1); }} title={t('back')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '12px' }}>
                 <ArrowLeft size={20} />
               </button>
             )}
-            <button className="icon-btn" onClick={() => { stopAudio(); navigate('/dashboard'); }} title={t('home')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px' }}>
+            <button className="icon-btn" onClick={() => { stopAudio(); navigate('/dashboard'); }} title={t('home')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '12px' }}>
               <Home size={20} />
             </button>
           </div>
@@ -451,30 +454,29 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
           <div className="floating-nav-title" style={{ padding: '12px 32px' }}>{t(stepData.title) || t('Simulation')}</div>
         </div>
 
-        <div className="floating-nav-right">
-          <div className="nav-timer-pill" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white' }}>
+        <div className="floating-nav-right" style={{ flex: 1, justifyContent: 'flex-end', gap: '12px' }}>
+          <div className="nav-timer-pill" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', minWidth: '100px' }}>
             <Clock size={16} />
             <span>{formatTime(sceneTime)}</span>
           </div>
 
-          <div className="auth-control-group">
-            <button
-              onClick={() => { const next = i18n.language === 'en' ? 'te' : 'en'; i18n.changeLanguage(next); localStorage.setItem('i18nextLng', next); }}
-              className="auth-pill-btn active nav-pill"
-            >
-              {i18n.language === 'en' ? 'తెలుగు' : 'English'}
-            </button>
-            <div
-              className="auth-pill-toggle nav-toggle"
-              onClick={toggleTheme}
-            >
-              {theme === 'dark' ? <Sun size={15} strokeWidth={3} /> : <Moon size={15} strokeWidth={3} />}
-            </div>
-          </div>
+          <button 
+            className="icon-btn" 
+            onClick={() => setIsSettingsOpen(true)}
+            title={t('settings')}
+            style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '12px' }}
+          >
+            <Settings size={20} />
+          </button>
         </div>
-
-        <div className="progress-bar-flow"></div>
       </nav>
+
+      <SettingsPanel 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        theme={theme} 
+        toggleTheme={toggleTheme} 
+      />
 
       <main key={stepData.id} className="simulator-main animate-step">
         <div className="app-container">
