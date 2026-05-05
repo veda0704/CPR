@@ -19,13 +19,56 @@ const Signup = ({ theme, toggleTheme }) => {
     confirm_password: ''
   });
   const [errors, setErrors] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validateField = (name, value) => {
+    let error = '';
+    const isTe = i18n.language === 'te';
+    
+    switch (name) {
+      case 'first_name':
+        if (!value) error = isTe ? 'మొదటి పేరు అవసరం' : 'First name is required';
+        break;
+      case 'last_name':
+        if (!value) error = isTe ? 'చివరి పేరు అవసరం' : 'Last name is required';
+        break;
+      case 'email':
+        if (!value) error = isTe ? 'ఇమెయిల్ అవసరం' : 'Email is required';
+        else if (!validateEmail(value)) error = isTe ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email';
+        break;
+      case 'password':
+        if (!value) error = isTe ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required';
+        else if (value.length < 8) error = isTe ? 'పాస్‌వర్డ్ కనీసం 8 అక్షరాలు ఉండాలి' : 'Password must be at least 8 characters';
+        break;
+      case 'confirm_password':
+        if (!value) error = isTe ? 'పాస్‌వర్డ్ నిర్ధారణ అవసరం' : 'Confirm password is required';
+        else if (value !== formData.password) error = isTe ? 'పాస్‌వర్డ్‌లు సరిపోలడం లేదు' : 'Passwords do not match';
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirm_password) {
-      toast.error(i18n.language === 'te' ? 'పాస్‌వర్డ్‌లు సరిపోలడం లేదు' : 'Passwords do not match');
+    
+    // Final validation check
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setFieldErrors(newErrors);
       return;
     }
 
@@ -41,16 +84,31 @@ const Signup = ({ theme, toggleTheme }) => {
       toast.success(t('signup_success'));
       navigate('/login');
     } catch (err) {
-      const errorMsg = err.response?.data?.detail || 'Registration failed';
+      const errorData = err.response?.data || {};
+      const errorMsg = errorData.detail || 'Registration failed';
       toast.error(errorMsg);
-      setErrors(err.response?.data || {});
+      setErrors(errorData);
+      
+      // Map backend errors to field errors if they are field-specific
+      const backendFieldErrors = {};
+      Object.keys(errorData).forEach(key => {
+        if (Array.isArray(errorData[key])) {
+          backendFieldErrors[key] = errorData[key][0];
+        } else if (typeof errorData[key] === 'string' && key !== 'detail') {
+          backendFieldErrors[key] = errorData[key];
+        }
+      });
+      setFieldErrors(prev => ({ ...prev, ...backendFieldErrors }));
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    const error = validateField(name, value);
+    setFieldErrors(prev => ({ ...prev, [name]: error }));
   };
 
   return (
@@ -92,46 +150,61 @@ const Signup = ({ theme, toggleTheme }) => {
           
           <form onSubmit={handleSignup} className="login-form-stack">
             <div className="name-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div className="login-input-group">
-                <div className="login-input-icon"><User size={20} /></div>
-                <input name="first_name" placeholder={t('first_name')} value={formData.first_name} onChange={handleChange} required />
+              <div className="login-input-wrapper">
+                <div className={`login-input-group ${fieldErrors.first_name ? 'input-error' : ''}`}>
+                  <div className="login-input-icon"><User size={20} /></div>
+                  <input name="first_name" placeholder={t('first_name')} value={formData.first_name} onChange={handleChange} required />
+                </div>
+                {fieldErrors.first_name && <div className="field-error-msg">{fieldErrors.first_name}</div>}
               </div>
-              <div className="login-input-group">
-                <div className="login-input-icon"><User size={20} /></div>
-                <input name="last_name" placeholder={t('last_name')} value={formData.last_name} onChange={handleChange} required />
+              <div className="login-input-wrapper">
+                <div className={`login-input-group ${fieldErrors.last_name ? 'input-error' : ''}`}>
+                  <div className="login-input-icon"><User size={20} /></div>
+                  <input name="last_name" placeholder={t('last_name')} value={formData.last_name} onChange={handleChange} required />
+                </div>
+                {fieldErrors.last_name && <div className="field-error-msg">{fieldErrors.last_name}</div>}
               </div>
             </div>
 
-            <div className="login-input-group">
-              <div className="login-input-icon"><Mail size={20} /></div>
-              <input type="email" name="email" placeholder={t('email')} value={formData.email} onChange={handleChange} required />
+            <div className="login-input-wrapper">
+              <div className={`login-input-group ${fieldErrors.email ? 'input-error' : ''}`}>
+                <div className="login-input-icon"><Mail size={20} /></div>
+                <input type="email" name="email" placeholder={t('email')} value={formData.email} onChange={handleChange} required />
+              </div>
+              {fieldErrors.email && <div className="field-error-msg">{fieldErrors.email}</div>}
             </div>
 
-            <div className="login-input-group">
-              <div className="login-input-icon"><Lock size={20} /></div>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                name="password"
-                placeholder={t('password')} 
-                value={formData.password}
-                onChange={handleChange}
-                required 
-              />
-              <button type="button" className="pw-toggle" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+            <div className="login-input-wrapper">
+              <div className={`login-input-group ${fieldErrors.password ? 'input-error' : ''}`}>
+                <div className="login-input-icon"><Lock size={20} /></div>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  name="password"
+                  placeholder={t('password')} 
+                  value={formData.password}
+                  onChange={handleChange}
+                  required 
+                />
+                <button type="button" className="pw-toggle" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {fieldErrors.password && <div className="field-error-msg">{fieldErrors.password}</div>}
             </div>
 
-            <div className="login-input-group">
-              <div className="login-input-icon"><Shield size={20} /></div>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                name="confirm_password"
-                placeholder={t('confirm_password')} 
-                value={formData.confirm_password}
-                onChange={handleChange}
-                required 
-              />
+            <div className="login-input-wrapper">
+              <div className={`login-input-group ${fieldErrors.confirm_password ? 'input-error' : ''}`}>
+                <div className="login-input-icon"><Shield size={20} /></div>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  name="confirm_password"
+                  placeholder={t('confirm_password')} 
+                  value={formData.confirm_password}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+              {fieldErrors.confirm_password && <div className="field-error-msg">{fieldErrors.confirm_password}</div>}
             </div>
 
             <button type="submit" className="login-submit-btn" disabled={isLoading}>
@@ -368,6 +441,23 @@ const Signup = ({ theme, toggleTheme }) => {
           font-weight: 600;
           color: #1E293B;
           outline: none;
+        }
+
+        .login-input-group.input-error {
+          border-color: #ef4444 !important;
+        }
+
+        .field-error-msg {
+          color: #ef4444;
+          font-size: 11px;
+          font-weight: 700;
+          margin-top: 4px;
+          animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(-5px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .login-input-icon {

@@ -22,7 +22,7 @@ function App() {
     let timeout;
     const resetTimer = () => {
       if (timeout) clearTimeout(timeout);
-      // Logout after 30 minutes of inactivity (1800000 ms)
+      // Logout after 10 minutes of inactivity (600000 ms)
       timeout = setTimeout(async () => {
         if (localStorage.getItem('access_token') || sessionStorage.getItem('access_token')) {
           try {
@@ -34,7 +34,7 @@ function App() {
           sessionStorage.removeItem('access_token');
           setUser(null);
         }
-      }, 1800000);
+      }, 600000);
     };
 
     if (user) {

@@ -19,9 +19,52 @@ const Login = ({ onLogin, theme, toggleTheme }) => {
     return localStorage.getItem('remember_me') === 'true';
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' });
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (!value) {
+      setFieldErrors(prev => ({ ...prev, email: i18n.language === 'te' ? 'ఇమెయిల్ అవసరం' : 'Email is required' }));
+    } else if (!validateEmail(value)) {
+      setFieldErrors(prev => ({ ...prev, email: i18n.language === 'te' ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email' }));
+    } else {
+      setFieldErrors(prev => ({ ...prev, email: '' }));
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (!value) {
+      setFieldErrors(prev => ({ ...prev, password: i18n.language === 'te' ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required' }));
+    } else if (value.length < 6) {
+      setFieldErrors(prev => ({ ...prev, password: i18n.language === 'te' ? 'పాస్‌వర్డ్ కనీసం 6 అక్షరాలు ఉండాలి' : 'Password must be at least 6 characters' }));
+    } else {
+      setFieldErrors(prev => ({ ...prev, password: '' }));
+    }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    // Final validation check before submit
+    const newErrors = { email: '', password: '' };
+    if (!email) newErrors.email = i18n.language === 'te' ? 'ఇమెయిల్ అవసరం' : 'Email is required';
+    else if (!validateEmail(email)) newErrors.email = i18n.language === 'te' ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email';
+    
+    if (!password) newErrors.password = i18n.language === 'te' ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required';
+    
+    if (newErrors.email || newErrors.password) {
+      setFieldErrors(newErrors);
+      return;
+    }
+
     setIsLoading(true);
     setError('');
     try {
@@ -79,29 +122,35 @@ const Login = ({ onLogin, theme, toggleTheme }) => {
           </h1>
           
           <form onSubmit={handleLogin} className="login-form-stack">
-            <div className="login-input-group">
-              <div className="login-input-icon"><User size={20} /></div>
-              <input 
-                type="email" 
-                placeholder={t('email')} 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required 
-              />
+            <div className="login-input-wrapper">
+              <div className={`login-input-group ${fieldErrors.email ? 'input-error' : ''}`}>
+                <div className="login-input-icon"><User size={20} /></div>
+                <input 
+                  type="email" 
+                  placeholder={t('email')} 
+                  value={email}
+                  onChange={handleEmailChange}
+                  required 
+                />
+              </div>
+              {fieldErrors.email && <div className="field-error-msg">{fieldErrors.email}</div>}
             </div>
 
-            <div className="login-input-group">
-              <div className="login-input-icon"><Lock size={20} /></div>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                placeholder={t('password')} 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required 
-              />
-              <button type="button" className="pw-toggle" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+            <div className="login-input-wrapper">
+              <div className={`login-input-group ${fieldErrors.password ? 'input-error' : ''}`}>
+                <div className="login-input-icon"><Lock size={20} /></div>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder={t('password')} 
+                  value={password}
+                  onChange={handlePasswordChange}
+                  required 
+                />
+                <button type="button" className="pw-toggle" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {fieldErrors.password && <div className="field-error-msg">{fieldErrors.password}</div>}
             </div>
 
             <div className="login-extra-actions">
@@ -338,6 +387,23 @@ const Login = ({ onLogin, theme, toggleTheme }) => {
           font-weight: 600;
           color: #1E293B;
           outline: none;
+        }
+
+        .login-input-group.input-error {
+          border-color: #ef4444 !important;
+        }
+
+        .field-error-msg {
+          color: #ef4444;
+          font-size: 12px;
+          font-weight: 700;
+          margin-top: 4px;
+          animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(-5px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .login-input-icon {

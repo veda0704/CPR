@@ -21,7 +21,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passCtrl = TextEditingController();
   bool _obscure = true;
   bool _rememberMe = false;
-  String? _localError;
+  String? _emailError;
+  String? _passError;
 
   @override
   void initState() {
@@ -51,22 +52,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  bool _validate() {
     final isTe = ref.read(languageProvider) == 'te';
-    final email = _emailCtrl.text.trim();
-    final password = _passCtrl.text;
+    bool isValid = true;
+    
+    setState(() {
+      _emailError = null;
+      _passError = null;
+    });
 
-    if (email.isEmpty || password.isEmpty) {
-      setState(() => _localError = isTe ? 'దయచేసి ఇమెయిల్ మరియు పాస్‌వర్డ్ రెండింటినీ నమోదు చేయండి' : 'Please enter both email and password');
-      return;
+    if (_emailCtrl.text.trim().isEmpty) {
+      setState(() => _emailError = isTe ? 'ఇమెయిల్ అవసరం' : 'Email is required');
+      isValid = false;
+    } else if (!_emailCtrl.text.contains('@')) {
+      setState(() => _emailError = isTe ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email');
+      isValid = false;
     }
 
-    // Clear local validation error to allow server error to show
-    setState(() => _localError = null);
+    if (_passCtrl.text.isEmpty) {
+      setState(() => _passError = isTe ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required');
+      isValid = false;
+    }
 
+    return isValid;
+  }
+
+  void _submit() {
+    if (!_validate()) return;
+    
     ref
         .read(authProvider.notifier)
-        .login(email, password, _rememberMe);
+        .login(_emailCtrl.text.trim(), _passCtrl.text, _rememberMe);
   }
 
   @override
@@ -304,9 +320,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildForm(AuthState state, bool isTe, bool isDark) {
-    final hasError = state.status == AuthStatus.error || _localError != null;
-    final errorMsg = _localError ?? state.errorMessage ?? (isTe ? 'చెల్లుబాటు కాని ఆధారాలు' : 'Invalid credentials');
-
     return Column(
       children: [
         _buildInput(
@@ -316,6 +329,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           isDark: isDark,
           keyboardType: TextInputType.emailAddress,
           action: TextInputAction.next,
+          errorText: _emailError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _emailError = isTe ? 'ఇమెయిల్ అవసరం' : 'Email is required');
+            } else if (!v.contains('@')) {
+              setState(() => _emailError = isTe ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email');
+            } else {
+              setState(() => _emailError = null);
+            }
+          },
         ),
         const SizedBox(height: 16),
         _buildInput(
@@ -328,6 +352,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           onToggle: () => setState(() => _obscure = !_obscure),
           action: TextInputAction.done,
           onSubmitted: (_) => _submit(),
+          errorText: _passError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _passError = isTe ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required');
+            } else {
+              setState(() => _passError = null);
+            }
+          },
         ),
         const SizedBox(height: 20),
         Row(
@@ -354,7 +387,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               style: const TextStyle(color: AppColors.teal, fontWeight: FontWeight.w800, fontSize: 13)),
           ],
         ),
-        if (hasError)
+        if (state.status == AuthStatus.error)
           Container(
             margin: const EdgeInsets.only(top: 24),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -369,7 +402,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    errorMsg,
+                    state.errorMessage ?? (isTe ? 'చెల్లుబాటు కాని ఆధారాలు' : 'Invalid credentials'),
                     style: GoogleFonts.inter(
                       color: Colors.red.shade700,
                       fontWeight: FontWeight.w700,
@@ -395,6 +428,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     TextInputType? keyboardType,
     TextInputAction? action,
     ValueChanged<String>? onSubmitted,
+    String? errorText,
+    ValueChanged<String>? onChanged,
   }) {
     return StatefulBuilder(
       builder: (context, setState) {
@@ -403,62 +438,84 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Builder(
             builder: (context) {
               final hasFocus = Focus.of(context).hasFocus;
-              return Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: hasFocus 
-                          ? AppColors.teal 
-                          : (isDark ? Colors.white24 : const Color(0xFFE2E8F0)),
-                      width: 2,
-                    ),
-                  ),
-                ),
-                child: TextField(
-                  controller: controller,
-                  obscureText: obscure,
-                  keyboardType: keyboardType,
-                  textInputAction: action,
-                  onSubmitted: onSubmitted,
-                  cursorColor: AppColors.teal,
-                  style: GoogleFonts.inter(
-                    color: isDark ? Colors.white : const Color(0xFF1E293B),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                  decoration: InputDecoration(
-                    filled: false,
-                    hintText: hint,
-                    hintStyle: GoogleFonts.inter(
-                      color: AppColors.muted,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Icon(
-                        icon, 
-                        color: hasFocus ? AppColors.teal : AppColors.muted, 
-                        size: 22
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 4),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: errorText != null
+                              ? Colors.red
+                              : hasFocus 
+                                  ? AppColors.teal 
+                                  : (isDark ? Colors.white24 : const Color(0xFFE2E8F0)),
+                          width: 2,
+                        ),
                       ),
                     ),
-                    prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-                    suffixIcon: isPassword && onToggle != null 
-                      ? IconButton(
-                          icon: Icon(
-                            obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: hasFocus ? AppColors.teal : AppColors.muted,
-                            size: 20,
+                    child: TextField(
+                      controller: controller,
+                      obscureText: obscure,
+                      keyboardType: keyboardType,
+                      textInputAction: action,
+                      onSubmitted: onSubmitted,
+                      onChanged: onChanged,
+                      cursorColor: AppColors.teal,
+                      style: GoogleFonts.inter(
+                        color: isDark ? Colors.white : const Color(0xFF1E293B),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                      decoration: InputDecoration(
+                        filled: false,
+                        hintText: hint,
+                        hintStyle: GoogleFonts.inter(
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 12),
+                          child: Icon(
+                            icon, 
+                            color: errorText != null 
+                                ? Colors.red 
+                                : (hasFocus ? AppColors.teal : AppColors.muted), 
+                            size: 22
                           ),
-                          onPressed: onToggle,
-                        )
-                      : null,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                        suffixIcon: isPassword && onToggle != null 
+                          ? IconButton(
+                              icon: Icon(
+                                obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                color: hasFocus ? AppColors.teal : AppColors.muted,
+                                size: 20,
+                              ),
+                              onPressed: onToggle,
+                            )
+                          : null,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
                   ),
-                ),
+                  if (errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        errorText,
+                        style: GoogleFonts.inter(
+                          color: Colors.red,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                ],
               );
             }
           ),

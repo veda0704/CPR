@@ -185,8 +185,8 @@ class AclsApp extends ConsumerWidget {
   void _resetInactivityTimer(WidgetRef ref) {
     _inactivityTimer?.cancel();
     if (ref.read(authProvider).value?.status == AuthStatus.authenticated) {
-      _inactivityTimer = Timer(const Duration(minutes: 30), () {
-        debugPrint('🔒 Mobile Inactivity Timeout (30 min). Logging out...');
+      _inactivityTimer = Timer(const Duration(minutes: 10), () {
+        debugPrint('🔒 Mobile Inactivity Timeout (10 min). Logging out...');
         ref.read(authProvider.notifier).logout();
         _messengerKey.currentState?.showSnackBar(
           SnackBar(
