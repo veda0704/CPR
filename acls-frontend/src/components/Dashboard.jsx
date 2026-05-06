@@ -6,18 +6,18 @@ import { getDashboard, logout } from '../services/api';
 import {
   LogOut, Play, Zap, Heart, Activity, Thermometer, ClipboardList, Wind,
   AlertTriangle, Monitor, HeartPulse, Brain, Baby, ShieldAlert, Siren,
-  ListChecks, Search, ChevronRight, CheckCircle2, Moon, Sun, User, Clock, Trophy, RotateCcw
+  ListChecks, Search, ChevronRight, CheckCircle2, Moon, Sun, User, Clock, Trophy, RotateCcw, Settings
 } from 'lucide-react';
 import Footer from './Footer';
 import iaclsLogo from '../assets/iacls-logo.png';
 import bavyaLogo from '../assets/bavya-logo.png';
 import { getModuleStatus, setModuleStatus, getModuleProgress } from '../utils/moduleStatus';
 import SettingsPanel from './SettingsPanel';
-import { Settings } from 'lucide-react';
+import AnimatedECG from './AnimatedECG';
 
 const Skeleton = ({ className }) => <div className={`skeleton ${className}`} />;
 
-const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
+const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeColor }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [levels, setLevels] = useState([]);
@@ -97,6 +97,17 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
     const filename = mapping[modId] || 'abcdem2.png';
     return `http://10.2.1.15:8002/static/images/module-bgs/${filename}`;
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector('.search-input')?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -205,17 +216,17 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
   return (
     <div className="medical-bg">
       <nav className="floating-nav animate-reveal">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <img 
             src={iaclsLogo} 
             alt="IACLS Logo" 
             style={{ 
               height: '75px', 
               objectFit: 'contain', 
-              filter: 'brightness(0) invert(1) drop-shadow(0 0 0.5px white)' 
+              filter: 'brightness(0) invert(1)' 
             }} 
           />
-          <div className="search-container nav-search" style={{ flex: 1, maxWidth: '600px' }}>
+          <div className="search-container nav-search">
             <Search size={18} />
             <input
               type="text"
@@ -227,52 +238,39 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div className="user-nav-block" style={{ borderLeft: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div className="user-nav-block">
             <div className="user-info">
-              <span className="user-name" style={{ color: 'white' }}>{user?.first_name || t('clinical_user')}</span>
-              <span className="user-role" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.72rem' }}>{user?.role || 'Clinician'}</span>
+              <span className="user-name">{user?.first_name || t('clinical_user')}</span>
             </div>
-            <div className="user-avatar" style={{ background: 'rgba(255,255,255,0.2)', color: 'white' }}>
+            <div className="user-avatar">
               <User size={20} />
             </div>
-            
             <button 
-              className="icon-btn" 
+              className="settings-nav-btn"
               onClick={() => setIsSettingsOpen(true)}
               title={t('settings')}
-              style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '14px' }}
             >
               <Settings size={20} />
             </button>
-
             <button 
               onClick={handleLogout} 
-              className="logout-btn"
-              style={{ 
-                background: 'rgba(255,255,255,0.15)', 
-                width: '42px', 
-                height: '42px', 
-                borderRadius: '14px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                color: 'white',
-                border: '1px solid rgba(255,255,255,0.3)',
-                cursor: 'pointer'
-              }}
+              className="logout-nav-btn"
+              title={t('logout')}
             >
-              <LogOut size={20} />
+              <LogOut size={18} />
             </button>
           </div>
         </div>
       </nav>
 
       <SettingsPanel 
-        isOpen={isSettingsOpen} 
-        onClose={() => setIsSettingsOpen(false)} 
-        theme={theme} 
-        toggleTheme={toggleTheme} 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        currentPrimary={themeColor}
+        applyThemeColor={applyThemeColor}
       />
 
       <main className="app-container dashboard-main">
@@ -293,10 +291,8 @@ const Dashboard = ({ user, setUser, theme, toggleTheme }) => {
               <section className="dashboard-hero compact-hero-row">
                 <div className="hero-row-content">
                   <div className="hero-visual-section">
-                    <div className="hero-tag-circle-mini">
-                      <div className="hero-progress-text" style={{ position: 'relative', top: 'auto', left: 'auto', transform: 'none' }}>
-                        <Trophy size={32} color="var(--primary)" strokeWidth={2.5} />
-                      </div>
+                    <div className="hero-tag-circle-mini" style={{ width: '160px', height: '80px', overflow: 'hidden', background: 'transparent', border: 'none', boxShadow: 'none', display: 'flex', alignItems: 'center' }}>
+                      <AnimatedECG rhythms={['nsr']} isHero={true} />
                     </div>
                   </div>
 

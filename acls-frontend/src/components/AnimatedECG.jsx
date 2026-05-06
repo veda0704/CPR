@@ -278,7 +278,7 @@ const formatRhythmName = (type) => {
     return titles[type] || 'ECG Monitor';
 };
 
-const SingleMonitor = ({ rhythmType }) => {
+const SingleMonitor = ({ rhythmType, isHero = false }) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -293,18 +293,30 @@ const SingleMonitor = ({ rhythmType }) => {
         const waveformFunction = createWaveform(rhythmType);
 
         const render = (time) => {
-            ctx.fillStyle = '#1A1716'; // Deep Charcoal
-            ctx.fillRect(0, 0, width, canvas.height);
+            // Hero mode uses transparent background, normal mode uses charcoal
+            if (isHero) {
+                ctx.clearRect(0, 0, width, canvas.height);
+            } else {
+                ctx.fillStyle = '#1A1716'; 
+                ctx.fillRect(0, 0, width, canvas.height);
+            }
+            
+            // Grid lines
             ctx.lineWidth = 0.5;
-            ctx.strokeStyle = 'rgba(138, 63, 12, 0.15)'; // Subtle Burnt Brown Grid
+            ctx.strokeStyle = isHero 
+                ? 'color-mix(in srgb, var(--primary-color), transparent 90%)'
+                : 'rgba(138, 63, 12, 0.15)'; 
+            
             for(let i=0; i<width; i+=40) {
                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
             }
             for(let j=0; j<canvas.height; j+=40) {
                ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(width, j); ctx.stroke();
             }
-            ctx.lineWidth = 2.5;
-            ctx.strokeStyle = '#F2A007'; // Warm Amber Wave
+
+            // Waveform
+            ctx.lineWidth = isHero ? 3.5 : 2.5;
+            ctx.strokeStyle = isHero ? 'var(--primary-color)' : '#F2A007'; 
             ctx.lineJoin = 'round';
             ctx.beginPath();
             timeOffset = time;
@@ -319,40 +331,64 @@ const SingleMonitor = ({ rhythmType }) => {
                 }
             }
             ctx.stroke();
-            const grad = ctx.createLinearGradient(width - 50, 0, width, 0);
-            grad.addColorStop(0, 'rgba(26, 23, 22, 0)');
-            grad.addColorStop(1, 'rgba(26, 23, 22, 1)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(width - 50, 0, 50, canvas.height);
+
+            // Fade effect at the leading edge
+            if (!isHero) {
+                const grad = ctx.createLinearGradient(width - 50, 0, width, 0);
+                grad.addColorStop(0, 'rgba(26, 23, 22, 0)');
+                grad.addColorStop(1, 'rgba(26, 23, 22, 1)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(width - 50, 0, 50, canvas.height);
+            }
+
             animationFrameId = requestAnimationFrame(render);
         };
         animationFrameId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [rhythmType]);
+    }, [rhythmType, isHero]);
+
+    const monitorStyle = isHero ? {
+        position: 'relative',
+        width: '100%',
+        background: 'transparent',
+    } : {
+        position: 'relative',
+        width: '100%',
+        marginBottom: '16px',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        border: '1.5px solid var(--border)',
+        background: '#1A1716',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.2)'
+    };
 
     return (
-        <div style={{ position: 'relative', width: '100%', marginBottom: '16px', borderRadius: '12px', overflow: 'hidden', border: '1.5px solid var(--border)', background: '#1A1716', boxShadow: '0 8px 30px rgba(0,0,0,0.2)' }}>
-            <div style={{ position: 'absolute', top: '10px', left: '16px', color: '#F2A007', fontWeight: 900, fontSize: '14px', zIndex: 10, letterSpacing: '0.5px' }}>
-                II
-            </div>
-             <div style={{ position: 'absolute', top: '10px', right: '16px', color: 'rgba(233, 224, 179, 0.6)', fontWeight: 800, fontSize: '11px', zIndex: 10, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                {formatRhythmName(rhythmType)}
-            </div>
+        <div style={monitorStyle}>
+            {!isHero && (
+                <>
+                    <div style={{ position: 'absolute', top: '10px', left: '16px', color: '#F2A007', fontWeight: 900, fontSize: '14px', zIndex: 10, letterSpacing: '0.5px' }}>
+                        II
+                    </div>
+                    <div style={{ position: 'absolute', top: '10px', right: '16px', color: 'rgba(233, 224, 179, 0.6)', fontWeight: 800, fontSize: '11px', zIndex: 10, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        {formatRhythmName(rhythmType)}
+                    </div>
+                </>
+            )}
             <canvas 
                 ref={canvasRef} 
                 width={800} 
-                height={160} 
+                height={180} 
                 style={{ width: '100%', height: 'auto', display: 'block' }}
             />
         </div>
     );
 };
 
-const AnimatedECG = ({ rhythms = ['nsr'] }) => {
+const AnimatedECG = ({ rhythms = ['nsr'], isHero = false }) => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', justifyContent: 'center', background: 'transparent', padding: '16px', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', justifyContent: 'center', background: 'transparent', padding: isHero ? '0' : '16px', borderRadius: '16px' }}>
             {rhythms.map((rhythm, idx) => (
-                <SingleMonitor key={idx} rhythmType={rhythm} />
+                <SingleMonitor key={idx} rhythmType={rhythm} isHero={isHero} />
             ))}
         </div>
     );

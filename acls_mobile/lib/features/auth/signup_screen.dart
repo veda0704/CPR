@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/loading_spinner.dart';
 import '../settings/language_provider.dart';
-import '../../core/theme/theme_provider.dart';
+
 import 'auth_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -24,6 +24,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _confirmPassCtrl = TextEditingController();
   
   bool _obscure = true;
+  bool _confirmObscure = true;
   String? _firstError;
   String? _lastError;
   String? _emailError;
@@ -106,23 +107,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         );
   }
 
-  Widget _buildThemeToggle(BuildContext context) {
-    return GestureDetector(
-      onTap: () => ref.read(themeModeProvider.notifier).toggle(),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.6),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Theme.of(context).brightness == Brightness.dark ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
-          color: AppColors.tealDark,
-          size: 20,
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +119,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       next.whenData((authState) {
         if (authState.status == AuthStatus.signupSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(isTe ? 'నమోదు పూర్తయింది! ఇప్పుడు లాగిన్ చేయవచ్చు.' : 'Signup completed! Now you can sign in.'), backgroundColor: AppColors.teal),
+            SnackBar(content: Text(isTe ? 'నమోదు పూర్తయింది! ఇప్పుడు లాగిన్ చేయవచ్చు.' : 'Signup completed! Now you can sign in.'), backgroundColor: Theme.of(context).primaryColor),
           );
           context.pop();
         }
@@ -163,7 +148,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               top: 0,
               left: 0,
               right: 0,
-              height: MediaQuery.of(context).size.height * 0.38,
+              height: MediaQuery.of(context).size.height * 0.32,
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -171,7 +156,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     end: Alignment.bottomRight,
                     colors: isDark 
                       ? [const Color(0xFF1E293B), const Color(0xFF0F172A)]
-                      : [const Color(0xFFE0F2F1), const Color(0xFFB2DFDB)],
+                      : [
+                          Theme.of(context).primaryColor.withValues(alpha: 0.95),
+                          Theme.of(context).primaryColor.withValues(alpha: 0.85),
+                        ],
                   ),
                 ),
                 child: SafeArea(
@@ -182,44 +170,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(
-                              'assets/images/iacls-logo.png',
-                              height: 75, // Impactful hero logo
-                              fit: BoxFit.contain,
-                            ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () => ref.read(languageProvider.notifier).setLanguage(isTe ? 'en' : 'te'),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.5),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
-                                    ),
-                                    child: Text(
-                                      isTe ? 'English' : 'తెలుగు',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors.tealDark,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                _buildThemeToggle(context),
-                              ],
+                             Image.asset(
+                               'assets/images/iacls-logo.png',
+                               height: 65, // Slightly smaller to avoid overflow
+                               fit: BoxFit.contain,
+                               color: Colors.white, // Tint to white
+                               colorBlendMode: BlendMode.srcIn,
+                             ),
+                            IconButton(
+                              onPressed: () => context.push('/settings'),
+                              icon: Icon(Icons.settings_rounded, color: isDark ? Theme.of(context).primaryColor : Colors.white, size: 24),
+                              style: IconButton.styleFrom(
+                                backgroundColor: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.15),
+                                padding: const EdgeInsets.all(12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 5),
                       // Hero Illustration
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 32),
-                        height: 160,
+                        height: 130, // Reduced height for signup to avoid overflow
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF1E293B) : Colors.white,
                           borderRadius: BorderRadius.circular(28),
@@ -239,7 +213,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
                     ],
                   ),
                 ),
@@ -248,7 +221,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
             // Form Content
             Positioned.fill(
-              top: MediaQuery.of(context).size.height * 0.34,
+              top: MediaQuery.of(context).size.height * 0.32,
               child: Container(
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF0F172A) : Colors.white,
@@ -257,206 +230,220 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     topRight: Radius.circular(40),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                isTe ? 'iACLSలో చేరండి ✨' : 'Join iACLS ✨',
-                                style: GoogleFonts.inter(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w900,
-                                  color: isDark ? Colors.white : AppColors.teal,
-                                  letterSpacing: -1,
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-                              if (effectiveState.status == AuthStatus.error)
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 24),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.error_outline_rounded, color: Colors.red, size: 20),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          effectiveState.errorMessage ?? (isTe ? 'నమోదు విఫలమైంది' : 'Signup failed'),
-                                          style: GoogleFonts.inter(
-                                            color: Colors.red.shade700,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              _buildInput(
-                                controller: _firstCtrl,
-                                hint: isTe ? 'మొదటి పేరు' : 'First Name',
-                                icon: Icons.person_outline_rounded,
-                                isDark: isDark,
-                                action: TextInputAction.next,
-                                errorText: _firstError,
-                                onChanged: (v) {
-                                  final isTe = ref.read(languageProvider) == 'te';
-                                  if (v.isEmpty) {
-                                    setState(() => _firstError = isTe ? 'మొదటి పేరు అవసరం' : 'First name is required');
-                                  } else {
-                                    setState(() => _firstError = null);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              _buildInput(
-                                controller: _lastCtrl,
-                                hint: isTe ? 'చివరి పేరు' : 'Last Name',
-                                icon: Icons.person_outline_rounded,
-                                isDark: isDark,
-                                action: TextInputAction.next,
-                                errorText: _lastError,
-                                onChanged: (v) {
-                                  final isTe = ref.read(languageProvider) == 'te';
-                                  if (v.isEmpty) {
-                                    setState(() => _lastError = isTe ? 'చివరి పేరు అవసరం' : 'Last name is required');
-                                  } else {
-                                    setState(() => _lastError = null);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              _buildInput(
-                                controller: _emailCtrl,
-                                hint: isTe ? 'ఈమెయిల్' : 'Email Address',
-                                icon: Icons.email_outlined,
-                                isDark: isDark,
-                                keyboardType: TextInputType.emailAddress,
-                                action: TextInputAction.next,
-                                errorText: _emailError,
-                                onChanged: (v) {
-                                  final isTe = ref.read(languageProvider) == 'te';
-                                  if (v.isEmpty) {
-                                    setState(() => _emailError = isTe ? 'ఇమెయిల్ అవసరం' : 'Email is required');
-                                  } else if (!v.contains('@')) {
-                                    setState(() => _emailError = isTe ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email');
-                                  } else {
-                                    setState(() => _emailError = null);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              _buildInput(
-                                controller: _passCtrl,
-                                hint: isTe ? 'పాస్‌వర్డ్' : 'Password',
-                                icon: Icons.lock_outline_rounded,
-                                isDark: isDark,
-                                isPassword: true,
-                                obscure: _obscure,
-                                onToggle: () => setState(() => _obscure = !_obscure),
-                                action: TextInputAction.next,
-                                errorText: _passError,
-                                onChanged: (v) {
-                                  final isTe = ref.read(languageProvider) == 'te';
-                                  if (v.isEmpty) {
-                                    setState(() => _passError = isTe ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required');
-                                  } else if (v.length < 8) {
-                                    setState(() => _passError = isTe ? 'పాస్‌వర్డ్ కనీసం 8 అక్షరాలు ఉండాలి' : 'Password must be at least 8 characters');
-                                  } else {
-                                    setState(() => _passError = null);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              _buildInput(
-                                controller: _confirmPassCtrl,
-                                hint: isTe ? 'పాస్‌వర్డ్ నిర్ధారించండి' : 'Confirm Password',
-                                icon: Icons.lock_reset_rounded,
-                                isDark: isDark,
-                                isPassword: true,
-                                obscure: _obscure,
-                                onToggle: () => setState(() => _obscure = !_obscure),
-                                action: TextInputAction.done,
-                                onSubmitted: (_) => _submit(),
-                                errorText: _confirmError,
-                                onChanged: (v) {
-                                  final isTe = ref.read(languageProvider) == 'te';
-                                  if (v.isEmpty) {
-                                    setState(() => _confirmError = isTe ? 'పాస్‌వర్డ్ నిర్ధారణ అవసరం' : 'Confirm password is required');
-                                  } else if (v != _passCtrl.text) {
-                                    setState(() => _confirmError = isTe ? 'పాస్‌వర్డ్‌లు సరిపోలడం లేదు' : 'Passwords do not match');
-                                  } else {
-                                    setState(() => _confirmError = null);
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 24),
-                              
-                              SizedBox(
-                                width: double.infinity,
-                                height: 60,
-                                child: ElevatedButton(
-                                  onPressed: (effectiveState.status == AuthStatus.loading || authAsync.isLoading) ? null : _submit,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.teal,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                                    elevation: 4,
-                                  ),
-                                  child: (effectiveState.status == AuthStatus.loading || authAsync.isLoading)
-                                    ? const LoadingSpinner.compact(message: '')
-                                    : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(isTe ? 'సైన్ అప్' : 'Sign Up', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
-                                          const SizedBox(width: 12),
-                                          const Icon(Icons.person_add_rounded, color: Colors.white),
-                                        ],
-                                      ),
-                                ),
-                              ),
-                              
-                              const SizedBox(height: 20),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () => context.pop(),
-                                  child: Text.rich(
-                                    TextSpan(
-                                      text: isTe ? 'ఖాతా ఉందా? ' : "Already have an account? ",
-                                      style: GoogleFonts.inter(color: AppColors.muted, fontWeight: FontWeight.w600),
-                                      children: [
-                                        TextSpan(text: isTe ? 'లాగిన్' : 'Login', style: const TextStyle(color: AppColors.teal, fontWeight: FontWeight.w900)),
-                                      ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                        child: IntrinsicHeight(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    isTe ? 'iACLSలో చేరండి ✨' : 'Join iACLS ✨',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w900,
+                                      color: isDark ? Colors.white : Theme.of(context).primaryColor,
+                                      letterSpacing: -1,
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(height: 16),
+                                  if (effectiveState.status == AuthStatus.error)
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 24),
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.error_outline_rounded, color: Colors.red, size: 20),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Text(
+                                              effectiveState.errorMessage ?? (isTe ? 'నమోదు విఫలమైంది' : 'Signup failed'),
+                                              style: GoogleFonts.inter(
+                                                color: Colors.red.shade700,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  _buildForm(effectiveState, isTe, isDark),
+                                  const SizedBox(height: 20), // Synchronized with login button spacing
+                                  
+                                  // Signup Button
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: 60,
+                                    child: ElevatedButton(
+                                      onPressed: (effectiveState.status == AuthStatus.loading || authAsync.isLoading) ? null : _submit,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context).primaryColor,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                        elevation: 4,
+                                      ),
+                                      child: (effectiveState.status == AuthStatus.loading || authAsync.isLoading)
+                                        ? const LoadingSpinner.compact(message: '')
+                                        : Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(isTe ? 'సైన్ అప్' : 'Sign Up', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
+                                              const SizedBox(width: 12),
+                                              const Icon(Icons.person_add_rounded, color: Colors.white),
+                                            ],
+                                          ),
+                                    ),
+                                  ),
+                                  
+                                  const SizedBox(height: 28),
+                                  Center(
+                                    child: GestureDetector(
+                                      onTap: () => context.pop(),
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text: isTe ? 'ఖాతా ఉందా? ' : "Already have an account? ",
+                                          style: GoogleFonts.inter(color: AppColors.muted, fontWeight: FontWeight.w600),
+                                          children: [
+                                            TextSpan(text: isTe ? 'లాగిన్' : 'Login', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w900)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  const SizedBox(height: 32),
+                                  _buildFooter(isTe),
+                                  const SizedBox(height: 20),
+                                ],
                               ),
-                              const SizedBox(height: 20),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SafeArea(
-                      top: false,
-                      child: _buildFooter(isTe),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),
         ],
       ),
+    );
+  }
+
+  Widget _buildForm(AuthState state, bool isTe, bool isDark) {
+    return Column(
+      children: [
+        _buildInput(
+          controller: _firstCtrl,
+          hint: isTe ? 'మొదటి పేరు' : 'First Name',
+          icon: Icons.person_outline_rounded,
+          isDark: isDark,
+          action: TextInputAction.next,
+          errorText: _firstError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _firstError = isTe ? 'మొదటి పేరు అవసరం' : 'First name is required');
+            } else {
+              setState(() => _firstError = null);
+            }
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildInput(
+          controller: _lastCtrl,
+          hint: isTe ? 'చివరి పేరు' : 'Last Name',
+          icon: Icons.person_outline_rounded,
+          isDark: isDark,
+          action: TextInputAction.next,
+          errorText: _lastError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _lastError = isTe ? 'చివరి పేరు అవసరం' : 'Last name is required');
+            } else {
+              setState(() => _lastError = null);
+            }
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildInput(
+          controller: _emailCtrl,
+          hint: isTe ? 'ఈమెయిల్' : 'Email Address',
+          icon: Icons.email_outlined,
+          isDark: isDark,
+          keyboardType: TextInputType.emailAddress,
+          action: TextInputAction.next,
+          errorText: _emailError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _emailError = isTe ? 'ఇమెయిల్ అవసరం' : 'Email is required');
+            } else if (!v.contains('@')) {
+              setState(() => _emailError = isTe ? 'చెల్లుబాటు అయ్యే ఇమెయిల్ నమోదు చేయండి' : 'Enter a valid email');
+            } else {
+              setState(() => _emailError = null);
+            }
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildInput(
+          controller: _passCtrl,
+          hint: isTe ? 'పాస్‌వర్డ్' : 'Password',
+          icon: Icons.lock_outline_rounded,
+          isDark: isDark,
+          isPassword: true,
+          obscure: _obscure,
+          onToggle: () => setState(() => _obscure = !_obscure),
+          action: TextInputAction.next,
+          errorText: _passError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _passError = isTe ? 'పాస్‌వర్డ్ అవసరం' : 'Password is required');
+            } else if (v.length < 8) {
+              setState(() => _passError = isTe ? 'పాస్‌వర్డ్ కనీసం 8 అక్షరాలు ఉండాలి' : 'Password must be at least 8 characters');
+            } else {
+              setState(() => _passError = null);
+            }
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildInput(
+          controller: _confirmPassCtrl,
+          hint: isTe ? 'పాస్‌వర్డ్ నిర్ధారించండి' : 'Confirm Password',
+          icon: Icons.lock_reset_rounded,
+          isDark: isDark,
+          isPassword: true,
+          obscure: _confirmObscure,
+          onToggle: () => setState(() => _confirmObscure = !_confirmObscure),
+          action: TextInputAction.done,
+          onSubmitted: (_) => _submit(),
+          errorText: _confirmError,
+          onChanged: (v) {
+            final isTe = ref.read(languageProvider) == 'te';
+            if (v.isEmpty) {
+              setState(() => _confirmError = isTe ? 'పాస్‌వర్డ్ నిర్ధారణ అవసరం' : 'Confirm password is required');
+            } else if (v != _passCtrl.text) {
+              setState(() => _confirmError = isTe ? 'పాస్‌వర్డ్‌లు సరిపోలడం లేదు' : 'Passwords do not match');
+            } else {
+              setState(() => _confirmError = null);
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -492,7 +479,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           color: errorText != null
                               ? Colors.red
                               : hasFocus 
-                                  ? AppColors.teal 
+                                  ? Theme.of(context).primaryColor 
                                   : (isDark ? Colors.white24 : const Color(0xFFE2E8F0)),
                           width: 2,
                         ),
@@ -505,7 +492,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       textInputAction: action,
                       onSubmitted: onSubmitted,
                       onChanged: onChanged,
-                      cursorColor: AppColors.teal,
+                      cursorColor: Theme.of(context).primaryColor,
                       style: GoogleFonts.inter(
                         color: isDark ? Colors.white : const Color(0xFF1E293B),
                         fontWeight: FontWeight.w600,
@@ -524,7 +511,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             icon, 
                             color: errorText != null 
                                 ? Colors.red 
-                                : (hasFocus ? AppColors.teal : AppColors.muted), 
+                                : (hasFocus ? Theme.of(context).primaryColor : AppColors.muted), 
                             size: 20
                           ),
                         ),
@@ -533,7 +520,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ? IconButton(
                               icon: Icon(
                                 obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                color: hasFocus ? AppColors.teal : AppColors.muted,
+                                color: hasFocus ? Theme.of(context).primaryColor : AppColors.muted,
                                 size: 18,
                               ),
                               onPressed: onToggle,
@@ -569,38 +556,41 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   Widget _buildFooter(bool isTe) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 8,
             children: [
               Text(
                 isTe ? '© 2026 iACLS ప్రోటోకాల్' : '© 2026 iACLS Protocol',
                 style: GoogleFonts.inter(
                   color: AppColors.muted,
-                  fontSize: 11,
+                  fontSize: 10,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 12),
                 height: 12,
                 width: 1,
                 color: Colors.grey.withValues(alpha: 0.2),
               ),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     isTe ? 'పవర్డ్ బై ' : 'Powered by ',
                     style: GoogleFonts.inter(
                       color: AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Image.asset('assets/images/bavya-logo.png', height: 14),
+                  Image.asset('assets/images/bavya-logo.png', height: 13),
                 ],
               ),
             ],

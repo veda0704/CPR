@@ -19,6 +19,7 @@ import '../../core/storage/local_storage.dart';
 import 'step_provider.dart';
 import 'completion_screen.dart';
 import 'scene_timer_provider.dart';
+import '../settings/settings_screen.dart';
 
 class StepScreen extends ConsumerStatefulWidget {
   final String stepId;
@@ -39,7 +40,9 @@ class _StepScreenState extends ConsumerState<StepScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final timerCtrl = ref.read(sceneTimerControllerProvider);
       // If first step, reset the timer
-      if (widget.stepId.endsWith('_start') || widget.stepId == '1' || widget.stepId == 'adult_choking_step1') {
+      if (widget.stepId.endsWith('_start') ||
+          widget.stepId == '1' ||
+          widget.stepId == 'adult_choking_step1') {
         (timerCtrl['reset'] as Function)();
       }
       (timerCtrl['start'] as Function)();
@@ -73,7 +76,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
         await _videoController!.dispose();
         _videoController = null;
       }
-      VideoPlayerController ctrl = VideoPlayerController.networkUrl(Uri.parse(fullUrl));
+      VideoPlayerController ctrl =
+          VideoPlayerController.networkUrl(Uri.parse(fullUrl));
       await ctrl.initialize();
       ctrl.setLooping(true);
       if (mounted) {
@@ -132,7 +136,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
   void _trackStepProgress(StepModel step) {
     final authState = ref.read(authProvider).value;
     final email = authState?.email ?? '';
-    final moduleId = _getModuleIdFromStep(step.id.isNotEmpty ? step.id : widget.stepId);
+    final moduleId =
+        _getModuleIdFromStep(step.id.isNotEmpty ? step.id : widget.stepId);
     if (email.isEmpty || moduleId.isEmpty) return;
 
     final status = LocalStorage.getModuleStatus(email, moduleId);
@@ -182,11 +187,16 @@ class _StepScreenState extends ConsumerState<StepScreen> {
       final email = authState?.email ?? '';
       final currentModuleId = _getModuleIdFromStep(widget.stepId);
       final targetModuleId = _getModuleIdFromStep(target);
-      
+
       // If the target is a different module (and we aren't just going 'back'), mark the current one as complete
-      if (currentModuleId.isNotEmpty && targetModuleId.isNotEmpty && currentModuleId != targetModuleId && !label.contains('back')) {
+      if (currentModuleId.isNotEmpty &&
+          targetModuleId.isNotEmpty &&
+          currentModuleId != targetModuleId &&
+          !label.contains('back')) {
         LocalStorage.setModuleStatus(email, currentModuleId, 'completed');
-      } else if (label.contains('continue') && !label.contains('back') && currentModuleId.isNotEmpty) {
+      } else if (label.contains('continue') &&
+          !label.contains('back') &&
+          currentModuleId.isNotEmpty) {
         // Fallback for cases where targetModuleId mapping isn't fully defined yet but it's clearly a 'continue' action
         LocalStorage.setModuleStatus(email, currentModuleId, 'completed');
       }
@@ -204,7 +214,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
     return stepAsync.when(
       loading: () => Scaffold(
           body: Center(
-              child: LoadingSpinner.fullScreen(message: isTe ? 'లోడ్ అవుతోంది...' : 'Loading...'))),
+              child: LoadingSpinner.fullScreen(
+                  message: isTe ? 'లోడ్ అవుతోంది...' : 'Loading...'))),
       error: (e, _) => Scaffold(
         body: Center(
           child: Column(
@@ -228,7 +239,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
       ),
       data: (data) {
         final step = StepModel.fromJson(data);
-        WidgetsBinding.instance.addPostFrameCallback((_) => _trackStepProgress(step));
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) => _trackStepProgress(step));
         if (step.video != null && step.video!.endsWith('.mp4')) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (_videoController == null ||
@@ -266,85 +278,107 @@ class _StepScreenState extends ConsumerState<StepScreen> {
                     child: Column(
                       children: [
                         _StepHeader(
-                          title: step.title, 
-                          lang: lang, 
+                          title: step.title,
+                          lang: lang,
                           stepId: widget.stepId,
                           timeLimit: step.timeLimit,
-                          onTimeout: () => _handleChoice(context, next: step.timeOutNext ?? 'dashboard'),
+                          onTimeout: () => _handleChoice(context,
+                              next: step.timeOutNext ?? 'dashboard'),
                         ),
                         Expanded(
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              return SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(),
-                                padding: const EdgeInsets.fromLTRB(20, 80, 20, 16), // Increased top padding for floating timer
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          _QuestionCard(
-                                              question: step.question,
-                                              audioUrl: step.audioUrl),
-                                          const SizedBox(height: 24),
-                                          if (step.interactiveComponent == 'patient_type_selector' ||
-                                              step.interactiveComponent == 'choice_cards')
-                                            _buildMedia(step, isTe)
-                                          else
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context).brightness == Brightness.dark 
-                                                  ? const Color(0xFF1E293B) 
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            return SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.fromLTRB(20, 80, 20,
+                                  16), // Increased top padding for floating timer
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    minHeight: constraints.maxHeight - 32),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        _QuestionCard(
+                                            question: step.question,
+                                            audioUrl: step.audioUrl),
+                                        const SizedBox(height: 24),
+                                        if (step.interactiveComponent ==
+                                                'patient_type_selector' ||
+                                            step.interactiveComponent ==
+                                                'choice_cards')
+                                          _buildMedia(step, isTe)
+                                        else
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? const Color(0xFF1E293B)
                                                   : Colors.white,
-                                                borderRadius: BorderRadius.circular(24),
-                                                border: Border.all(
-                                                  color: Theme.of(context).brightness == Brightness.dark 
-                                                    ? Colors.white.withValues(alpha: 0.05) 
-                                                    : Colors.black.withValues(alpha: 0.05),
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black.withValues(alpha: 0.12),
-                                                    blurRadius: 24,
-                                                    offset: const Offset(0, 8),
-                                                  )
-                                                ],
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              border: Border.all(
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.dark
+                                                    ? Colors.white
+                                                        .withValues(alpha: 0.05)
+                                                    : Colors.black.withValues(
+                                                        alpha: 0.05),
                                               ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(24),
-                                                child: AspectRatio(
-                                                    aspectRatio: 16 / 9,
-                                                    child: _buildMedia(step, isTe)),
-                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withValues(alpha: 0.12),
+                                                  blurRadius: 24,
+                                                  offset: const Offset(0, 8),
+                                                )
+                                              ],
                                             ),
-                                          const SizedBox(height: 24),
-                                          ...step.choices
-                                              .where((c) {
-                                                if (widget.stepId == 'rhythms_start' && c.next == 'dashboard') return true;
-                                                if (widget.stepId.contains('_start') && c.next == 'dashboard') return false;
-                                                return true;
-                                              })
-                                              .map((choice) {
-                                                return Padding(
-                                                    padding: const EdgeInsets.only(bottom: 12),
-                                                    child: _ChoiceButton(
-                                                        choice: choice,
-                                                        onTap: () => _handleChoice(context,
-                                                            choice: choice)));
-                                              }),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 24),
-                                    ],
-                                  ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
+                                              child: AspectRatio(
+                                                  aspectRatio: 16 / 9,
+                                                  child:
+                                                      _buildMedia(step, isTe)),
+                                            ),
+                                          ),
+                                        const SizedBox(height: 24),
+                                        ...step.choices.where((c) {
+                                          if (widget.stepId == 'rhythms_start' &&
+                                              c.next == 'dashboard') {
+                                            return true;
+                                          }
+                                          if (widget.stepId.contains('_start') &&
+                                              c.next == 'dashboard') {
+                                            return false;
+                                          }
+                                          return true;
+                                        }).map((choice) {
+                                          return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 12),
+                                              child: _ChoiceButton(
+                                                  choice: choice,
+                                                  onTap: () => _handleChoice(
+                                                      context,
+                                                      choice: choice)));
+                                        }),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                  ],
                                 ),
-                              );
-                            }
-                          ),
+                              ),
+                            );
+                          }),
                         ),
                         _PinnedFooter(isTe: isTe),
                       ],
@@ -352,8 +386,9 @@ class _StepScreenState extends ConsumerState<StepScreen> {
                   ),
                   Positioned(
                     top: 165, // Definitively below the navbar safe area
-                    right: 20, 
-                    child: _FloatingTimer(sceneTime: ref.watch(sceneTimeProvider)),
+                    right: 20,
+                    child:
+                        _FloatingTimer(sceneTime: ref.watch(sceneTimeProvider)),
                   ),
                 ],
               ),
@@ -394,27 +429,29 @@ class _PatientSelector extends StatelessWidget {
   const _PatientSelector(
       {required this.options, required this.onSelect, required this.isTe});
 
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.of(context).size.width;
     final isTablet = width > 768;
-    
+
     if (isTablet) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: options.map((opt) => Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: _buildLargeCard(context, opt, isDark),
-          ),
-        )).toList(),
+        children: options
+            .map((opt) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: _buildLargeCard(context, opt, isDark),
+                  ),
+                ))
+            .toList(),
       );
     }
 
     return Column(
-      children: options.map((opt) => _buildLargeCard(context, opt, isDark)).toList(),
+      children:
+          options.map((opt) => _buildLargeCard(context, opt, isDark)).toList(),
     );
   }
 
@@ -440,7 +477,7 @@ class _PatientSelector extends StatelessWidget {
           children: [
             // Background Image
             _ImageWidget(url: opt['image']),
-            
+
             // Premium Gradient Overlay
             Container(
               decoration: BoxDecoration(
@@ -456,7 +493,7 @@ class _PatientSelector extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Content
             Padding(
               padding: const EdgeInsets.all(28),
@@ -470,17 +507,18 @@ class _PatientSelector extends StatelessWidget {
                         child: Text(
                           opt['label'].toUpperCase(),
                           style: GoogleFonts.inter(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: -0.5,
-                            height: 1.1
-                          ),
+                              fontSize: 26,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                              height: 1.1),
                         ),
                       ),
                       if (opt['badge'] != null)
                         Icon(
-                          opt['badge'] == 'check' ? Icons.check_circle_rounded : Icons.warning_rounded,
+                          opt['badge'] == 'check'
+                              ? Icons.check_circle_rounded
+                              : Icons.warning_rounded,
                           color: Colors.white.withValues(alpha: 0.9),
                           size: 26,
                         ),
@@ -506,17 +544,18 @@ class _PatientSelector extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: const Color(0xFF0F172A),
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 18),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18)),
                         elevation: 0,
                       ),
                       child: Text(
                         "SELECT ${opt['label']}".toUpperCase(),
                         style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w900, 
-                          fontSize: 14,
-                          letterSpacing: 1.0
-                        ),
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            letterSpacing: 1.0),
                       ),
                     ),
                   ),
@@ -583,10 +622,11 @@ class _QuestionCardState extends ConsumerState<_QuestionCard>
     setState(() => _isPlaying = true);
     try {
       final base = ApiClient.baseUrl.split('/api/').first;
-      final path = widget.audioUrl!.startsWith('/') ? widget.audioUrl! : '/${widget.audioUrl}';
-      final fullUrl = widget.audioUrl!.startsWith('http')
+      final path = widget.audioUrl!.startsWith('/')
           ? widget.audioUrl!
-          : '$base$path';
+          : '/${widget.audioUrl}';
+      final fullUrl =
+          widget.audioUrl!.startsWith('http') ? widget.audioUrl! : '$base$path';
 
       _audioPlayer ??= AudioPlayer();
       await _audioPlayer!.setPlayerMode(PlayerMode.lowLatency);
@@ -597,7 +637,9 @@ class _QuestionCardState extends ConsumerState<_QuestionCard>
       if (mounted) {
         setState(() => _isPlaying = false);
         final base = ApiClient.baseUrl.split('/api/').first;
-        final path = widget.audioUrl!.startsWith('/') ? widget.audioUrl! : '/${widget.audioUrl}';
+        final path = widget.audioUrl!.startsWith('/')
+            ? widget.audioUrl!
+            : '/${widget.audioUrl}';
         final fullUrl = widget.audioUrl!.startsWith('http')
             ? widget.audioUrl!
             : '$base$path';
@@ -628,7 +670,9 @@ class _QuestionCardState extends ConsumerState<_QuestionCard>
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFEEEEEE),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : const Color(0xFFEEEEEE),
         ),
         boxShadow: [
           BoxShadow(
@@ -663,12 +707,13 @@ class _QuestionCardState extends ConsumerState<_QuestionCard>
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: AppColors.eliteTeal.withValues(alpha: 0.1),
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     _isPlaying ? Icons.stop_rounded : Icons.volume_up_rounded,
-                    color: AppColors.eliteTeal,
+                    color: Theme.of(context).primaryColor,
                     size: 24,
                   ),
                 ),
@@ -688,13 +733,12 @@ class _StepHeader extends ConsumerWidget {
   final int? timeLimit;
   final Function() onTimeout;
 
-  const _StepHeader({
-    required this.title, 
-    required this.lang, 
-    required this.stepId, 
-    this.timeLimit,
-    required this.onTimeout
-  });
+  const _StepHeader(
+      {required this.title,
+      required this.lang,
+      required this.stepId,
+      this.timeLimit,
+      required this.onTimeout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -707,14 +751,14 @@ class _StepHeader extends ConsumerWidget {
     final authState = ref.watch(authProvider).value;
     final userName = authState?.userName ?? 'User';
 
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       child: Container(
         height: 85,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF0F172A) : const Color(0xFF004D39),
+          color:
+              isDark ? const Color(0xFF0F172A) : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: Colors.white.withValues(alpha: 0.1),
@@ -734,69 +778,76 @@ class _StepHeader extends ConsumerWidget {
             children: [
               // Content Row - Centered Vertically
               Align(
-                alignment: const Alignment(0, -0.1), // Slightly above center to look more balanced
+                alignment: const Alignment(0, -0.1),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Row(
                     children: [
                       // Branded Logo
                       Padding(
-                        padding: const EdgeInsets.only(left: 4), // Shifted left like in Dashboard
+                        padding: const EdgeInsets.only(left: 2),
                         child: Image.asset(
                           'assets/images/iacls-logo.png',
-                          height: 62, // Increased size for high-fidelity impact
+                          height: 40,
                           color: Colors.white,
                           fit: BoxFit.contain,
                         ),
                       ),
-                      const SizedBox(width: 14), // Balanced spacing
+                      const SizedBox(width: 8),
 
                       // Floating Title Pill
                       Expanded(
                         child: Container(
-                          height: 44,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF059669), Color(0xFF10B981)],
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context).primaryColor,
+                                Theme.of(context).primaryColor
+                              ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF059669).withValues(alpha: 0.3),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withValues(alpha: 0.3),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               )
                             ],
                           ),
                           child: Center(
-                            child: Text(
-                              title.toUpperCase(),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.inter(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                title.toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  letterSpacing: -0.2,
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      
-                      const SizedBox(width: 8),
+
+                      const SizedBox(width: 6),
 
                       // Step Timeout Timer
                       if (timeLimit != null) ...[
                         _NavbarTimer(seconds: timeLimit!, onTimeout: onTimeout),
                         const SizedBox(width: 4),
                       ],
-                      
+
                       const SizedBox(width: 4),
-                      _buildMenuArea(ref, isDark, isTe, userName),
+                      _buildMenuArea(context, ref, isDark, isTe, userName),
                     ],
                   ),
                 ),
@@ -808,7 +859,7 @@ class _StepHeader extends ConsumerWidget {
                 right: 0,
                 child: Container(
                   height: 3,
-                  color: const Color(0xFF059669),
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ],
@@ -818,61 +869,21 @@ class _StepHeader extends ConsumerWidget {
     );
   }
 
-  Widget _buildMenuArea(WidgetRef ref, bool isDark, bool isTe, String userName) {
-    return PopupMenuButton<String>(
-      icon: const Icon(
-        Icons.more_vert_rounded,
-        color: Colors.white,
-        size: 28,
+  Widget _buildMenuArea(BuildContext context, WidgetRef ref, bool isDark,
+      bool isTe, String userName) {
+    return IconButton(
+      onPressed: () => Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const SettingsScreen())),
+      icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 22),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+      style: IconButton.styleFrom(
+        backgroundColor: Colors.white.withValues(alpha: 0.12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      offset: const Offset(0, 50),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      onSelected: (value) {
-        if (value == 'dashboard') {
-          GoRouter.of(ref.context).go('/dashboard');
-        } else if (value == 'toggle_theme') {
-          ref.read(themeModeProvider.notifier).toggle();
-        } else if (value == 'toggle_lang') {
-          ref.read(languageProvider.notifier).setLanguage(isTe ? 'en' : 'te');
-        }
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'dashboard',
-          child: Row(
-            children: [
-              const Icon(Icons.home_rounded, color: AppColors.skyBlue, size: 20),
-              const SizedBox(width: 12),
-              Text(isTe ? 'హోమ్' : 'Home', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'toggle_lang',
-          child: Row(
-            children: [
-              const Icon(Icons.translate_rounded, color: AppColors.skyBlue, size: 20),
-              const SizedBox(width: 12),
-              Text(isTe ? 'English' : 'తెలుగు', style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'toggle_theme',
-          child: Row(
-            children: [
-              Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: AppColors.skyBlue, size: 20),
-              const SizedBox(width: 12),
-              Text(isDark ? (isTe ? 'లైట్ మోడ్' : 'Light Mode') : (isTe ? 'డార్క్ మోడ్' : 'Dark Mode'), 
-                style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
-
 
 class _NavbarTimer extends StatefulWidget {
   final int seconds;
@@ -883,7 +894,8 @@ class _NavbarTimer extends StatefulWidget {
   State<_NavbarTimer> createState() => _NavbarTimerState();
 }
 
-class _NavbarTimerState extends State<_NavbarTimer> with SingleTickerProviderStateMixin {
+class _NavbarTimerState extends State<_NavbarTimer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -915,20 +927,23 @@ class _NavbarTimerState extends State<_NavbarTimer> with SingleTickerProviderSta
         final remainingSeconds = (widget.seconds * _controller.value).ceil();
         final minutes = (remainingSeconds / 60).floor();
         final seconds = remainingSeconds % 60;
-        final timeStr = "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
-        
+        final timeStr =
+            "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+
         final isLowTime = remainingSeconds <= 5;
         final color = isLowTime ? Colors.redAccent : Colors.white;
-        
+
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: isLowTime 
-                ? Colors.red.withValues(alpha: 0.2) 
+            color: isLowTime
+                ? Colors.red.withValues(alpha: 0.2)
                 : Colors.white.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isLowTime ? Colors.redAccent.withValues(alpha: 0.5) : Colors.white24,
+              color: isLowTime
+                  ? Colors.redAccent.withValues(alpha: 0.5)
+                  : Colors.white24,
               width: 1,
             ),
           ),
@@ -995,7 +1010,7 @@ class _VideoWidgetState extends State<_VideoWidget> {
               ElevatedButton(
                 onPressed: widget.onRetry,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.skyBlue,
+                  backgroundColor: Theme.of(context).primaryColor,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
@@ -1088,8 +1103,7 @@ class _VideoWidgetState extends State<_VideoWidget> {
             )
           : Container(
               color: Colors.black,
-              child: const Center(
-                  child: LoadingSpinner.compact()),
+              child: const Center(child: LoadingSpinner.compact()),
             ),
     );
   }
@@ -1116,9 +1130,11 @@ class _ImageWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.broken_image_rounded, color: Colors.white24, size: 48),
+                const Icon(Icons.broken_image_rounded,
+                    color: Colors.white24, size: 48),
                 const SizedBox(height: 12),
-                const Text('Image unavailable', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                const Text('Image unavailable',
+                    style: TextStyle(color: Colors.white70, fontSize: 13)),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
@@ -1126,11 +1142,15 @@ class _ImageWidget extends StatelessWidget {
                     (context as Element).markNeedsBuild();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.skyBlue,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Retry', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: const Text('Retry',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -1293,39 +1313,46 @@ class _ChoiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isSecondary = choice.color == 'secondary';
-    
-    final color = isSecondary 
-        ? (isDark ? Colors.white.withValues(alpha: 0.1) : AppColors.fromLabel(choice.color))
-        : AppColors.fromLabel(choice.color);
-        
-    final textColor = isSecondary 
-        ? (isDark ? Colors.white : AppColors.slate) 
-        : Colors.white;
+    final isDanger = choice.color == 'danger' || choice.color == 'error';
+
+    final color = isSecondary
+        ? (isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFF3F4F6))
+        : isDanger
+            ? (isDark ? const Color(0xFFEF4444).withValues(alpha: 0.2) : const Color(0xFFFEF2F2))
+            : (choice.color == 'primary' ? Theme.of(context).primaryColor : AppColors.fromLabel(choice.color));
+
+    final textColor = isSecondary
+        ? (isDark ? Colors.white : AppColors.slate)
+        : isDanger
+            ? (isDark ? const Color(0xFFFCA5A5) : const Color(0xFFDC2626))
+            : Colors.white;
 
     return Opacity(
       opacity: 1.0,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          boxShadow: isSecondary ? [] : [
-            BoxShadow(
-              color: color.withValues(alpha: 0.2),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
+          boxShadow: isSecondary
+              ? []
+              : [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
         ),
         child: Material(
           color: color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: isSecondary 
-              ? BorderSide(
-                  color: isDark 
-                    ? Colors.white.withValues(alpha: 0.1) 
-                    : const Color(0xFFE5E7EB), 
-                  width: 1)
-              : BorderSide.none,
+            side: isSecondary
+                ? BorderSide(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.1)
+                        : const Color(0xFFE5E7EB),
+                    width: 1)
+                : BorderSide.none,
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
@@ -1343,13 +1370,15 @@ class _ChoiceButton extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   color: textColor,
                   letterSpacing: 0.8,
-                  shadows: isSecondary ? [] : [
-                    Shadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      offset: const Offset(0, 1),
-                      blurRadius: 2,
-                    )
-                  ],
+                  shadows: isSecondary
+                      ? []
+                      : [
+                          Shadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            offset: const Offset(0, 1),
+                            blurRadius: 2,
+                          )
+                        ],
                 ),
               ),
             ),
@@ -1367,16 +1396,17 @@ class _PinnedFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
         border: Border(
           top: BorderSide(
-            color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.1), 
-            width: 1
-          ),
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.1),
+              width: 1),
         ),
       ),
       child: SafeArea(
@@ -1412,7 +1442,8 @@ class _FloatingTimer extends StatefulWidget {
   State<_FloatingTimer> createState() => _FloatingTimerState();
 }
 
-class _FloatingTimerState extends State<_FloatingTimer> with SingleTickerProviderStateMixin {
+class _FloatingTimerState extends State<_FloatingTimer>
+    with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _scaleAnimation;
 
@@ -1444,16 +1475,21 @@ class _FloatingTimerState extends State<_FloatingTimer> with SingleTickerProvide
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isUrgent 
-            ? [const Color(0xFFEF4444), const Color(0xFFB91C1C)] // Urgent Red for CPR Cycle
-            : [const Color(0xFF059669), const Color(0xFF065F46)],
+          colors: isUrgent
+              ? [const Color(0xFFEF4444), const Color(0xFFB91C1C)]
+              : [
+                  Theme.of(context).primaryColor,
+                  Color.lerp(
+                      Theme.of(context).primaryColor, Colors.black, 0.25)!
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: (isUrgent ? Colors.red : Colors.black).withValues(alpha: 0.25),
+            color:
+                (isUrgent ? Colors.red : Colors.black).withValues(alpha: 0.25),
             blurRadius: 12,
             offset: const Offset(0, 4),
           )

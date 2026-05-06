@@ -10,7 +10,7 @@ const LoadingSpinner = ({ fullScreen = true, message = 'Initializing Scenario...
           <div className="pulse-ring"></div>
           <div className="pulse-ring pulse-ring-2"></div>
           <div className="spinner-center">
-            <HeartPulse size={44} color="#81C784" fill="#81C784" strokeWidth={1.5} />
+            <HeartPulse size={44} color="var(--primary-color)" fill="var(--primary-color)" strokeWidth={1.5} />
           </div>
         </div>
         

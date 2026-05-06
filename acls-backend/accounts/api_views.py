@@ -43,7 +43,6 @@ def build_refresh_cookie(response, refresh_token, remember):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 @throttle_classes([ScopedRateThrottle])
-@ensure_csrf_cookie
 def api_login(request):
     serializer = LoginSerializer(data=request.data)
     if not serializer.is_valid():

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/storage/local_storage.dart';
-import '../../core/widgets/loading_spinner.dart';
-import '../../core/theme/app_theme.dart';
+import '../../core/api/api_client.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,19 +26,36 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate after animation + small delay
-    Future.delayed(const Duration(seconds: 2), () async {
-      debugPrint('🕒 [SplashScreen] Checking login state...');
-      final loggedIn = await LocalStorage.isLoggedIn;
-      debugPrint('🔑 [SplashScreen] isLoggedIn: $loggedIn');
-      if (mounted) {
-        if (loggedIn) {
-          context.go('/dashboard');
-        } else {
-          context.go('/login');
-        }
+    // Initialize and then navigate
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    debugPrint('🎬 [SplashScreen] Starting initialization sequence...');
+    
+    // Create a minimum delay for the animation to look good
+    final minDelay = Future.delayed(const Duration(milliseconds: 1800));
+    
+    // Actual loading tasks (already started in main, but ensuring here)
+    final initializationTasks = Future.wait<void>([
+      LocalStorage.init(),
+      ApiClient.setup(),
+      minDelay,
+    ]);
+
+    await initializationTasks;
+    
+    debugPrint('🕒 [SplashScreen] Checking login state...');
+    final loggedIn = await LocalStorage.isLoggedIn;
+    debugPrint('🔑 [SplashScreen] isLoggedIn: $loggedIn');
+
+    if (mounted) {
+      if (loggedIn) {
+        context.go('/dashboard');
+      } else {
+        context.go('/login');
       }
-    });
+    }
   }
 
   @override
@@ -50,21 +66,41 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    
     return Scaffold(
-      backgroundColor: AppColors.bg,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.bgGradient),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              primaryColor,
+              primaryColor.withValues(alpha: 0.8),
+            ],
+          ),
+        ),
         child: Center(
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/images/iacls-logo.png', width: 260),
+                Image.asset(
+                  'assets/images/iacls-logo.png',
+                  width: 260,
+                  color: Colors.white,
+                  colorBlendMode: BlendMode.srcIn,
+                ),
                 const SizedBox(height: 48),
-                const LoadingSpinner.compact(
-                  message: 'Initializing ACLS System...',
-                  showSpinner: false,
+                Text(
+                  'Initializing ACLS System...',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ],
             ),

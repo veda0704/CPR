@@ -99,8 +99,8 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
                   child: CustomPaint(
                     size: Size(widget.size, widget.size),
                     painter: _RingPainter(
-                      color: AppColors.success.withValues(alpha: 0.35),
-                      secondaryColor: AppColors.success.withValues(alpha: 0.18),
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.35),
+                      secondaryColor: Theme.of(context).primaryColor.withValues(alpha: 0.18),
                     ),
                   ),
                 ),
@@ -110,8 +110,8 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
                   child: CustomPaint(
                     size: Size(widget.size * 0.72, widget.size * 0.72),
                     painter: _RingPainter(
-                      color: AppColors.eliteTeal.withValues(alpha: 0.35),
-                      secondaryColor: AppColors.eliteTeal.withValues(alpha: 0.18),
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.35),
+                      secondaryColor: Theme.of(context).primaryColor.withValues(alpha: 0.18),
                     ),
                   ),
                 ),
@@ -128,7 +128,7 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.eliteTeal.withValues(alpha: 0.12),
+                          color: Theme.of(context).primaryColor.withValues(alpha: 0.12),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -137,7 +137,7 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
                     child: Center(
                       child: Icon(
                         Icons.favorite_rounded, // Heart Pulse equivalent
-                        color: AppColors.success,
+                        color: Theme.of(context).primaryColor,
                         size: widget.size * 0.3,
                       ),
                     ),
@@ -232,7 +232,7 @@ class _LoadingDots extends StatelessWidget {
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(
-                  color: AppColors.success.withValues(alpha: opacity),
+                  color: Theme.of(context).primaryColor.withValues(alpha: opacity),
                   shape: BoxShape.circle,
                 ),
               ),

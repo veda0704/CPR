@@ -125,7 +125,7 @@ const normalizeStepData = (rawData) => {
 };
 
 // --- Main Component ---
-const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
+const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeColor }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { '*': stepId } = useParams();
@@ -451,7 +451,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
         </div>
 
         <div className="floating-nav-center">
-          <div className="floating-nav-title" style={{ padding: '12px 32px' }}>{t(stepData.title) || t('Simulation')}</div>
+          <div className="floating-nav-title" style={{ padding: '8px 32px' }}>{t(stepData.title) || t('Simulation')}</div>
         </div>
 
         <div className="floating-nav-right" style={{ flex: 1, justifyContent: 'flex-end', gap: '12px' }}>
@@ -476,6 +476,8 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
         onClose={() => setIsSettingsOpen(false)} 
         theme={theme} 
         toggleTheme={toggleTheme} 
+        currentPrimary={themeColor}
+        applyThemeColor={applyThemeColor}
       />
 
       <main key={stepData.id} className="simulator-main animate-step">
@@ -483,8 +485,8 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
           {/* CASE 1: Selector / Category Grid (For specific hubs) */}
           {(stepData.interactive_component === 'choice_cards' || stepData.interactive_component === 'patient_type_selector') ? (
             <div className="selector-layout animate-reveal">
-              <div className="selector-grid-container">
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+              <div className="selector-grid-container" style={{ padding: '0 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
                   <h2 className="selector-grid-title" style={{ margin: 0 }}>{t(stepData.question)}</h2>
                   <button 
                     className={`icon-btn ${voiceEnabled ? 'active' : ''}`} 
@@ -498,7 +500,8 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
                       border: '1px solid rgba(0,0,0,0.05)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      marginBottom: '24px'
                     }}
                   >
                     {voiceEnabled ? <Volume2 size={20} color="var(--primary)" /> : <VolumeX size={20} color="var(--text-muted)" />}
@@ -589,15 +592,13 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme }) => {
                 </div>
               </div>
 
-              <div className="glass-card" style={{ 
-                padding: '20px 24px', 
+              <div style={{ 
+                padding: '20px 0', 
                 display: 'flex', 
                 flexDirection: 'column', 
                 gap: '12px', 
-                boxShadow: '0 12px 48px rgba(0,0,0,0.06)', 
-                border: '1px solid rgba(255,255,255,0.8)', 
                 width: '100%',
-                maxWidth: '460px',
+                maxWidth: '480px',
                 margin: '0 auto',
                 maxHeight: 'calc(100vh - 160px)',
                 overflowY: 'auto'

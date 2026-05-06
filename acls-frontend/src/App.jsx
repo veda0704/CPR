@@ -5,7 +5,6 @@ import { useState, useEffect, Suspense, lazy } from 'react';
 import LoadingSpinner from './components/LoadingSpinner';
 import { getMe, logout } from './services/api';
 import { useTheme } from './hooks/useTheme';
-import { applyTheme } from './utils/theme';
 
 // Lazy load components for code splitting
 const Login = lazy(() => import('./components/Login'));
@@ -18,10 +17,26 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
+  const [themeColor, setThemeColor] = useState(localStorage.getItem('themeColor') || '#005B41');
+
+  const getContrastColor = (hexcolor) => {
+    hexcolor = hexcolor.replace("#", "");
+    var r = parseInt(hexcolor.substr(0, 2), 16);
+    var g = parseInt(hexcolor.substr(2, 2), 16);
+    var b = parseInt(hexcolor.substr(4, 2), 16);
+    var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#0F172A' : '#FFFFFF';
+  };
+
+  const applyThemeColor = (color) => {
+    setThemeColor(color);
+    document.documentElement.style.setProperty('--primary-color', color);
+    document.documentElement.style.setProperty('--button-text', getContrastColor(color));
+    localStorage.setItem('themeColor', color);
+  };
 
   useEffect(() => {
-    const savedColor = localStorage.getItem('themeColor');
-    if (savedColor) applyTheme(savedColor);
+    applyThemeColor(themeColor);
   }, []);
 
   useEffect(() => {
@@ -107,11 +122,11 @@ function App() {
         <div style={{ position: 'relative', width: '100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', zIndex: 10 }}>
           <Suspense fallback={<LoadingSpinner fullScreen message={t('loading') || "Loading..."} />}>
             <Routes>
-              <Route path="/login" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
-              <Route path="/signup" element={!user ? <Signup theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={user ? <Dashboard user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
-              <Route path="/acls/*" element={user ? <ACLSWorkflow user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
-              <Route path="/" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/dashboard" />} />
+              <Route path="/login" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} themeColor={themeColor} applyThemeColor={applyThemeColor} /> : <Navigate to="/dashboard" />} />
+              <Route path="/signup" element={!user ? <Signup theme={theme} toggleTheme={toggleTheme} themeColor={themeColor} applyThemeColor={applyThemeColor} /> : <Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={user ? <Dashboard user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} themeColor={themeColor} applyThemeColor={applyThemeColor} /> : <Navigate to="/login" />} />
+              <Route path="/acls/*" element={user ? <ACLSWorkflow user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} themeColor={themeColor} applyThemeColor={applyThemeColor} /> : <Navigate to="/login" />} />
+              <Route path="/" element={!user ? <Login onLogin={setUser} theme={theme} toggleTheme={toggleTheme} themeColor={themeColor} applyThemeColor={applyThemeColor} /> : <Navigate to="/dashboard" />} />
             </Routes>
           </Suspense>
         </div>
@@ -134,11 +149,11 @@ function App() {
             },
             success: {
               iconTheme: {
-                primary: '#005B41',
+                primary: themeColor,
                 secondary: '#fff',
               },
               style: {
-                borderLeft: '5px solid #005B41',
+                borderLeft: `5px solid ${themeColor}`,
               }
             },
             error: {

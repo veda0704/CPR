@@ -86,32 +86,46 @@ class AppColors {
 }
 
 class AppTheme {
-  static ThemeData get lightTheme {
-    final base = ThemeData(
-      colorSchemeSeed: AppColors.skyBlue, // Elite Teal
-      scaffoldBackgroundColor: AppColors.bg,
-      useMaterial3: true,
-      brightness: Brightness.light,
-    );
-
+  static ThemeData lightTheme(Color primaryColor) {
     return _buildTheme(
-        base, AppColors.text, Colors.white.withValues(alpha: 0.9));
+      ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: AppColors.bg,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          primary: primaryColor,
+          brightness: Brightness.light,
+        ),
+      ),
+      AppColors.text,
+      Colors.white.withValues(alpha: 0.9),
+      primaryColor,
+    );
   }
 
-  static ThemeData get darkTheme => _buildTheme(
-        ThemeData(
+  static ThemeData darkTheme(Color primaryColor) {
+    return _buildTheme(
+      ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0F172A),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryColor,
+          primary: primaryColor,
           brightness: Brightness.dark,
-          scaffoldBackgroundColor: const Color(0xFF0F172A),
-          colorSchemeSeed: AppColors.skyBlue, // Elite Teal
-          useMaterial3: true,
         ),
-        const Color(0xFFF8FAFC),
-        const Color(0xFF1E293B),
-      );
+      ),
+      const Color(0xFFF8FAFC),
+      const Color(0xFF1E293B),
+      primaryColor,
+    );
+  }
 
   static ThemeData _buildTheme(
-      ThemeData base, Color textColor, Color surfaceColor) {
+      ThemeData base, Color textColor, Color surfaceColor, Color primaryColor) {
     return base.copyWith(
+      primaryColor: primaryColor,
       textTheme: GoogleFonts.interTextTheme(base.textTheme).apply(
         bodyColor: textColor,
         displayColor: textColor,
@@ -127,8 +141,8 @@ class AppTheme {
           fontWeight: FontWeight.w700,
         ),
       ),
-      elevatedButtonTheme: _elevatedButtonTheme(AppColors.eliteTeal),
-      inputDecorationTheme: _inputDecorationTheme(surfaceColor),
+      elevatedButtonTheme: _elevatedButtonTheme(primaryColor),
+      inputDecorationTheme: _inputDecorationTheme(surfaceColor, primaryColor),
       cardTheme: CardThemeData(
         color: surfaceColor,
         elevation: 0,
@@ -163,7 +177,7 @@ class AppTheme {
     );
   }
 
-  static InputDecorationTheme _inputDecorationTheme(Color fillColor) {
+  static InputDecorationTheme _inputDecorationTheme(Color fillColor, Color primaryColor) {
     return InputDecorationTheme(
       filled: true,
       fillColor: fillColor.withValues(alpha: 0.9),
@@ -177,12 +191,9 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.eliteTeal, width: 2),
+        borderSide: BorderSide(color: primaryColor, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
-
-  // Backward compatibility
-  static ThemeData get theme => lightTheme;
 }

@@ -84,7 +84,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.skyBlue.withValues(alpha: 0.15),
+                      color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
                       blurRadius: 40,
                       offset: const Offset(0, 16),
                     )
@@ -98,11 +98,15 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                       width: 96,
                       height: 96,
                       decoration: BoxDecoration(
-                        gradient: AppColors.accentGradient,
+                        gradient: LinearGradient(
+                          colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withValues(alpha: 0.8)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.skyBlue.withValues(alpha: 0.35),
+                            color: Theme.of(context).primaryColor.withValues(alpha: 0.35),
                             blurRadius: 24,
                             offset: const Offset(0, 8),
                           )
@@ -174,18 +178,18 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: AppColors.eliteTeal.withValues(alpha: 0.08),
+                          color: Theme.of(context).primaryColor.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(
                               color:
-                                  AppColors.eliteTeal.withValues(alpha: 0.2)),
+                                  Theme.of(context).primaryColor.withValues(alpha: 0.2)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.check_circle_outline_rounded,
+                            Icon(Icons.check_circle_outline_rounded,
                                 size: 16,
-                                color: AppColors.eliteTeal),
+                                color: Theme.of(context).primaryColor),
                             const SizedBox(width: 6),
                             Flexible(
                               child: Text(
@@ -193,7 +197,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.eliteTeal,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),
@@ -235,7 +239,7 @@ class _CompletionScreenState extends ConsumerState<CompletionScreen>
 
   List<Widget> _confettiDots() {
     final colors = [
-      AppColors.skyBlue, AppColors.yellow, const Color(0xFF34D399),
+      Theme.of(context).primaryColor, AppColors.yellow, const Color(0xFF34D399),
       const Color(0xFF60A5FA), const Color(0xFFA78BFA),
     ];
     return List.generate(30, (i) {
@@ -271,11 +275,15 @@ class _GradientButton extends StatelessWidget {
         onTap: onTap,
         child: Ink(
           decoration: BoxDecoration(
-            gradient: AppColors.accentGradient,
+            gradient: LinearGradient(
+              colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withValues(alpha: 0.85)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: AppColors.skyBlue.withValues(alpha: 0.3),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               )

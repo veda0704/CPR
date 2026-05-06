@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,11 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:acls_mobile/generated/app_localizations.dart';
 import '../../core/widgets/loading_spinner.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/theme/theme_provider.dart';
 import '../../core/widgets/animated_ecg.dart';
 import '../auth/auth_provider.dart';
 import '../settings/language_provider.dart';
 import '../simulation/step_provider.dart';
+
 import '../../core/api/api_client.dart';
 import '../../core/storage/local_storage.dart';
 
@@ -99,16 +100,16 @@ IconData _getIcon(String key) {
   }
 }
 
-Color _getLevelColor(String? levelId) {
+Color _getLevelColor(BuildContext context, String? levelId) {
   switch (levelId) {
     case 'level1':
-      return const Color(0xFF00796B); // Teal
+      return Theme.of(context).primaryColor; // Teal
     case 'level2':
-      return const Color(0xFF059669); // Emerald
+      return Theme.of(context).primaryColor; // Emerald
     case 'level3':
-      return const Color(0xFF0D9488); // Teal-Cyan
+      return Theme.of(context).primaryColor; // Teal-Cyan
     default:
-      return const Color(0xFF00796B);
+      return Theme.of(context).primaryColor;
   }
 }
 
@@ -179,7 +180,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       body: AnimatedECGBackground(
         child: RefreshIndicator(
           onRefresh: () async => ref.invalidate(dashboardProvider),
-          color: AppColors.skyBlue,
+          color: Theme.of(context).primaryColor,
           child: Container(
             decoration: BoxDecoration(
               gradient: isDark
@@ -331,7 +332,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                       });
                                     },
                                     child: Text(isTe ? "శోధనను క్లియర్ చేయండి" : "Clear search",
-                                        style: GoogleFonts.inter(color: AppColors.skyBlue, fontWeight: FontWeight.w700))),
+                                        style: GoogleFonts.inter(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w700))),
                               ],
                             ),
                           ),
@@ -347,107 +348,57 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
                           child: Container(
                             height: 85,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: isDark 
                                 ? const Color(0xFF0F172A) 
-                                : const Color(0xFF004D39),
+                                : Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.1),
-                                width: 1,
-                              ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.4),
+                                  color: Colors.black.withValues(alpha: 0.3),
                                   blurRadius: 20,
                                   offset: const Offset(0, 8),
                                 ),
                               ],
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: const Alignment(0, -0.1),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 4, right: 2), // Shift logo left, maintain proper edge padding
-                                      child: Row(
-                                        children: [
-                                          Hero(
-                                            tag: 'app_logo',
-                                            child: Image.asset(
-                                              'assets/images/iacls-logo.png',
-                                              height: 54, // Standardized Elite branding
-                                              color: Colors.white,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12), // Equal spacing before search
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 42,
-                                              child: TextField(
-                                                controller: _searchController,
-                                                onChanged: (val) => setState(() => _searchQuery = val),
-                                                cursorColor: AppColors.skyBlue,
-                                                style: GoogleFonts.inter(
-                                                  fontSize: 13, 
-                                                  color: const Color(0xFF0F172A),
-                                                  fontWeight: FontWeight.w600
-                                                ),
-                                                decoration: InputDecoration(
-                                                  filled: true,
-                                                  fillColor: Colors.white,
-                                                  hintText: isTe ? 'సెర్చ్ మాడ్యూల్స్...' : 'Search modules...',
-                                                  hintStyle: GoogleFonts.inter(
-                                                    color: Colors.black38, 
-                                                    fontSize: 13
-                                                  ),
-                                                  prefixIcon: const Icon(Icons.search_rounded, 
-                                                    size: 18, 
-                                                    color: Color(0xFF005B41)),
-                                                  suffixIcon: _isSearching 
-                                                    ? const Padding(
-                                                        padding: EdgeInsets.all(12),
-                                                        child: SizedBox(
-                                                          width: 16,
-                                                          height: 16,
-                                                          child: CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF005B41)),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : null,
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(12),
-                                                    borderSide: BorderSide.none,
-                                                  ),
-                                                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 6), // Equal spacing after search (compensating for PopupMenuButton's innate padding)
-                                          _buildMenuArea(fullName, isTe, ref),
-                                        ],
+                            child: Row(
+                              children: [
+                                Hero(
+                                  tag: 'app_logo',
+                                  child: Image.asset(
+                                    'assets/images/iacls-logo.png',
+                                    height: 48,
+                                    color: Colors.white,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 42,
+                                    child: TextField(
+                                      controller: _searchController,
+                                      onChanged: (val) => setState(() => _searchQuery = val),
+                                      style: GoogleFonts.inter(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w600),
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: isTe ? 'వెతకండి...' : 'Search...',
+                                        hintStyle: GoogleFonts.inter(color: Colors.black38, fontSize: 12),
+                                        prefixIcon: Icon(Icons.search_rounded, size: 18, color: Theme.of(context).primaryColor),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        contentPadding: EdgeInsets.zero,
                                       ),
                                     ),
                                   ),
-                                  // Glowing Bottom Line
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: Container(
-                                      height: 3,
-                                      color: const Color(0xFF059669),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(width: 12),
+                                _buildMenuArea(fullName, isTe, ref),
+                              ],
                             ),
                           ),
                         ),
@@ -477,128 +428,154 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           // Premium Level Hero - Match Web
                           SliverToBoxAdapter(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
-                              child: Container(
-                                padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? const Color(0xFF1E293B)
-                                      : _getLevelColor(lvlId).withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(32),
-                                  border: Border.all(
-                                      color: _getLevelColor(lvlId).withValues(alpha: 0.1)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.04),
-                                      blurRadius: 32,
-                                      offset: const Offset(0, 16),
-                                    )
-                                  ],
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                              padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(32),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: isDark
+                                            ? [
+                                                const Color(0xFF1E293B).withValues(alpha: 0.8),
+                                                const Color(0xFF0F172A).withValues(alpha: 0.9),
+                                              ]
+                                            : [
+                                                _getLevelColor(context, lvlId).withValues(alpha: 0.12),
+                                                _getLevelColor(context, lvlId).withValues(alpha: 0.05),
+                                              ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(32),
+                                      border: Border.all(
+                                        color: isDark 
+                                          ? Colors.white.withValues(alpha: 0.1) 
+                                          : _getLevelColor(context, lvlId).withValues(alpha: 0.2),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
-                                          width: 54,
-                                          height: 54,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: _getLevelColor(lvlId).withValues(alpha: 0.1),
-                                              shape: BoxShape.circle,
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 42,
+                                              height: 42,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: _getLevelColor(context, lvlId).withValues(alpha: 0.1),
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(color: _getLevelColor(context, lvlId).withValues(alpha: 0.2), width: 1.5),
+                                                ),
+                                                child: Icon(
+                                                  Icons.emoji_events_rounded,
+                                                  color: _getLevelColor(context, lvlId),
+                                                  size: 24,
+                                                ),
+                                              ),
                                             ),
-                                            child: Icon(
-                                              Icons.emoji_events_rounded,
-                                              color: _getLevelColor(lvlId),
-                                              size: 28,
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(isTe ? "లెర్నింగ్ జర్నీ" : "LEARNING JOURNEY", 
+                                                    style: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w900, color: _getLevelColor(context, lvlId).withValues(alpha: 0.7), letterSpacing: 1.5)),
+                                                  const SizedBox(height: 2),
+                                                  Text(isTe ? (lvl['name_te'] ?? lvl['name'] ?? '') : (lvl['name'] ?? ''), 
+                                                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w900, color: isDark ? Colors.white : _getLevelColor(context, lvlId), letterSpacing: -0.5, height: 1.1)),
+                                                ],
+                                              ),
                                             ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                          decoration: BoxDecoration(
+                                            color: isDark ? Colors.black.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.5),
+                                            borderRadius: BorderRadius.circular(24),
+                                            border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.05) : _getLevelColor(context, lvlId).withValues(alpha: 0.1), width: 1.5),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: _buildCompactStat(
+                                                  context,
+                                                  isTe ? "క్రియాశీల" : "ACTIVE", 
+                                                  rawModules.isNotEmpty 
+                                                    ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0])?['id'] ?? ''))
+                                                    : (isTe ? "ఏదీ లేదు" : "NONE"),
+                                                  status: isTe ? "పురోగతి" : "RUNNING",
+                                                  icon: Icons.play_circle_filled_rounded,
+                                                  onTap: () {
+                                                    if (rawModules.isEmpty) return;
+                                                    final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0]);
+                                                    if (mod != null && mod['start_step'] != null) {
+                                                      context.push('/acls/${mod['start_step']}');
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                              Container(width: 1, height: 40, color: isDark ? Colors.white.withValues(alpha: 0.1) : _getLevelColor(context, lvlId).withValues(alpha: 0.1)),
+                                              Expanded(
+                                                child: _buildCompactStat(
+                                                  context,
+                                                  isTe ? "తదుపరి" : "NEXT", 
+                                                  rawModules.isNotEmpty
+                                                    ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0])?['id'] ?? ''))
+                                                    : (isTe ? "ఏదీ లేదు" : "NONE"),
+                                                  status: isTe ? "కొనసాగించు" : "CONTINUE",
+                                                  icon: Icons.arrow_circle_right_rounded,
+                                                  onTap: () {
+                                                    if (rawModules.isEmpty) return;
+                                                    final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0]);
+                                                    if (mod != null && mod['start_step'] != null) {
+                                                      context.push('/acls/${mod['start_step']}');
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                              Container(width: 1, height: 40, color: isDark ? Colors.white.withValues(alpha: 0.1) : _getLevelColor(context, lvlId).withValues(alpha: 0.1)),
+                                              Expanded(
+                                                child: _buildCompactStat(
+                                                  context,
+                                                  isTe ? "చివరిది" : "LAST", 
+                                                  _l(context, "scene_safety"),
+                                                  status: "TODAY",
+                                                  icon: Icons.history_rounded,
+                                                  onTap: () {},
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(isTe ? "లెర్నింగ్ జర్నీ" : "LEARNING JOURNEY", style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w900, color: _getLevelColor(lvlId), letterSpacing: 1.5)),
-                                              const SizedBox(height: 2),
-                                              Text(isTe ? (lvl['name_te'] ?? lvl['name'] ?? '') : (lvl['name'] ?? ''), style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w900, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.slate, letterSpacing: -0.5, height: 1.1)),
-                                            ],
+                                        const SizedBox(height: 16),
+                                        Container(
+                                          height: 4,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(color: isDark ? Colors.white.withValues(alpha: 0.1) : _getLevelColor(context, lvlId).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(2)),
+                                          child: FractionallySizedBox(
+                                            alignment: Alignment.centerLeft,
+                                            widthFactor: LocalStorage.getLevelProgress(userMap?['email'] ?? '', rawModules).clamp(0.01, 1.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: _getLevelColor(context, lvlId),
+                                                borderRadius: BorderRadius.circular(2), 
+                                                boxShadow: [
+                                                  BoxShadow(color: _getLevelColor(context, lvlId).withValues(alpha: 0.3), blurRadius: 4)
+                                                ]
+                                              )
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 24),
-                                    // Three cards like Web
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      physics: const BouncingScrollPhysics(),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 170,
-                                            child: _buildQuickStat(
-                                              isTe ? "క్రియాశీల మాడ్యూల్" : "Active Module", 
-                                              rawModules.isNotEmpty 
-                                                ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0])?['id'] ?? ''))
-                                                : (isTe ? "ఏదీ లేదు" : "None"),
-                                              color: _getLevelColor(lvlId),
-                                              status: isTe ? "పురోగతిలో ఉంది" : "In Progress",
-                                              onTap: () {
-                                                if (rawModules.isEmpty) return;
-                                                final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0]);
-                                                if (mod != null && mod['start_step'] != null) {
-                                                  context.push('/acls/${mod['start_step']}');
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          SizedBox(
-                                            width: 170,
-                                            child: _buildQuickStat(
-                                              isTe ? "తదుపరి దశ" : "Next Step", 
-                                              rawModules.isNotEmpty
-                                                ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0])?['id'] ?? ''))
-                                                : (isTe ? "ఏదీ లేదు" : "None"),
-                                              color: _getLevelColor(lvlId),
-                                              status: isTe ? "కొనసాగించండి →" : "Continue →",
-                                              onTap: () {
-                                                if (rawModules.isEmpty) return;
-                                                final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0]);
-                                                if (mod != null && mod['start_step'] != null) {
-                                                  context.push('/acls/${mod['start_step']}');
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          SizedBox(
-                                            width: 170,
-                                            child: _buildQuickStat(
-                                              isTe ? "చివరిగా చూసినది" : "Last Accessed", 
-                                              _l(context, "scene_safety"),
-                                              color: _getLevelColor(lvlId),
-                                              status: "Today, 10:30 AM",
-                                              onTap: () {},
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    Container(
-                                      height: 6,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(color: _getLevelColor(lvlId).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(3)),
-                                      child: FractionallySizedBox(
-                                        alignment: Alignment.centerLeft,
-                                        widthFactor: LocalStorage.getLevelProgress(userMap?['email'] ?? '', rawModules).clamp(0.01, 1.0),
-                                        child: Container(decoration: BoxDecoration(color: _getLevelColor(lvlId), borderRadius: BorderRadius.circular(3), boxShadow: [BoxShadow(color: _getLevelColor(lvlId).withValues(alpha: 0.3), blurRadius: 8)])),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -606,7 +583,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           // Module grid
                           SliverPadding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 24),
+                                const EdgeInsets.fromLTRB(24, 8, 24, 24),
                             sliver: SliverGrid(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -653,214 +630,80 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  Widget _buildQuickStat(String title, String value, {required Color color, required VoidCallback onTap, String? status}) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget _buildCompactStat(BuildContext context, String title, String value, {required IconData icon, required VoidCallback onTap, String? status}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).primaryColor;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF0F172A) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            if (!isDark)
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              )
-          ],
-          border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.1) : Colors.transparent,
-          ),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Icon(Icons.bolt_rounded, color: color, size: 14),
-                const SizedBox(width: 4),
-                Text(title.toUpperCase(),
-                    style: GoogleFonts.inter(
-                        fontSize: 9,
-                        fontWeight: FontWeight.w900,
-                        color: color,
-                        letterSpacing: 0.5)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                height: 1.2,
-                color: isDark ? Colors.white : AppColors.slate,
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white.withValues(alpha: 0.1) : primaryColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
+              child: Icon(icon, color: isDark ? Colors.white : primaryColor, size: 14),
             ),
+            const SizedBox(height: 6),
+            Text(title, 
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(fontSize: 7, fontWeight: FontWeight.w900, color: isDark ? Colors.white.withValues(alpha: 0.7) : primaryColor.withValues(alpha: 0.7), letterSpacing: 0.5)),
+            const SizedBox(height: 2),
+            Text(value, 
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w800, color: isDark ? Colors.white : primaryColor, height: 1.1)),
             if (status != null) ...[
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  if (status.contains('→'))
-                    Text(status, style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w700, color: color))
-                  else ...[
-                    Container(width: 6, height: 6, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-                    const SizedBox(width: 4),
-                    Text(status, style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w700, color: color)),
-                  ]
-                ],
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.white.withValues(alpha: 0.15) : primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(status.toUpperCase(), 
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(fontSize: 7.5, fontWeight: FontWeight.w900, color: isDark ? Colors.white : primaryColor)),
               ),
-            ]
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMenuArea(String name, bool isTe, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-    final isDark = themeMode == ThemeMode.dark ||
-        (themeMode == ThemeMode.system &&
-            WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-                Brightness.dark);
-    
-    return PopupMenuButton<String>(
-      icon: const Icon(
-        Icons.more_vert_rounded,
-        color: Colors.white,
-        size: 28,
-      ),
-      offset: const Offset(0, 50),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 12,
-      color: isDark ? const Color(0xFF1E293B) : Colors.white,
-      onSelected: (value) {
-        HapticFeedback.lightImpact();
-        if (value == 'logout') {
-          ref.read(authProvider.notifier).logout();
-          context.go('/login');
-        } else if (value == 'toggle_lang') {
-          ref.read(languageProvider.notifier).setLanguage(isTe ? 'en' : 'te');
-        } else if (value == 'toggle_theme') {
-          ref.read(themeModeProvider.notifier).toggle();
-        }
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          enabled: false,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Builder(
-                    builder: (context) {
-                      final String? authFirstName = ref.watch(authProvider).value?.firstName;
-                      final String? authEmail = ref.watch(authProvider).value?.email;
-                      final String emailPrefix = authEmail != null ? authEmail.split('@').first : 'User';
 
-                      final String displayName = (authFirstName != null && authFirstName.trim().isNotEmpty && authFirstName != 'User')
-                          ? authFirstName
-                          : (name.isNotEmpty && name != 'User' ? name.split(' ').first : emailPrefix);
-                      
-                      return Text(
-                        displayName,
-                        style: GoogleFonts.inter(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                            color: isDark ? Colors.white : AppColors.slate,
-                            letterSpacing: -0.5),
-                      );
-                    },
-                  ),
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF005B41),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.person_rounded, color: Colors.white, size: 20),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              const Divider(height: 1),
-            ],
+
+  Widget _buildMenuArea(String name, bool isTe, WidgetRef ref) {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () => context.push('/settings'),
+          icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 24),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.white.withValues(alpha: 0.15),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-        PopupMenuItem(
-          value: 'toggle_lang',
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.skyBlue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.translate_rounded, color: AppColors.skyBlue, size: 18),
-              ),
-              const SizedBox(width: 14),
-              Text(
-                isTe ? "English Mode" : "తెలుగు మోడ్",
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700, 
-                    color: isDark ? Colors.white : AppColors.slate),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'toggle_theme',
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.skyBlue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, 
-                    color: AppColors.skyBlue, size: 18),
-              ),
-              const SizedBox(width: 14),
-              Text(
-                isTe 
-                  ? (isDark ? 'లైట్ మోడ్' : 'డార్క్ మోడ్')
-                  : (isDark ? 'Light Mode' : 'Dark Mode'),
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700, 
-                    color: isDark ? Colors.white : AppColors.slate),
-              ),
-            ],
-          ),
-        ),
-        const PopupMenuDivider(height: 1),
-        PopupMenuItem(
-          value: 'logout',
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.logout_rounded, color: Colors.redAccent, size: 18),
-              ),
-              const SizedBox(width: 14),
-              Text(
-                isTe ? 'లాగ్ అవుట్' : 'Logout',
-                style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700, color: Colors.redAccent),
-              ),
-            ],
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () {
+            ref.read(authProvider.notifier).logout();
+            context.go('/login');
+          },
+          icon: const Icon(Icons.logout_rounded, color: Colors.white, size: 24),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.white.withValues(alpha: 0.15),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],
@@ -909,7 +752,7 @@ class _ModuleCard extends StatelessWidget {
     final statusColor = isCompleted
         ? AppColors.success
         : isInProgress
-            ? AppColors.skyBlue
+            ? Theme.of(context).primaryColor
             : AppColors.muted;
     final statusIcon = isCompleted
         ? Icons.check_circle_rounded
@@ -920,8 +763,8 @@ class _ModuleCard extends StatelessWidget {
       _getModuleImage(id),
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => Container(
-        color: AppColors.skyBlueSoft,
-        child: Icon(icon, size: 40, color: AppColors.skyBlue),
+        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+        child: Icon(icon, size: 40, color: Theme.of(context).primaryColor),
       ),
     );
     final moduleImage = isLocked
@@ -991,7 +834,7 @@ class _ModuleCard extends StatelessWidget {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
-                                const Color(0xFF00796B).withValues(alpha: 0.25),
+                                Theme.of(context).primaryColor.withValues(alpha: 0.25),
                                 Colors.transparent,
                                 Colors.transparent,
                                 Colors.black.withValues(alpha: 0.3),
@@ -1100,7 +943,7 @@ class _ModuleCard extends StatelessWidget {
                             child: Container(
                               height: 36,
                               decoration: BoxDecoration(
-                                color: AppColors.skyBlue,
+                                color: Theme.of(context).primaryColor,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
