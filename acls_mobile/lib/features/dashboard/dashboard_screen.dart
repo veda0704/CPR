@@ -169,6 +169,45 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     super.dispose();
   }
 
+  Map<String, dynamic>? _getActiveModule(String userId, List<dynamic> modules) {
+    final inProgress = modules.where((m) => LocalStorage.getModuleStatus(userId, m['id'] ?? '') == 'in_progress').toList();
+    if (inProgress.isEmpty) return modules.isNotEmpty ? modules.first : null;
+    inProgress.sort((a, b) {
+      final tA = LocalStorage.getLastAccessed(userId, a['id'] ?? '') ?? DateTime(0);
+      final tB = LocalStorage.getLastAccessed(userId, b['id'] ?? '') ?? DateTime(0);
+      return tB.compareTo(tA);
+    });
+    return inProgress.first;
+  }
+
+  Map<String, dynamic>? _getNextModule(String userId, List<dynamic> modules) {
+    return modules.firstWhere((m) {
+      final status = LocalStorage.getModuleStatus(userId, m['id'] ?? '');
+      return status == 'locked' || status == 'not_started';
+    }, orElse: () => modules.isNotEmpty ? modules.last : null);
+  }
+
+  Map<String, dynamic>? _getLastAccessedModule(String userId, List<dynamic> modules) {
+    final accessed = modules.where((m) => LocalStorage.getLastAccessed(userId, m['id'] ?? '') != null).toList();
+    if (accessed.isEmpty) return modules.isNotEmpty ? modules.first : null;
+    accessed.sort((a, b) {
+      final tA = LocalStorage.getLastAccessed(userId, a['id'] ?? '') ?? DateTime(0);
+      final tB = LocalStorage.getLastAccessed(userId, b['id'] ?? '') ?? DateTime(0);
+      return tB.compareTo(tA);
+    });
+    return accessed.first;
+  }
+
+  String _formatTime(DateTime? time, bool isTe) {
+    if (time == null) return isTe ? "ఎప్పుడూ లేదు" : "Never";
+    final now = DateTime.now();
+    final diff = now.difference(time);
+    if (diff.inMinutes < 1) return isTe ? "ఇప్పుడే" : "Just now";
+    if (diff.inHours < 1) return isTe ? "${diff.inMinutes} నిమిషాల క్రితం" : "${diff.inMinutes} mins ago";
+    if (diff.inDays < 1) return isTe ? "${diff.inHours} గంటల క్రితం" : "${diff.inHours} hours ago";
+    return "${time.day}/${time.month}/${time.year}";
+  }
+
   @override
   Widget build(BuildContext context) {
     final dashAsync = ref.watch(dashboardProvider);
@@ -507,14 +546,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                                 child: _buildCompactStat(
                                                   context,
                                                   isTe ? "క్రియాశీల" : "ACTIVE", 
-                                                  rawModules.isNotEmpty 
-                                                    ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0])?['id'] ?? ''))
-                                                    : (isTe ? "ఏదీ లేదు" : "NONE"),
+                                                  _l(context, _getActiveModule(email, rawModules)?['id'] ?? ''),
                                                   status: isTe ? "పురోగతి" : "RUNNING",
                                                   icon: Icons.play_circle_filled_rounded,
                                                   onTap: () {
-                                                    if (rawModules.isEmpty) return;
-                                                    final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'in_progress', orElse: () => rawModules[0]);
+                                                    final mod = _getActiveModule(email, rawModules);
                                                     if (mod != null && mod['start_step'] != null) {
                                                       context.push('/acls/${mod['start_step']}');
                                                     }
@@ -526,14 +562,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                                 child: _buildCompactStat(
                                                   context,
                                                   isTe ? "తదుపరి" : "NEXT", 
-                                                  rawModules.isNotEmpty
-                                                    ? _l(context, (rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0])?['id'] ?? ''))
-                                                    : (isTe ? "ఏదీ లేదు" : "NONE"),
+                                                  _l(context, _getNextModule(email, rawModules)?['id'] ?? ''),
                                                   status: isTe ? "కొనసాగించు" : "CONTINUE",
                                                   icon: Icons.arrow_circle_right_rounded,
                                                   onTap: () {
-                                                    if (rawModules.isEmpty) return;
-                                                    final mod = rawModules.firstWhere((m) => m != null && LocalStorage.getModuleStatus(userMap?['email'] ?? '', m['id'] ?? '') == 'locked', orElse: () => rawModules[0]);
+                                                    final mod = _getNextModule(email, rawModules);
                                                     if (mod != null && mod['start_step'] != null) {
                                                       context.push('/acls/${mod['start_step']}');
                                                     }
@@ -545,10 +578,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                                 child: _buildCompactStat(
                                                   context,
                                                   isTe ? "చివరిది" : "LAST", 
-                                                  _l(context, "scene_safety"),
-                                                  status: "TODAY",
+                                                  _l(context, _getLastAccessedModule(email, rawModules)?['id'] ?? ''),
+                                                  status: _formatTime(LocalStorage.getLastAccessed(email, _getLastAccessedModule(email, rawModules)?['id'] ?? ''), isTe).toUpperCase(),
                                                   icon: Icons.history_rounded,
-                                                  onTap: () {},
+                                                  onTap: () {
+                                                    final mod = _getLastAccessedModule(email, rawModules);
+                                                    if (mod != null && mod['start_step'] != null) {
+                                                      context.push('/acls/${mod['start_step']}');
+                                                    }
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -738,12 +776,15 @@ class _ModuleCard extends StatelessWidget {
     final isLocked = status == 'locked';
     final isCompleted = status == 'completed';
     final isInProgress = status == 'in_progress';
+    final isNotStarted = status == 'not_started';
 
     final statusLabel = isCompleted
         ? l10n.completed
         : isInProgress
             ? l10n.in_progress
-            : l10n.locked;
+            : isNotStarted
+                ? (l10n.not_started)
+                : l10n.locked;
     final actionLabel = isCompleted
         ? l10n.review
         : isInProgress
@@ -753,12 +794,16 @@ class _ModuleCard extends StatelessWidget {
         ? AppColors.success
         : isInProgress
             ? Theme.of(context).primaryColor
-            : AppColors.muted;
+            : isNotStarted
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.7)
+                : AppColors.muted;
     final statusIcon = isCompleted
         ? Icons.check_circle_rounded
         : isInProgress
             ? Icons.show_chart_rounded
-            : Icons.lock_rounded;
+            : isNotStarted
+                ? Icons.play_arrow_rounded
+                : Icons.lock_rounded;
     final imageWidget = Image.network(
       _getModuleImage(id),
       fit: BoxFit.cover,

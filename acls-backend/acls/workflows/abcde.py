@@ -83,7 +83,7 @@ ABCDE_WORKFLOW = {
     "abcde_circulation": {
         "title": _("Blood Flow (C)"),
         "question": _("Check pulse, BP, and skin temperature. Is circulation stable?"),
-        "video": "/static/images/circulation.jpg",
+        "video": "/static/images/pulse_check.png",
         "choices": [
             {"label": _("YES, CONTINUE TO DISABILITY"), "next": "abcde_disability", "color": "success"},
             {"label": _("NO, TREAT SHOCK/BLEEDING"), "next": "abcde_circulation_support", "color": "danger"},

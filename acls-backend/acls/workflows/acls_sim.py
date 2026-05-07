@@ -6,7 +6,7 @@ ACLS_SIM_WORKFLOW = {
         "question": _("Is the scene safe for you and your team?"),
         "video": "/static/videos/check.mp4",
         "choices": [
-            {"label": _("YES"), "next": "2", "color": "primary"},
+            {"label": _("YES"), "next": "3", "color": "primary"},
             {"label": _("NO"), "next": "dashboard", "color": "secondary", "isExit": True}
         ]
     },
@@ -16,7 +16,7 @@ ACLS_SIM_WORKFLOW = {
         "video": "/static/videos/responsive_2.mp4",
         "choices": [
             {"label": _("YES"), "next": "dashboard", "color": "secondary", "isExit": True},
-            {"label": _("NO"), "next": "3", "color": "primary"}
+            {"label": _("NO"), "next": "4", "color": "primary"}
         ]
     },
     "3": {
@@ -24,8 +24,7 @@ ACLS_SIM_WORKFLOW = {
         "question": _("Did anyone see the person collapse?"),
         "video": "/static/videos/Collapsed.mp4",
         "choices": [
-            {"label": _("YES"), "next": "4", "color": "primary"},
-            {"label": _("NO"), "next": "4", "color": "primary"}
+            {"label": _("YES"), "next": "2", "color": "primary"}
         ]
     },
     "4": {
@@ -53,8 +52,7 @@ ACLS_SIM_WORKFLOW = {
         "question": _("Start high-quality CPR (30 compressions, 2 breaths)?"),
         "video": "/static/videos/CPR.mp4",
         "choices": [
-            {"label": _("YES"), "next": "7", "color": "primary"},
-            {"label": _("NO"), "next": "dashboard", "color": "secondary", "isExit": True}
+            {"label": _("YES"), "next": "7", "color": "primary"}
         ]
     },
     "7": {
@@ -62,8 +60,7 @@ ACLS_SIM_WORKFLOW = {
         "question": _("Is a defibrillator / cardiac monitor available?"),
         "video": "/static/videos/shock.mp4",
         "choices": [
-            {"label": _("YES"), "next": "8", "color": "primary"},
-            {"label": _("NO"), "next": "8", "color": "primary"}
+            {"label": _("YES"), "next": "8", "color": "primary"}
         ]
     },
     "8": {

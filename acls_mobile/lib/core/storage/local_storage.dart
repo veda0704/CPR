@@ -78,9 +78,11 @@ class LocalStorage {
   static String _progressKey(String userId, String moduleId) => 'progress_${userId}_$moduleId';
   static String _moduleProgressKey(String userId, String moduleId) =>
       'module_progress_${userId}_$moduleId';
+  static String _lastAccessedKey(String userId, String moduleId) => 'last_accessed_${userId}_$moduleId';
 
   static Future<void> setModuleStatus(String userId, String moduleId, String status) async {
     await _prefs?.setString(_progressKey(userId, moduleId), status);
+    await setLastAccessed(userId, moduleId);
     if (status == 'completed') {
       await _prefs?.setDouble(_moduleProgressKey(userId, moduleId), 100.0);
     }
@@ -104,7 +106,18 @@ class LocalStorage {
       await setModuleStatus(userId, moduleId, 'completed');
     } else if (next > 0 && status != 'completed') {
       await setModuleStatus(userId, moduleId, 'in_progress');
+    } else {
+      await setLastAccessed(userId, moduleId);
     }
+  }
+
+  static Future<void> setLastAccessed(String userId, String moduleId) async {
+    await _prefs?.setString(_lastAccessedKey(userId, moduleId), DateTime.now().toIso8601String());
+  }
+
+  static DateTime? getLastAccessed(String userId, String moduleId) {
+    final str = _prefs?.getString(_lastAccessedKey(userId, moduleId));
+    return str != null ? DateTime.parse(str) : null;
   }
 
   static Future<void> setFirstName(String name) async {

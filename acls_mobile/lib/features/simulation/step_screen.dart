@@ -23,7 +23,8 @@ import '../settings/settings_screen.dart';
 
 class StepScreen extends ConsumerStatefulWidget {
   final String stepId;
-  const StepScreen({super.key, required this.stepId});
+  final bool fromRedirect;
+  const StepScreen({super.key, required this.stepId, this.fromRedirect = false});
 
   @override
   ConsumerState<StepScreen> createState() => _StepScreenState();
@@ -97,8 +98,16 @@ class _StepScreenState extends ConsumerState<StepScreen> {
   String _getModuleIdFromStep(String stepId) {
     final normalId = stepId.toLowerCase();
     if (normalId.startsWith('ecg_rhythms')) return 'ecg_rhythms';
-    if (normalId.startsWith('adv_airway')) return 'adv_airway';
-    if (normalId.startsWith('cardiac_alg')) return 'cardiac_alg';
+    if (normalId.startsWith('adv_airway') ||
+        normalId.startsWith('lma_') ||
+        normalId.startsWith('rsi_')) return 'adv_airway';
+    if (normalId.startsWith('cardiac_alg') ||
+        normalId.startsWith('alg_') ||
+        normalId.startsWith('vf_') ||
+        normalId.startsWith('vt_') ||
+        normalId.startsWith('pea_') ||
+        normalId.startsWith('asystole_') ||
+        normalId.startsWith('post_arrest_')) return 'cardiac_alg';
     if (normalId.startsWith('scene_safety')) return 'scene_safety';
     if (normalId.startsWith('snake_bite')) return 'snake_bite';
     if (normalId == '1') return 'acls';
@@ -115,8 +124,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
     if (normalId.startsWith('stroke')) return 'stroke';
     if (normalId.startsWith('disaster')) return 'disaster';
     if (normalId.startsWith('delivery')) return 'delivery';
-    if (normalId.startsWith('ecg')) return 'ecg_rhythms';
-    if (normalId.startsWith('rhythms')) return 'ecg_rhythms';
+    if (normalId.startsWith('ecg')) return 'ecg';
+    if (normalId.startsWith('rhythms')) return 'ecg';
     if (normalId.startsWith('h5t5') ||
         normalId.startsWith('h1_') ||
         normalId.startsWith('h2_') ||
@@ -201,7 +210,8 @@ class _StepScreenState extends ConsumerState<StepScreen> {
         LocalStorage.setModuleStatus(email, currentModuleId, 'completed');
       }
 
-      context.push('/acls/$target');
+      final isRedirect = currentModuleId.isNotEmpty && targetModuleId.isNotEmpty && currentModuleId != targetModuleId;
+      context.push('/acls/$target', extra: isRedirect);
     }
   }
 
@@ -281,6 +291,7 @@ class _StepScreenState extends ConsumerState<StepScreen> {
                           title: step.title,
                           lang: lang,
                           stepId: widget.stepId,
+                          fromRedirect: widget.fromRedirect,
                           timeLimit: step.timeLimit,
                           onTimeout: () => _handleChoice(context,
                               next: step.timeOutNext ?? 'dashboard'),
@@ -345,18 +356,20 @@ class _StepScreenState extends ConsumerState<StepScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(24),
                                               child: AspectRatio(
-                                                  aspectRatio: 16 / 9,
+                                                  aspectRatio: 16 / 10,
                                                   child:
                                                       _buildMedia(step, isTe)),
                                             ),
                                           ),
                                         const SizedBox(height: 24),
                                         ...step.choices.where((c) {
-                                          if (widget.stepId == 'rhythms_start' &&
+                                          if (widget.stepId ==
+                                                  'rhythms_start' &&
                                               c.next == 'dashboard') {
                                             return true;
                                           }
-                                          if (widget.stepId.contains('_start') &&
+                                          if (widget.stepId
+                                                  .contains('_start') &&
                                               c.next == 'dashboard') {
                                             return false;
                                           }
@@ -551,7 +564,7 @@ class _PatientSelector extends StatelessWidget {
                         elevation: 0,
                       ),
                       child: Text(
-                        "SELECT ${opt['label']}".toUpperCase(),
+                        isTe ? opt['label'].toUpperCase() : "SELECT ${opt['label']}".toUpperCase(),
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w900,
                             fontSize: 14,
@@ -730,15 +743,18 @@ class _StepHeader extends ConsumerWidget {
   final String title;
   final String lang;
   final String stepId;
+  final bool fromRedirect;
   final int? timeLimit;
   final Function() onTimeout;
 
-  const _StepHeader(
-      {required this.title,
-      required this.lang,
-      required this.stepId,
-      this.timeLimit,
-      required this.onTimeout});
+  const _StepHeader({
+    required this.title,
+    required this.lang,
+    required this.stepId,
+    required this.fromRedirect,
+    this.timeLimit,
+    required this.onTimeout,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -783,6 +799,15 @@ class _StepHeader extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Row(
                     children: [
+                      // Contextual Back Button
+                      if (!stepId.endsWith('_start') && !stepId.endsWith('_initial') && stepId != '1' || fromRedirect)
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 22),
+                          onPressed: () => Navigator.of(context).pop(),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      
                       // Branded Logo
                       Padding(
                         padding: const EdgeInsets.only(left: 2),
@@ -872,8 +897,8 @@ class _StepHeader extends ConsumerWidget {
   Widget _buildMenuArea(BuildContext context, WidgetRef ref, bool isDark,
       bool isTe, String userName) {
     return IconButton(
-      onPressed: () => Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const SettingsScreen())),
+      onPressed: () => Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const SettingsScreen())),
       icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 22),
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
@@ -1316,10 +1341,16 @@ class _ChoiceButton extends StatelessWidget {
     final isDanger = choice.color == 'danger' || choice.color == 'error';
 
     final color = isSecondary
-        ? (isDark ? Colors.white.withValues(alpha: 0.1) : const Color(0xFFF3F4F6))
+        ? (isDark
+            ? Colors.white.withValues(alpha: 0.1)
+            : const Color(0xFFF3F4F6))
         : isDanger
-            ? (isDark ? const Color(0xFFEF4444).withValues(alpha: 0.2) : const Color(0xFFFEF2F2))
-            : (choice.color == 'primary' ? Theme.of(context).primaryColor : AppColors.fromLabel(choice.color));
+            ? (isDark
+                ? const Color(0xFFEF4444).withValues(alpha: 0.2)
+                : const Color(0xFFFEF2F2))
+            : (choice.color == 'primary'
+                ? Theme.of(context).primaryColor
+                : AppColors.fromLabel(choice.color));
 
     final textColor = isSecondary
         ? (isDark ? Colors.white : AppColors.slate)

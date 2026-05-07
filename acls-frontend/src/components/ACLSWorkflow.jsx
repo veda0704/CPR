@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
 import Confetti from './Confetti';
 import ChoiceCards from './ChoiceCards';
@@ -128,6 +128,7 @@ const normalizeStepData = (rawData) => {
 const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeColor }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { '*': stepId } = useParams();
   const [stepData, setStepData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -171,7 +172,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
         }
         if (isMounted.current) {
           setStepData(sanitized);
-          
+
           // Dynamic Progress Tracking for every module
           const moduleId = getModuleIdFromStep(sanitized.id || stepId);
           if (moduleId && sanitized.total_steps > 0) {
@@ -222,29 +223,29 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
   const getModuleIdFromStep = (stepIdentifier) => {
     if (!stepIdentifier) return null;
     const normalId = stepIdentifier.toLowerCase();
-    
+
     // Check specific complex IDs first to avoid partial matches
     if (normalId.startsWith('ecg_rhythms')) return 'ecg_rhythms';
-    if (normalId.startsWith('adv_airway')) return 'adv_airway';
-    if (normalId.startsWith('cardiac_alg')) return 'cardiac_alg';
+    if (normalId.startsWith('adv_airway') || normalId.startsWith('lma_') || normalId.startsWith('rsi_')) return 'adv_airway';
+    if (normalId.startsWith('cardiac_alg') || normalId.startsWith('alg_') || normalId.startsWith('vf_') || normalId.startsWith('vt_') || normalId.startsWith('pea_') || normalId.startsWith('asystole_') || normalId.startsWith('post_arrest_')) return 'cardiac_alg';
     if (normalId.startsWith('scene_safety')) return 'scene_safety';
     if (normalId.startsWith('snake_bite')) return 'snake_bite';
-    
+
     // Standard mapping
     if (normalId === '1') return 'acls';
     if (normalId.startsWith('abcde')) return 'abcde';
     if (normalId.startsWith('bls')) return 'bls';
-    if (normalId.startsWith('choking')) return 'choking';
+    if (normalId.startsWith('choking') || normalId.startsWith('adult_choking') || normalId.startsWith('infant_choking')) return 'choking';
     if (normalId.startsWith('airway')) return 'airway';
     if (normalId.startsWith('trauma')) return 'trauma';
     if (normalId.startsWith('poisoning')) return 'poisoning';
     if (normalId.startsWith('stroke')) return 'stroke';
     if (normalId.startsWith('disaster')) return 'disaster';
     if (normalId.startsWith('delivery')) return 'delivery';
-    if (normalId.startsWith('ecg')) return 'ecg_rhythms'; // Map basic ecg to rhythms module
-    if (normalId.startsWith('rhythms')) return 'ecg_rhythms';
+    if (normalId.startsWith('ecg')) return 'ecg'; // Map basic ecg to rhythms module
+    if (normalId.startsWith('rhythms')) return 'ecg';
     if (normalId.startsWith('h5t5')) return 'h5t5';
-    
+
     return Object.keys(moduleMap).find((moduleKey) => normalId.includes(moduleKey)) || null;
   };
 
@@ -301,7 +302,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
         setModuleStatus(moduleId, 'in_progress', user?.email);
       }
     }
-    
+
     // Guard against rapid-fire audio during navigation
     const playTimeout = setTimeout(() => {
       if (stepData && voiceEnabled) {
@@ -319,7 +320,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
 
   const handleChoice = (nextStep, choice) => {
     stopAudio();
-    
+
     // Track sub-module completion for Rhythms & Blocks
     if (nextStep === 'rhythms_start' || nextStep === 'dashboard') {
       const currentStep = stepData?.id || stepId;
@@ -330,7 +331,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
 
     if (nextStep === 'dashboard') {
       const moduleId = getModuleIdFromStep(stepData?.id || stepId);
-      
+
       // If it's a legitimate completion (not just a BACK button), mark as complete
       if (moduleId && !choice?.label?.toLowerCase()?.includes('back')) {
         setModuleStatus(moduleId, 'completed', user?.email);
@@ -358,7 +359,8 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
         setModuleStatus(currentModuleId, 'completed', user?.email);
       }
 
-      navigate(`/acls/${nextStep}`);
+      const isRedirect = currentModuleId && targetModuleId && currentModuleId !== targetModuleId;
+      navigate(`/acls/${nextStep}`, { state: { fromRedirect: isRedirect } });
     }
   };
 
@@ -404,7 +406,7 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
           </div>
           <h1 className="completion-headline">{completionInfo.headline}</h1>
           <p className="completion-sub">{completionInfo.sub}</p>
-          
+
           <div className="completion-module-badge">
             <CheckCircle size={20} style={{ color: 'var(--success)' }} />
             <span>{t(stepData.title)}</span>
@@ -427,19 +429,21 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
       <nav className="floating-nav animate-reveal">
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flex: 1 }}>
           <div className="nav-brand">
-            <img 
-              src={iaclsLogo} 
-              alt="IACLS Logo" 
-              style={{ 
-                height: '54px', 
-                width: 'auto', 
+            <img
+              src={iaclsLogo}
+              alt="IACLS Logo"
+              style={{
+                height: '54px',
+                width: 'auto',
                 objectFit: 'contain',
                 filter: 'brightness(0) invert(1) drop-shadow(0 0 0.5px white)'
-              }} 
+              }}
             />
           </div>
           <div style={{ display: 'flex', gap: '10px', marginLeft: '12px', paddingLeft: '20px', borderLeft: '1px solid rgba(255,255,255,0.2)' }}>
-            {!stepId.includes('_start') && !stepId.includes('_initial') && stepId !== '1' && (
+            {((!stepId.includes('_start') && !stepId.includes('_initial') && stepId !== '1') || 
+               stepId.includes('post_arrest') || 
+               location.state?.fromRedirect) && (
               <button className="icon-btn" onClick={() => { stopAudio(); navigate(-1); }} title={t('back')} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '12px' }}>
                 <ArrowLeft size={20} />
               </button>
@@ -460,8 +464,8 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
             <span>{formatTime(sceneTime)}</span>
           </div>
 
-          <button 
-            className="icon-btn" 
+          <button
+            className="icon-btn"
             onClick={() => setIsSettingsOpen(true)}
             title={t('settings')}
             style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', width: '42px', height: '42px', borderRadius: '12px' }}
@@ -471,11 +475,11 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
         </div>
       </nav>
 
-      <SettingsPanel 
-        isOpen={isSettingsOpen} 
-        onClose={() => setIsSettingsOpen(false)} 
-        theme={theme} 
-        toggleTheme={toggleTheme} 
+      <SettingsPanel
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        theme={theme}
+        toggleTheme={toggleTheme}
         currentPrimary={themeColor}
         applyThemeColor={applyThemeColor}
       />
@@ -488,30 +492,18 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
               <div className="selector-grid-container" style={{ padding: '0 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
                   <h2 className="selector-grid-title" style={{ margin: 0 }}>{t(stepData.question)}</h2>
-                  <button 
-                    className={`icon-btn ${voiceEnabled ? 'active' : ''}`} 
-                    onClick={toggleVoice} 
-                    style={{ 
-                      flexShrink: 0, 
-                      width: '42px', 
-                      height: '42px', 
-                      borderRadius: '12px', 
-                      background: voiceEnabled ? 'var(--primary-soft)' : 'rgba(0,0,0,0.03)',
-                      border: '1px solid rgba(0,0,0,0.05)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '24px'
-                    }}
+                  <button
+                    className={`voice-toggle-btn ${voiceEnabled ? 'active' : ''}`}
+                    onClick={toggleVoice}
                   >
-                    {voiceEnabled ? <Volume2 size={20} color="var(--primary)" /> : <VolumeX size={20} color="var(--text-muted)" />}
+                    {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
                   </button>
                 </div>
                 <div className="selector-grid">
                   {(stepData.interactive_props?.options || []).map((choice, idx) => (
-                    <div 
-                      key={idx} 
-                      className="selector-card animate-reveal" 
+                    <div
+                      key={idx}
+                      className="selector-card animate-reveal"
                       onClick={() => handleChoice(choice.next, choice)}
                       style={{ animationDelay: `${idx * 0.1}s` }}
                     >
@@ -538,19 +530,19 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
                   {stepData.choices
                     .filter(choice => choice.next === 'dashboard')
                     .map((choice, idx) => (
-                        <div key={idx} style={{ textAlign: 'center', width: '100%', maxWidth: '360px' }}>
-                          <button 
-                            className={`simulator-btn ${choice.color || 'success'}`}
-                            onClick={() => handleChoice(choice.next, choice)}
-                            style={{ 
-                              width: '100%', 
-                              minHeight: '44px',
-                              borderRadius: '12px'
-                            }}
-                          >
-                            {t(choice.label || choice.text)}
-                          </button>
-                        </div>
+                      <div key={idx} style={{ textAlign: 'center', width: '100%', maxWidth: '360px' }}>
+                        <button
+                          className={`simulator-btn ${choice.color || 'success'}`}
+                          onClick={() => handleChoice(choice.next, choice)}
+                          style={{
+                            width: '100%',
+                            minHeight: '44px',
+                            borderRadius: '12px'
+                          }}
+                        >
+                          {t(choice.label || choice.text)}
+                        </button>
+                      </div>
                     ))}
                 </div>
               )}
@@ -558,15 +550,15 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
           ) : (
             /* CASE 2: Clinical Scenario (Split-Screen) */
             <div className="acls-workflow-layout has-media">
-              
+
               {/* Left Side: Media and Info */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div className="simulator-media-container" style={{ 
-                  width: '100%', 
+                <div className="simulator-media-container" style={{
+                  width: '100%',
                   aspectRatio: '16/10',
                   maxHeight: '300px',
-                  overflow: 'hidden', 
-                  borderRadius: '24px', 
+                  overflow: 'hidden',
+                  borderRadius: '24px',
                   border: '1px solid rgba(0,0,0,0.08)',
                   background: '#0F172A',
                   display: 'flex',
@@ -580,9 +572,9 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
                     </div>
                   ) : stepData.video ? (
                     stepData.video.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i) ? (
-                      <img src={stepData.video} alt="" style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                      <img src={stepData.video} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <video ref={videoRef} src={stepData.video} autoPlay loop muted playsInline style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                      <video ref={videoRef} src={stepData.video} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     )
                   ) : (
                     <div style={{ width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.2 }}>
@@ -592,11 +584,11 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
                 </div>
               </div>
 
-              <div style={{ 
-                padding: '20px 0', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: '12px', 
+              <div style={{
+                padding: '20px 0',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
                 width: '100%',
                 maxWidth: '480px',
                 margin: '0 auto',
@@ -607,22 +599,11 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
                   <h2 className="simulator-question" style={{ margin: 0, flex: 1, fontSize: '21px', fontWeight: 850, color: 'var(--text-main)', lineHeight: 1.5, letterSpacing: '-0.015em', whiteSpace: 'pre-line' }}>
                     {t(stepData.question)}
                   </h2>
-                  <button 
-                    className={`icon-btn ${voiceEnabled ? 'active' : ''}`} 
-                    onClick={toggleVoice} 
-                    style={{ 
-                      flexShrink: 0, 
-                      width: '42px', 
-                      height: '42px', 
-                      borderRadius: '12px', 
-                      background: voiceEnabled ? 'var(--primary-soft)' : 'rgba(0,0,0,0.03)',
-                      border: '1px solid rgba(0,0,0,0.05)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
+                  <button
+                    className={`voice-toggle-btn ${voiceEnabled ? 'active' : ''}`}
+                    onClick={toggleVoice}
                   >
-                    {voiceEnabled ? <Volume2 size={20} color="var(--primary)" /> : <VolumeX size={20} color="var(--text-muted)" />}
+                    {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
                   </button>
                 </div>
 
@@ -634,23 +615,23 @@ const ACLSWorkflow = ({ user, setUser, theme, toggleTheme, themeColor, applyThem
                       return true;
                     })
                     .map((choice, idx) => (
-                    <button
-                      key={idx}
-                      className={`simulator-btn ${choice.color || 'primary'}`}
-                      onClick={() => handleChoice(choice.next, choice)}
-                      style={{ minHeight: '64px', padding: '12px 20px', width: '100%' }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.25)', width: '34px', height: '34px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {choice.color === 'danger' ? <AlertCircle size={18} /> : <CheckCircle size={18} />}
+                      <button
+                        key={idx}
+                        className={`simulator-btn ${choice.color || 'primary'}`}
+                        onClick={() => handleChoice(choice.next, choice)}
+                        style={{ minHeight: '64px', padding: '12px 20px', width: '100%' }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ background: 'rgba(255,255,255,0.25)', width: '34px', height: '34px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {choice.color === 'danger' ? <AlertCircle size={18} /> : <CheckCircle size={18} />}
+                          </div>
+                          <div style={{ textAlign: 'left' }}>
+                            <div style={{ fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.01em' }}>{t(choice.label || choice.text)}</div>
+                          </div>
                         </div>
-                        <div style={{ textAlign: 'left' }}>
-                          <div style={{ fontSize: '15.5px', fontWeight: 700, letterSpacing: '-0.01em' }}>{t(choice.label || choice.text)}</div>
-                        </div>
-                      </div>
-                      <ChevronRight size={18} strokeWidth={3} />
-                    </button>
-                  ))}
+                        <ChevronRight size={18} strokeWidth={3} />
+                      </button>
+                    ))}
                 </div>
               </div>
 

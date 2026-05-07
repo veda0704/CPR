@@ -11,7 +11,7 @@ import {
 import Footer from './Footer';
 import iaclsLogo from '../assets/iacls-logo.png';
 import bavyaLogo from '../assets/bavya-logo.png';
-import { getModuleStatus, setModuleStatus, getModuleProgress } from '../utils/moduleStatus';
+import { getModuleStatus, setModuleStatus, getModuleProgress, getAllModuleStatuses } from '../utils/moduleStatus';
 import SettingsPanel from './SettingsPanel';
 import AnimatedECG from './AnimatedECG';
 
@@ -26,6 +26,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [fullModuleData, setFullModuleData] = useState({});
 
   const getModuleIcon = (modId) => {
     const mapping = {
@@ -116,10 +117,15 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
         const res = await getDashboard();
         const levelsData = res.data.levels || [];
         setLevels(levelsData);
+        
+        const allData = getAllModuleStatuses(user?.email);
+        setFullModuleData(allData);
+        
         const statusMap = {};
         levelsData.forEach((level) => {
           level.modules.forEach((mod) => {
-            statusMap[mod.id] = getModuleStatus(mod.id, user?.email);
+            const d = allData[mod.id];
+            statusMap[mod.id] = (typeof d === 'object') ? d.status : (d || 'not_started');
           });
         });
         setModuleStatusMap(statusMap);
@@ -157,6 +163,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
     if (moduleStatusMap[mod.id] !== 'completed') {
       setModuleStatus(mod.id, 'in_progress', user?.email);
       setModuleStatusMap((prev) => ({ ...prev, [mod.id]: 'in_progress' }));
+      setFullModuleData(getAllModuleStatuses(user?.email));
     }
     navigate(`/acls/${mod.start_step}`);
   };
@@ -171,6 +178,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
     switch (status) {
       case 'completed': return { icon: <CheckCircle2 size={14} />, label: t('completed') || 'Completed', class: 'completed' };
       case 'in_progress': return { icon: <Activity size={14} />, label: t('in_progress') || 'In Progress', class: 'in_progress' };
+      case 'not_started': return { icon: <Play size={14} />, label: t('not_started') || 'Not Started', class: 'not_started' };
       default: return { icon: <ShieldAlert size={14} />, label: t('locked') || 'Locked', class: 'locked' };
     }
   };
@@ -276,9 +284,35 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
       <main className="app-container dashboard-main">
         {levels.map((level) => {
           const progress = calculateLevelProgress(level.modules);
-          const activeMod = level.modules.find(m => moduleStatusMap[m.id] === 'in_progress') || level.modules[0];
-          const nextStep = level.modules.find(m => moduleStatusMap[m.id] === 'locked' || moduleStatusMap[m.id] === undefined) || level.modules[0];
-          const lastAccessed = level.modules.find(m => moduleStatusMap[m.id] !== 'locked') || level.modules[0];
+          
+          // Improved logic for Dashboard cards
+          const activeMod = level.modules
+            .filter(m => moduleStatusMap[m.id] === 'in_progress')
+            .sort((a, b) => new Date(fullModuleData[b.id]?.lastAccessed || 0) - new Date(fullModuleData[a.id]?.lastAccessed || 0))[0] 
+            || level.modules[0];
+
+          const nextStep = level.modules
+            .find(m => moduleStatusMap[m.id] === 'not_started' || moduleStatusMap[m.id] === 'locked' || !moduleStatusMap[m.id]) 
+            || level.modules[level.modules.length - 1];
+
+          const lastAccessed = level.modules
+            .filter(m => fullModuleData[m.id]?.lastAccessed)
+            .sort((a, b) => new Date(fullModuleData[b.id]?.lastAccessed) - new Date(fullModuleData[a.id]?.lastAccessed))[0]
+            || level.modules[0];
+          
+          const formatLastAccessed = (modId) => {
+            const dateStr = fullModuleData[modId]?.lastAccessed;
+            if (!dateStr) return t('never') || 'Never';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMin = Math.floor(diffMs / 60000);
+            if (diffMin < 1) return t('just_now') || 'Just now';
+            if (diffMin < 60) return `${diffMin} ${t('mins_ago') || 'mins ago'}`;
+            const diffHrs = Math.floor(diffMin / 60);
+            if (diffHrs < 24) return `${diffHrs} ${t('hours_ago') || 'hours ago'}`;
+            return date.toLocaleDateString();
+          };
           
           const filteredModules = level.modules.filter(m => 
             t(m.name).toLowerCase().includes(searchQuery.toLowerCase())
@@ -326,7 +360,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
                       <div className="pill-content">
                         <span className="pill-label">{t('last_accessed')}</span>
                         <span className="pill-value">{t(lastAccessed.name)}</span>
-                        <span className="pill-time">{t('today_time')}</span>
+                        <span className="pill-time">{formatLastAccessed(lastAccessed.id)}</span>
                       </div>
                     </div>
                   </div>

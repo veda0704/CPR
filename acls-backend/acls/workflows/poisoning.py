@@ -36,7 +36,24 @@ POISONING_WORKFLOW = {
         "video": "/static/images/poisoning.png",
         "choices": [
             {"label": _("YES"), "next": "poisoning_hos", "color": "success"},
-            {"label": _("NO, Repeat dose"), "next": "poisoning_opioid", "color": "warning"}
+            {"label": _("NO, Repeat dose"), "next": "poisoning_opioid_repeat", "color": "warning"}
+        ]
+    },
+    "poisoning_opioid_repeat": {
+        "title": _("Second Dose Administered"),
+        "question": _("Second dose of Naloxone given. Continue monitoring for 2-3 minutes. Any improvement in breathing?"),
+        "video": "/static/images/poisoning.png",
+        "choices": [
+            {"label": _("YES"), "next": "poisoning_hos", "color": "success"},
+            {"label": _("STILL NO IMPROVEMENT"), "next": "poisoning_opioid_failed", "color": "danger"}
+        ]
+    },
+    "poisoning_opioid_failed": {
+        "title": _("No Response to Naloxone"),
+        "question": _("Patient is not responding to Naloxone. Start Bag-Valve-Mask (BVM) ventilation, consider advanced airway, and initiate rapid transport immediately. Ready?"),
+        "video": "/static/images/call_108.png",
+        "choices": [
+            {"label": _("READY FOR TRANSPORT"), "next": "poisoning_hos", "color": "primary"}
         ]
     },
     "poisoning_op": {

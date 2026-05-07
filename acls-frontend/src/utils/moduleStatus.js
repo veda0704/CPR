@@ -55,7 +55,8 @@ export const setModuleStatus = (moduleId, status, userId) => {
   
   statuses[moduleId] = { 
     ...current,
-    status 
+    status,
+    lastAccessed: new Date().toISOString()
   };
   if (status === 'completed') statuses[moduleId].progress = 100;
   
@@ -86,7 +87,8 @@ export const setModuleProgress = (moduleId, progress, userId) => {
   
   statuses[moduleId] = {
     ...current,
-    progress: Math.max(current.progress, progress)
+    progress: Math.max(current.progress, progress),
+    lastAccessed: new Date().toISOString()
   };
   
   if (progress >= 100) statuses[moduleId].status = 'completed';
@@ -97,3 +99,5 @@ export const setModuleProgress = (moduleId, progress, userId) => {
 
 export const getStatusLabel = (status) => STATUS_LABELS[status] || STATUS_LABELS.not_started;
 export const getStatusColor = (status) => STATUS_COLORS[status] || STATUS_COLORS.not_started;
+
+export const getAllModuleStatuses = (userId) => getStoredStatuses(userId);

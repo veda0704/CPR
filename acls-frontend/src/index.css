@@ -789,6 +789,65 @@ button {
     transform: translateY(0) scale(0.98);
 }
 
+/* --- Voice/Speaker Toggle --- */
+.voice-toggle-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    z-index: 30;
+}
+
+.voice-toggle-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.voice-toggle-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 0 20px color-mix(in srgb, var(--primary-color), transparent 50%);
+}
+
+.voice-toggle-btn.active::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 2px solid var(--primary-color);
+    animation: speaker-pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes speaker-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+[data-theme="dark"] .voice-toggle-btn {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.voice-toggle-btn.active svg {
+    animation: speaker-shake 0.5s ease infinite alternate;
+}
+
+@keyframes speaker-shake {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+}
+
 .choice-card-btn:hover,
 .simulator-btn:hover {
     transform: translateY(-1px);

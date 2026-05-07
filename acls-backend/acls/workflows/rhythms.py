@@ -10,7 +10,7 @@ RHYTHMS_WORKFLOW = {
             {"label": _("TACHYARRHYTHMIAS"), "next": "rhythms_tachy", "color": "danger"},
             {"label": _("ARREST RHYTHMS"), "next": "rhythms_arrest", "color": "dark"},
             {"label": _("HEART BLOCKS"), "next": "rhythms_blocks", "color": "warning"},
-            {"label": _("CONTINUE TO CARDIAC ALGORITHMS"), "next": "cardiac_alg_start", "color": "success"}
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "rhythms_sinus": {

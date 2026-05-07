@@ -85,6 +85,7 @@ final _router = GoRouter(
       path: '/acls/:stepId',
       builder: (_, state) => StepScreen(
         stepId: state.pathParameters['stepId']!,
+        fromRedirect: state.extra as bool? ?? false,
       ),
     ),
   ],

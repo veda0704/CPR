@@ -87,15 +87,6 @@ H5T5_WORKFLOW = {
         "question": _("Could a blood clot be blocking the heart? Look for signs on ECG. Treatment: urgent hospital intervention."),
         "video": "/static/images/thrombosis_heart.png",
         "choices": [
-            {"label": _("FINISH H5T5"), "next": "h5t5_complete", "color": "success"}
-        ]
-    },
-    "h5t5_complete": {
-        "title": _("H5T5 Complete"),
-        "question": _("Reversible causes (5H & 5T) check complete. Would you like to return to the Cardiac Arrest algorithms next?"),
-        "video": "/static/images/algorithm_vf_vt.png",
-        "choices": [
-            {"label": _("CONTINUE TO CARDIAC ARREST"), "next": "cardiac_alg_start", "color": "primary"},
             {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     }

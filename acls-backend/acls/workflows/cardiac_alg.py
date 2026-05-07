@@ -4,7 +4,7 @@ CARDIAC_ALG_WORKFLOW = {
     "cardiac_alg_start": {
         "title": _("ACLS Cardiac Algorithms"),
         "question": _("Choose the treatment path based on the person's condition:"),
-        "video": "/static/images/algorithm.jpg",
+        "video": "/static/images/algorithm.png",
         "choices": [
             {"label": _("TACHYCARDIA (With Pulse)"), "next": "alg_tachy_assess", "color": "danger"},
             {"label": _("BRADYCARDIA (With Pulse)"), "next": "alg_brady_assess", "color": "warning"},
@@ -276,7 +276,7 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["nsr"]},
         "choices": [
-            {"label": _("COMPLETE ALGORITHM"), "next": "alg_post_arrest_complete", "color": "success"}
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "post_arrest_awake": {
@@ -285,7 +285,7 @@ CARDIAC_ALG_WORKFLOW = {
         "interactive_component": "ecg_monitor",
         "interactive_props": {"rhythms": ["nsr"]},
         "choices": [
-            {"label": _("COMPLETE ALGORITHM"), "next": "alg_post_arrest_complete", "color": "success"}
+            {"label": _("FINISH MODULE"), "next": "dashboard", "color": "success"}
         ]
     },
     "alg_post_arrest_complete": {
