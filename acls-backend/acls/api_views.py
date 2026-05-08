@@ -106,8 +106,8 @@ def api_dashboard_data(request):
             "tag": "START HERE",
             "modules": [
                 {"name": "Scene Safety & PPE", "id": "scene_safety", "start_step": "scene_safety_start", "thumbnail": "/static/images/module-bgs/scenesafetym1.png"},
-                {"name": "Systematic ABCDE", "id": "abcde", "start_step": "abcde_start", "thumbnail": "/static/images/module-bgs/abcdem2.png"},
-                {"name": "BLS & CPR", "id": "bls", "start_step": "bls_start", "thumbnail": "/static/images/module-bgs/blscprm3.png"},
+                {"name": "Systematic ABCDE", "id": "abcde", "start_step": "abcde_start", "thumbnail": "/static/images/module-bgs/abcde_new.png"},
+                {"name": "BLS & CPR", "id": "bls", "start_step": "bls_start", "thumbnail": "/static/images/module-bgs/bls_new.png"},
                 {"name": "Choking Management", "id": "choking", "start_step": "choking_start", "thumbnail": "/static/images/module-bgs/chokingm4.png"},
             ]
         },
@@ -116,14 +116,14 @@ def api_dashboard_data(request):
             "name": "Level 2: Emergency Management",
             "tag": "INTERMEDIATE",
             "modules": [
-                {"name": "Airway Anatomy", "id": "airway", "start_step": "airway_start", "thumbnail": "/static/images/module-bgs/airwaym5.png"},
-                {"name": "Advanced Airway", "id": "adv_airway", "start_step": "adv_airway_start", "thumbnail": "/static/images/module-bgs/advairwaym6.png"},
-                {"name": "Trauma & Bleeding", "id": "trauma", "start_step": "trauma_start", "thumbnail": "/static/images/module-bgs/traumam7.png"},
-                {"name": "Poisoning Management", "id": "poisoning", "start_step": "poisoning_start", "thumbnail": "/static/images/module-bgs/poisoningm8.png"},
-                {"name": "Snake Bite Management", "id": "snake_bite", "start_step": "snake_bite_initial", "thumbnail": "/static/images/module-bgs/snakebitem9.png"},
-                {"name": "Stroke Assessment", "id": "stroke", "start_step": "stroke_start", "thumbnail": "/static/images/module-bgs/strokem10.png"},
-                {"name": "Disaster Management", "id": "disaster", "start_step": "disaster_start", "thumbnail": "/static/images/module-bgs/disasterm11.png"},
-                {"name": "NLS & Delivery", "id": "delivery", "start_step": "delivery_start", "thumbnail": "/static/images/module-bgs/nlsm12.png"},
+                {"name": "Airway Anatomy", "id": "airway", "start_step": "airway_start", "thumbnail": "/static/images/module-bgs/airway_new.png"},
+                {"name": "Advanced Airway", "id": "adv_airway", "start_step": "adv_airway_start", "thumbnail": "/static/images/module-bgs/advancedairway.png"},
+                {"name": "Trauma & Bleeding", "id": "trauma", "start_step": "trauma_start", "thumbnail": "/static/images/module-bgs/trauma_new.png"},
+                {"name": "Poisoning Management", "id": "poisoning", "start_step": "poisoning_start", "thumbnail": "/static/images/module-bgs/poison_new.png"},
+                {"name": "Snake Bite Management", "id": "snake_bite", "start_step": "snake_bite_initial", "thumbnail": "/static/images/module-bgs/snakebite.png"},
+                {"name": "Stroke Assessment", "id": "stroke", "start_step": "stroke_start", "thumbnail": "/static/images/module-bgs/stroke_new.png"},
+                {"name": "Disaster Management", "id": "disaster", "start_step": "disaster_start", "thumbnail": "/static/images/module-bgs/disaster_new.png"},
+                {"name": "NLS & Delivery", "id": "delivery", "start_step": "delivery_start", "thumbnail": "/static/images/module-bgs/delivery_new.png"},
             ]
         },
         {
@@ -131,10 +131,10 @@ def api_dashboard_data(request):
             "name": "Level 3: Advanced Cardiac (ACLS)",
             "tag": "ADVANCED",
             "modules": [
-                {"name": "ECG & Rhythm Management", "id": "ecg", "start_step": "ecg_start", "thumbnail": "/static/images/module-bgs/ecgm13.png"},
-                {"name": "Cardiac Algorithms", "id": "cardiac_alg", "start_step": "cardiac_alg_start", "thumbnail": "/static/images/module-bgs/cardiacalgm15.png"},
-                {"name": "Reversible Causes (H5T5)", "id": "h5t5", "start_step": "h5t5_start", "thumbnail": "/static/images/module-bgs/h5t5m16.png"},
-                {"name": "Professional ACLS Simulator", "id": "acls", "start_step": "1", "thumbnail": "/static/images/module-bgs/aclsm17.png"},
+                {"name": "ECG & Rhythm Management", "id": "ecg", "start_step": "ecg_start", "thumbnail": "/static/images/module-bgs/ecg_new.png"},
+                {"name": "Cardiac Algorithms", "id": "cardiac_alg", "start_step": "cardiac_alg_start", "thumbnail": "/static/images/module-bgs/cardiac_alg_new.png"},
+                {"name": "Reversible Causes (H5T5)", "id": "h5t5", "start_step": "h5t5_start", "thumbnail": "/static/images/module-bgs/h5t5_new.png"},
+                {"name": "Professional ACLS Simulator", "id": "acls", "start_step": "1", "thumbnail": "/static/images/module-bgs/acls_new.png"},
             ]
         }
     ]

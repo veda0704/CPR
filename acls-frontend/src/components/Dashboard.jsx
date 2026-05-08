@@ -74,7 +74,10 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
     acls: 'description_acls',
   };
 
-  const getModuleImage = (modId) => {
+  const getModuleImage = (mod) => {
+    // If backend provides a thumbnail path, use it (it's usually /static/...)
+    if (mod.thumbnail) return mod.thumbnail;
+    
     const mapping = {
       scene_safety: 'scenesafetym1.png',
       abcde: 'abcdem2.png',
@@ -95,8 +98,8 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
       acls: 'abcdem2.png',
       ecg_rhythms: 'ecgm13.png'
     };
-    const filename = mapping[modId] || 'abcdem2.png';
-    return `http://10.2.1.15:8002/static/images/module-bgs/${filename}`;
+    const filename = mapping[mod.id] || 'abcdem2.png';
+    return `/static/images/module-bgs/${filename}`;
   };
 
   useEffect(() => {
@@ -380,7 +383,7 @@ const Dashboard = ({ user, setUser, theme, toggleTheme, themeColor, applyThemeCo
                         <div className={`module-status-pill ${status.class}`}>
                           {status.icon} {status.label}
                         </div>
-                        <img src={getModuleImage(mod.id)} alt={mod.name} className="module-card-img" />
+                        <img src={getModuleImage(mod)} alt={mod.name} className="module-card-img" />
                         {moduleStatusMap[mod.id] === 'locked' && (
                           <div className="lock-overlay"><ShieldAlert size={48} /></div>
                         )}

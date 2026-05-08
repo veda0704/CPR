@@ -100,14 +100,18 @@ class _StepScreenState extends ConsumerState<StepScreen> {
     if (normalId.startsWith('ecg_rhythms')) return 'ecg_rhythms';
     if (normalId.startsWith('adv_airway') ||
         normalId.startsWith('lma_') ||
-        normalId.startsWith('rsi_')) return 'adv_airway';
+        normalId.startsWith('rsi_')) {
+      return 'adv_airway';
+    }
     if (normalId.startsWith('cardiac_alg') ||
         normalId.startsWith('alg_') ||
         normalId.startsWith('vf_') ||
         normalId.startsWith('vt_') ||
         normalId.startsWith('pea_') ||
         normalId.startsWith('asystole_') ||
-        normalId.startsWith('post_arrest_')) return 'cardiac_alg';
+        normalId.startsWith('post_arrest_')) {
+      return 'cardiac_alg';
+    }
     if (normalId.startsWith('scene_safety')) return 'scene_safety';
     if (normalId.startsWith('snake_bite')) return 'snake_bite';
     if (normalId == '1') return 'acls';

@@ -45,7 +45,7 @@ export const useTTS = () => {
 
       const fullUrl = audioUrlRaw.startsWith('http') 
         ? audioUrlRaw 
-        : `http://${window.location.hostname}:8002${audioUrlRaw}`;
+        : audioUrlRaw; // Use relative path, proxied by Vite
 
       const audio = new Audio(fullUrl);
       audioRef.current = audio;
